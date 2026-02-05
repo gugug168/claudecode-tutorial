@@ -1,0 +1,31 @@
+# 只部署 website/ 目录，忽略其他内容
+/website/ 以外的所有文件
+
+# 部署相关
+.vercel
+
+# 系统文件
+.DS_Store
+Thumbs.db
+*.tmp
+*.log
+
+# 编辑器
+.vscode/
+.idea/
+
+# 临时文件
+tmpclaude-*
+nul
+
+# 不需要的目录
+claude-code-training/
+_tmp_tangshuang/
+
+# 保留在本地但不提交的文件
+CLAUDE CODE教学教程（解压后打开index学习）.zip
+*.zip
+
+# website 目录下不需要部署的文件
+website/notes.md
+website/task_plan.md

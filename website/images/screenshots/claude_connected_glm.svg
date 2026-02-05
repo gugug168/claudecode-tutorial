@@ -1,0 +1,22 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="520" viewBox="0 0 1200 520">
+  <defs>
+    <linearGradient id="bg" x1="0" x2="1" y1="0" y2="1">
+      <stop offset="0" stop-color="#0b1220"/>
+      <stop offset="1" stop-color="#111827"/>
+    </linearGradient>
+  </defs>
+  <rect x="0" y="0" width="1200" height="520" rx="18" fill="url(#bg)"/>
+  <rect x="22" y="22" width="1156" height="476" rx="14" fill="#0f172a" stroke="#334155"/>
+  <g font-family="Consolas, Monaco, 'Courier New', monospace" font-size="22" fill="#e2e8f0">
+    <text x="48" y="72" fill="#94a3b8">Claude Code CLI（示意）</text>
+    <text x="48" y="120">Claude Code v2.x.y</text>
+    <text x="48" y="156" fill="#a7f3d0">Connected to GLM (智谱 AI)</text>
+    <text x="48" y="208" fill="#94a3b8">Type your message and press Enter to send.</text>
+    <text x="48" y="244" fill="#94a3b8">Type /exit to quit.</text>
+    <text x="48" y="296" fill="#94a3b8">────────────────────────────────────────</text>
+    <text x="48" y="332" fill="#94a3b8">You are in a workspace: C:\Users\你的用户名\claude-practice</text>
+    <text x="48" y="368" fill="#94a3b8">────────────────────────────────────────</text>
+    <text x="48" y="420"><tspan fill="#60a5fa">&gt;</tspan> 你好，回复 OK</text>
+    <text x="48" y="456" fill="#a7f3d0">OK</text>
+  </g>
+</svg>

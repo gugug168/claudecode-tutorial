@@ -1,0 +1,168 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>S2：资料归档（文件整理） - Claude Code 教程</title>
+    <link rel="stylesheet" href="../css/style.css">
+</head>
+<body data-page-id="scenario-02-file-organize">
+    <div class="app-container">
+        <aside class="sidebar" id="sidebar">
+            <div class="sidebar-header">
+                <a href="../index.html" style="display: flex; align-items: center; gap: 12px; text-decoration: none;">
+                    <div class="logo">C</div>
+                    <span class="logo-text">Claude Code 教程</span>
+                </a>
+            </div>
+            <div class="sidebar-search">
+                <div class="search-box">
+                    <span class="search-icon" aria-hidden="true">
+                        <svg class="icon icon-xs"><use href="../images/icons.svg#icon-search"></use></svg>
+                    </span>
+                    <input type="text" placeholder="搜索章节...">
+                </div>
+            </div>
+            <nav class="sidebar-nav" id="sidebarNav"></nav>
+        </aside>
+
+        <main class="main-content">
+            <header class="top-nav">
+                <div class="top-nav-left">
+                    <button class="menu-toggle" id="menuToggle" aria-label="打开目录">
+                        <svg class="icon icon-sm" aria-hidden="true"><use href="../images/icons.svg#icon-menu"></use></svg>
+                    </button>
+                    <nav class="breadcrumb">
+                        <a href="../index.html">首页</a>
+                        <span class="separator">/</span>
+                        <a href="scenario-pack.html">场景包</a>
+                        <span class="separator">/</span>
+                        <span class="current">S2</span>
+                    </nav>
+                </div>
+                <div class="top-nav-right">
+                    <div class="progress-indicator">
+                        <span>学习进度</span>
+                        <div class="progress-bar">
+                            <div class="progress-fill" id="progressFill" style="width: 0%"></div>
+                        </div>
+                        <span class="progress-text" id="progressText">0%</span>
+                    </div>
+                </div>
+            </header>
+
+            <div class="content-wrapper">
+                <header class="article-header">
+                    <div class="article-breadcrumb">
+                        <a href="../index.html">首页</a> / <a href="scenario-pack.html">场景包</a> / <span>S2：资料归档（文件整理）</span>
+                    </div>
+                    <h1 class="article-title">S2：资料归档（文件整理）</h1>
+                    <div class="article-meta">
+                        <span class="article-meta-item">
+                            <svg class="icon icon-xs" aria-hidden="true"><use href="../images/icons.svg#icon-clock"></use></svg>
+                            预计时间：15分钟
+                        </span>
+                        <span class="article-meta-item">
+                            <svg class="icon icon-xs" aria-hidden="true"><use href="../images/icons.svg#icon-signal"></use></svg>
+                            难度：简单
+                        </span>
+                        <span class="article-meta-item">
+                            <svg class="icon icon-xs" aria-hidden="true"><use href="../images/icons.svg#icon-tag"></use></svg>
+                            类型：练习场景
+                        </span>
+                    </div>
+                </header>
+
+                <article class="article-content">
+                    <!-- 配图：文件整理归档 -->
+                    <div class="section-image">
+                        <img src="../images/external/img_355a9470404eab38.png" alt="Claude Code CLI文件管理界面" loading="lazy">
+                        <div class="section-image-caption">Claude Code 可以理解并整理文件结构</div>
+                    </div>
+
+                    <div class="alert alert-warning">
+                        <div class="alert-title">强烈建议：先在"练习文件夹"里做</div>
+                        <p>这个场景会移动/重命名文件。不要在真实资料根目录直接做。</p>
+                    </div>
+
+                    <h2 id="materials">练习素材</h2>
+                    <p>下载并解压到你自己的练习文件夹中：</p>
+                    <p><a href="../assets/scenarios/s2_资料归档_练习.zip" download>下载：s2_资料归档_练习.zip</a></p>
+                    <div class="alert alert-info">
+                        <div class="alert-title">提示</div>
+                        <p>这是一些“假文件”（内容不重要，文件名才重要），用于练习日期识别与归档分类。</p>
+                        <p>解压后建议先不要改文件名，跑通一次再换成你自己的真实资料。</p>
+                    </div>
+
+                    <h2 id="steps">练习步骤</h2>
+                    <ol>
+                        <li>新建文件夹：<code>资料归档练习</code></li>
+                        <li>把上面的压缩包解压到这个文件夹里（会得到一堆带日期/类型的文件）。</li>
+                        <li>在该文件夹运行 <code>claude</code>，复制下面提示词。</li>
+                    </ol>
+
+                    <h2 id="prompt">一键提示词（直接复制）</h2>
+                    <div class="code-block-wrapper">
+                        <div class="code-header">
+                            <span class="code-lang">提示词</span>
+                            <button class="code-copy">复制代码</button>
+                        </div>
+                        <pre><code class="language-bash">请整理当前文件夹里的所有文件，目标是形成清晰的归档结构。
+
+规则：
+1) 按类型建文件夹：01_会议纪要、02_图纸、03_照片、04_报表、05_合同、99_其他
+2) 如果文件名里包含日期（YYYY-MM-DD 或 YYYYMMDD），则在对应类型目录下再按月份建子目录（例如：2026-01）
+3) 移动文件到对应目录（不要删除文件）
+4) 生成归档清单 archive_index.md，内容包括：原文件名、目标路径、识别出的日期/类型依据
+
+执行前：
+先输出你准备怎么分类的“规则表”，我确认后再开始移动。</code></pre>
+                    </div>
+
+                    <h2 id="check">验收标准</h2>
+                    <div class="checklist" data-id="scenario-s2-checks">
+                        <div class="checklist-title">完成即合格</div>
+                        <div class="checklist-item">
+                            <input type="checkbox" id="s2c-1">
+                            <label for="s2c-1">创建了类型目录（01_会议纪要…99_其他）</label>
+                        </div>
+                        <div class="checklist-item">
+                            <input type="checkbox" id="s2c-2">
+                            <label for="s2c-2">包含日期的文件被归到月份子目录</label>
+                        </div>
+                        <div class="checklist-item">
+                            <input type="checkbox" id="s2c-3">
+                            <label for="s2c-3">生成了 <code>archive_index.md</code> 清单</label>
+                        </div>
+                    </div>
+
+                    <nav class="chapter-nav">
+                        <a href="scenario-01-excel-cleaning.html" class="chapter-nav-card">
+                            <svg class="icon" aria-hidden="true"><use href="../images/icons.svg#icon-arrow-left"></use></svg>
+                            <div class="content">
+                                <div class="label">上一页</div>
+                                <div class="title">S1：工程台账清洗（Excel）</div>
+                            </div>
+                        </a>
+                        <a href="scenario-03-report.html" class="chapter-nav-card next">
+                            <svg class="icon" aria-hidden="true"><use href="../images/icons.svg#icon-arrow-right"></use></svg>
+                            <div class="content">
+                                <div class="label">下一页</div>
+                                <div class="title">S3：日报/周报生成（模板化）</div>
+                            </div>
+                        </a>
+                    </nav>
+                </article>
+            </div>
+
+            <footer class="footer">
+                <div class="footer-copyright">&copy; 2025 Claude Code 教程网站</div>
+            </footer>
+        </main>
+
+        <div class="overlay" id="overlay"></div>
+    </div>
+
+    <script src="../js/main.js"></script>
+</body>
+</html>

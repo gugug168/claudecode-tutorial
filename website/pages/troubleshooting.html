@@ -1,0 +1,200 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>A1：故障排查（按症状） - Claude Code 教程</title>
+    <link rel="stylesheet" href="../css/style.css">
+</head>
+<body data-page-id="troubleshooting">
+    <div class="app-container">
+        <aside class="sidebar" id="sidebar">
+            <div class="sidebar-header">
+                <a href="../index.html" style="display: flex; align-items: center; gap: 12px; text-decoration: none;">
+                    <div class="logo">C</div>
+                    <span class="logo-text">Claude Code 教程</span>
+                </a>
+            </div>
+            <div class="sidebar-search">
+                <div class="search-box">
+                    <span class="search-icon" aria-hidden="true">
+                        <svg class="icon icon-xs"><use href="../images/icons.svg#icon-search"></use></svg>
+                    </span>
+                    <input type="text" placeholder="搜索章节...">
+                </div>
+            </div>
+            <nav class="sidebar-nav" id="sidebarNav"></nav>
+        </aside>
+
+        <main class="main-content">
+            <header class="top-nav">
+                <div class="top-nav-left">
+                    <button class="menu-toggle" id="menuToggle" aria-label="打开目录">
+                        <svg class="icon icon-sm" aria-hidden="true"><use href="../images/icons.svg#icon-menu"></use></svg>
+                    </button>
+                    <nav class="breadcrumb">
+                        <a href="../index.html">首页</a>
+                        <span class="separator">/</span>
+                        <span class="current">故障排查</span>
+                    </nav>
+                </div>
+                <div class="top-nav-right">
+                    <div class="progress-indicator">
+                        <span>学习进度</span>
+                        <div class="progress-bar">
+                            <div class="progress-fill" id="progressFill" style="width: 0%"></div>
+                        </div>
+                        <span class="progress-text" id="progressText">0%</span>
+                    </div>
+                </div>
+            </header>
+
+            <div class="content-wrapper">
+                <header class="article-header">
+                    <div class="article-breadcrumb">
+                        <a href="../index.html">首页</a> / <span>A1：故障排查（按症状）</span>
+                    </div>
+                    <h1 class="article-title">A1：故障排查（按症状）</h1>
+                    <div class="article-meta">
+                        <span class="article-meta-item">
+                            <svg class="icon icon-xs" aria-hidden="true"><use href="../images/icons.svg#icon-clock"></use></svg>
+                            随时查阅
+                        </span>
+                        <span class="article-meta-item">
+                            <svg class="icon icon-xs" aria-hidden="true"><use href="../images/icons.svg#icon-tag"></use></svg>
+                            类别：附录
+                        </span>
+                    </div>
+                </header>
+
+                <article class="article-content">
+                    <!-- 配图：故障排查 -->
+                    <div class="section-image">
+                        <img src="../images/external/img_355a9470404eab38.png" alt="Claude Code故障排查" loading="lazy">
+                        <div class="section-image-caption">遇到问题别慌，按症状一步步排查即可解决</div>
+                    </div>
+
+                    <div class="alert alert-info">
+                        <div class="alert-title">怎么用这页？（新手最快）</div>
+                        <ol>
+                            <li>先找到你看到的“症状”（比如：找不到命令 / 权限不足 / Key 无效）。</li>
+                            <li>照着做 2～3 个动作就能排除大部分问题。</li>
+                            <li>如果还不行，把“报错原文 + 你做了什么”复制给 Claude。</li>
+                        </ol>
+                    </div>
+
+                    <h2 id="not-found">症状1：运行 <code>claude</code> 提示“找不到命令”</h2>
+                    <div class="alert alert-warning">
+                        <div class="alert-title">你看到的可能是</div>
+                        <ul>
+                            <li><code>claude : 无法将“claude”项识别为 cmdlet...</code></li>
+                            <li><code>command not found: claude</code></li>
+                        </ul>
+                    </div>
+                    <ol>
+                        <li>先验证是否安装成功：<code>claude --version</code></li>
+                        <li>如果也找不到：回到 <a href="chapter-01.html">第01章</a> 重新安装 CLI（重点检查 Node.js 是否可用）。</li>
+                        <li>如果安装过但仍找不到：重启终端/电脑（PATH 生效常见需要重启）。</li>
+                    </ol>
+
+                    <h2 id="npm-missing">症状2：<code>npm</code> 找不到 / Node.js 相关问题</h2>
+                    <ol>
+                        <li>运行：<code>node -v</code> 和 <code>npm -v</code></li>
+                        <li>如果找不到：按 <a href="chapter-01.html#nodejs">第01章 Node.js</a> 重新安装，务必勾选 Add to PATH。</li>
+                    </ol>
+
+                    <h2 id="key">症状3：API Key 无效 / 401 / 鉴权失败</h2>
+                    <ol>
+                        <li>先确认：Key 没有多空格、没有少字符（复制时最常见）。</li>
+                        <li>确认你配的是“正确的 Key 类型”（看 <a href="concepts.html">概念扫盲</a>）。</li>
+                        <li>换一个最短的测试问题，减少干扰：<code>你好，回复 OK</code></li>
+                    </ol>
+
+                    <h3 id="key-lost">补充：我明明配过 Key，但重开终端就又失效</h3>
+                    <ol>
+                        <li>你很可能用的是“临时配置”：PowerShell 的 <code>$env:XXX=...</code> 或 CMD 的 <code>set XXX=...</code> 只在当前窗口有效。</li>
+                        <li>最省心的永久方案：回到 <a href="chapter-01.html#glm">第01章-智谱</a> 运行 <code>npx @z_ai/coding-helper</code>，让它写入 <code>~/.claude/settings.json</code>。</li>
+                        <li>如果你不想用向导：请在 <a href="chapter-01.html#api">第01章</a> 里按“永久配置”手动写入 <code>settings.json</code>。</li>
+                    </ol>
+
+                    <h3 id="cmd-env">补充：我在 CMD 输入 <code>$env:...</code> 报错</h3>
+                    <ol>
+                        <li><code>$env:</code> 是 PowerShell 语法，CMD 不认识。</li>
+                        <li>解决方案 1：换用 PowerShell/Windows Terminal 再执行教程命令。</li>
+                        <li>解决方案 2：在 CMD 用 <code>set ANTHROPIC_AUTH_TOKEN=...</code> 这种写法（见 <a href="quickstart.html#step2">10分钟跑通-第2步</a>）。</li>
+                    </ol>
+
+                    <h2 id="network">症状4：网络慢 / 连接失败 / 超时</h2>
+                    <ol>
+                        <li>先换一个网络（手机热点也行）验证是否是网络问题。</li>
+                        <li>如果你在公司网络：可能被限制外网，优先换网络测试。</li>
+                        <li>避免一次发很长内容：分段发（更容易成功，也更省钱）。</li>
+                    </ol>
+
+                    <h2 id="permission">症状5：不能改文件 / 权限不足</h2>
+                    <ol>
+                        <li>输入 <code>/status</code> 看看是不是只读模式。</li>
+                        <li>只读模式退出：<code>/edit</code>（或重新启动时别用 <code>--read-only</code>）。</li>
+                        <li>如果是系统权限：Windows 尽量在你自己的文件夹操作，不要动系统目录。</li>
+                    </ol>
+
+                    <h2 id="drive">症状6：教程说用 D 盘，但我电脑没有 D 盘</h2>
+                    <ol>
+                        <li>不需要 D 盘。建议用你的用户目录：<code>%USERPROFILE%</code>（Windows）或 <code>~/</code>（Mac）。</li>
+                        <li>最简单：按 <a href="quickstart.html#step3">10分钟跑通-第3步</a> 的命令创建练习文件夹即可。</li>
+                    </ol>
+
+                    <h2 id="copy-template">把问题复制给 Claude 的模板（直接复制）</h2>
+                    <div class="code-block-wrapper">
+                        <div class="code-header">
+                            <span class="code-lang">提示词</span>
+                            <button class="code-copy">复制代码</button>
+                        </div>
+                        <pre><code class="language-bash">我遇到问题了，请一步一步带我排查（每一步告诉我“要输入什么命令/要点哪里/成功时会看到什么”）。
+
+我在做的事情：
+1) ...
+2) ...
+
+我看到的报错原文（完整复制）：
+...
+
+我的系统：Windows / Mac
+我当前目录（如果有）：...</code></pre>
+                    </div>
+
+                    <button class="btn btn-secondary mark-complete-btn" style="margin: 32px 0 24px;">
+                        <svg class="icon icon-sm" aria-hidden="true"><use href="../images/icons.svg#icon-circle"></use></svg>
+                        标记为已完成（保存进度）
+                    </button>
+
+                    <nav class="chapter-nav">
+                        <a href="appendix.html" class="chapter-nav-card">
+                            <svg class="icon" aria-hidden="true"><use href="../images/icons.svg#icon-arrow-left"></use></svg>
+                            <div class="content">
+                                <div class="label">返回</div>
+                                <div class="title">速查手册</div>
+                            </div>
+                        </a>
+                        <a href="cost-saving.html" class="chapter-nav-card next">
+                            <svg class="icon" aria-hidden="true"><use href="../images/icons.svg#icon-arrow-right"></use></svg>
+                            <div class="content">
+                                <div class="label">下一页</div>
+                                <div class="title">省钱与避坑</div>
+                            </div>
+                        </a>
+                    </nav>
+                </article>
+            </div>
+
+            <footer class="footer">
+                <div class="footer-copyright">&copy; 2025 Claude Code 教程网站</div>
+            </footer>
+        </main>
+
+        <div class="overlay" id="overlay"></div>
+    </div>
+
+    <script src="../js/main.js"></script>
+</body>
+</html>

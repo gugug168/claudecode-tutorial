@@ -1,0 +1,561 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>学习路线图 - Claude Code 教程</title>
+    <link rel="stylesheet" href="../css/style.css">
+</head>
+<body data-page-id="roadmap">
+    <div class="app-container">
+        <aside class="sidebar" id="sidebar">
+            <div class="sidebar-header">
+                <a href="../index.html" style="display: flex; align-items: center; gap: 12px; text-decoration: none;">
+                    <div class="logo">C</div>
+                    <span class="logo-text">Claude Code 教程</span>
+                </a>
+            </div>
+            <div class="sidebar-search">
+                <div class="search-box">
+                    <span class="search-icon" aria-hidden="true">
+                        <svg class="icon icon-xs"><use href="../images/icons.svg#icon-search"></use></svg>
+                    </span>
+                    <input type="text" placeholder="搜索章节...">
+                </div>
+            </div>
+            <nav class="sidebar-nav" id="sidebarNav"></nav>
+        </aside>
+
+        <main class="main-content">
+            <header class="top-nav">
+                <div class="top-nav-left">
+                    <button class="menu-toggle" id="menuToggle" aria-label="打开目录">
+                        <svg class="icon icon-sm" aria-hidden="true"><use href="../images/icons.svg#icon-menu"></use></svg>
+                    </button>
+                    <nav class="breadcrumb">
+                        <a href="../index.html">首页</a>
+                        <span class="separator">/</span>
+                        <span class="current">学习路线图</span>
+                    </nav>
+                </div>
+                <div class="top-nav-right">
+                    <div class="progress-indicator">
+                        <span>学习进度</span>
+                        <div class="progress-bar">
+                            <div class="progress-fill" id="progressFill" style="width: 0%"></div>
+                        </div>
+                        <span class="progress-text" id="progressText">0%</span>
+                    </div>
+                </div>
+            </header>
+
+            <div class="content-wrapper">
+                <header class="article-header">
+                    <div class="article-breadcrumb">
+                        <a href="../index.html">首页</a> / <span>学习路线图</span>
+                    </div>
+                    <h1 class="article-title">学习路线图</h1>
+                    <div class="article-meta">
+                        <span class="article-meta-item">
+                            <svg class="icon icon-xs" aria-hidden="true"><use href="../images/icons.svg#icon-clock"></use></svg>
+                            全程约：4-6小时
+                        </span>
+                        <span class="article-meta-item">
+                            <svg class="icon icon-xs" aria-hidden="true"><use href="../images/icons.svg#icon-signal"></use></svg>
+                            适合：零基础小白
+                        </span>
+                    </div>
+                </header>
+
+                <article class="article-content">
+                    <div class="alert alert-info">
+                        <div class="alert-title">怎么用这个路线图？</div>
+                        <p>这是从<strong>完全小白</strong>到<strong>独立使用 Claude Code</strong>的完整学习路径。</p>
+                        <p>按照箭头顺序学习，每完成一步就打勾。完成后你会掌握：</p>
+                        <ul>
+                            <li>正确安装和配置 Claude Code</li>
+                            <li>用 AI 自动处理日常工作（Excel、文件整理等）</li>
+                            <li>遇到问题知道怎么排查和求助</li>
+                        </ul>
+                    </div>
+
+                    <!-- 路线图时间轴 -->
+                    <div class="roadmap-container">
+                        <div class="roadmap-header">
+                            <h2 class="roadmap-title">Claude Code 学习路径</h2>
+                            <p class="roadmap-subtitle">按照这个顺序学习，从零到上手</p>
+                        </div>
+
+                        <div class="roadmap-timeline">
+                            <!-- 第一阶段：快速上手 -->
+                            <div class="roadmap-phase">
+                                <div class="roadmap-phase-header">
+                                    <h3 class="roadmap-phase-title">第一阶段：快速上手</h3>
+                                    <span class="roadmap-phase-time">约 25 分钟</span>
+                                </div>
+
+                                <div class="roadmap-items">
+                                    <div class="roadmap-item" data-status="pending" data-page="quickstart">
+                                        <div class="roadmap-item-marker">
+                                            <svg class="roadmap-item-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"/>
+                                            </svg>
+                                        </div>
+                                        <div class="roadmap-item-content">
+                                            <div class="roadmap-item-title">10分钟跑通</div>
+                                            <div class="roadmap-item-desc">最快速的方式体验 Claude Code，先跑起来再学原理</div>
+                                            <div class="roadmap-item-meta">
+                                                <span class="roadmap-item-time">10 分钟</span>
+                                                <span class="roadmap-item-difficulty">简单</span>
+                                            </div>
+                                        </div>
+                                        <a href="quickstart.html" class="roadmap-item-link">
+                                            <svg class="icon icon-sm" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/>
+                                            </svg>
+                                        </a>
+                                    </div>
+
+                                    <div class="roadmap-item" data-status="pending" data-page="concepts">
+                                        <div class="roadmap-item-marker">
+                                            <svg class="roadmap-item-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12h-1M4 12H3m3.343-5.657l-.707-.707m2.828 9.9a5 5 0 117.072 0l-.548.547A3.374 3.374 0 0014 18.469V19a2 2 0 11-4 0v-.531c0-.895-.356-1.754-.988-2.386l-.548-.547z"/>
+                                            </svg>
+                                        </div>
+                                        <div class="roadmap-item-content">
+                                            <div class="roadmap-item-title">概念扫盲</div>
+                                            <div class="roadmap-item-desc">用大白话讲清楚：什么是 CLI、API Key、权限等核心概念</div>
+                                            <div class="roadmap-item-meta">
+                                                <span class="roadmap-item-time">15 分钟</span>
+                                                <span class="roadmap-item-difficulty">简单</span>
+                                            </div>
+                                        </div>
+                                        <a href="concepts.html" class="roadmap-item-link">
+                                            <svg class="icon icon-sm" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/>
+                                            </svg>
+                                        </a>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- 第二阶段：系统学习 -->
+                            <div class="roadmap-phase">
+                                <div class="roadmap-phase-header">
+                                    <h3 class="roadmap-phase-title">第二阶段：系统学习</h3>
+                                    <span class="roadmap-phase-time">约 2-3 小时</span>
+                                </div>
+
+                                <div class="roadmap-items">
+                                    <div class="roadmap-item" data-status="pending" data-page="chapter-01">
+                                        <div class="roadmap-item-marker">
+                                            <svg class="roadmap-item-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"/>
+                                            </svg>
+                                        </div>
+                                        <div class="roadmap-item-content">
+                                            <div class="roadmap-item-title">第01章：安装与配置</div>
+                                            <div class="roadmap-item-desc">安装 Node.js、Claude Code CLI，配置 API Key</div>
+                                            <div class="roadmap-item-meta">
+                                                <span class="roadmap-item-time">20 分钟</span>
+                                                <span class="roadmap-item-difficulty">简单</span>
+                                            </div>
+                                        </div>
+                                        <a href="chapter-01.html" class="roadmap-item-link">
+                                            <svg class="icon icon-sm" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/>
+                                            </svg>
+                                        </a>
+                                    </div>
+
+                                    <div class="roadmap-item" data-status="pending" data-page="chapter-02">
+                                        <div class="roadmap-item-marker">
+                                            <svg class="roadmap-item-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 9l3 3-3 3m5 0h3M5 20h14a2 2 0 002-2V6a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"/>
+                                            </svg>
+                                        </div>
+                                        <div class="roadmap-item-content">
+                                            <div class="roadmap-item-title">第02章：基本命令</div>
+                                            <div class="roadmap-item-desc">学习最基本的命令：让 AI 读文件、写文件、执行命令</div>
+                                            <div class="roadmap-item-meta">
+                                                <span class="roadmap-item-time">25 分钟</span>
+                                                <span class="roadmap-item-difficulty">简单</span>
+                                            </div>
+                                        </div>
+                                        <a href="chapter-02.html" class="roadmap-item-link">
+                                            <svg class="icon icon-sm" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/>
+                                            </svg>
+                                        </a>
+                                    </div>
+
+                                    <div class="roadmap-item" data-status="pending" data-page="chapter-03">
+                                        <div class="roadmap-item-marker">
+                                            <svg class="roadmap-item-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/>
+                                            </svg>
+                                        </div>
+                                        <div class="roadmap-item-content">
+                                            <div class="roadmap-item-title">第03章：对话与上下文</div>
+                                            <div class="roadmap-item-desc">理解 AI 如何记住上下文，如何进行多轮对话</div>
+                                            <div class="roadmap-item-meta">
+                                                <span class="roadmap-item-time">20 分钟</span>
+                                                <span class="roadmap-item-difficulty">中等</span>
+                                            </div>
+                                        </div>
+                                        <a href="chapter-03.html" class="roadmap-item-link">
+                                            <svg class="icon icon-sm" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/>
+                                            </svg>
+                                        </a>
+                                    </div>
+
+                                    <div class="roadmap-item" data-status="pending" data-page="chapter-04">
+                                        <div class="roadmap-item-marker">
+                                            <svg class="roadmap-item-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"/>
+                                            </svg>
+                                        </div>
+                                        <div class="roadmap-item-content">
+                                            <div class="roadmap-item-title">第04章：权限管理</div>
+                                            <div class="roadmap-item-desc">理解只读、默认、危险、系统级四种权限模式</div>
+                                            <div class="roadmap-item-meta">
+                                                <span class="roadmap-item-time">15 分钟</span>
+                                                <span class="roadmap-item-difficulty">中等</span>
+                                            </div>
+                                        </div>
+                                        <a href="chapter-04.html" class="roadmap-item-link">
+                                            <svg class="icon icon-sm" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/>
+                                            </svg>
+                                        </a>
+                                    </div>
+
+                                    <div class="roadmap-item" data-status="pending" data-page="chapter-05">
+                                        <div class="roadmap-item-marker">
+                                            <svg class="roadmap-item-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z"/>
+                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/>
+                                            </svg>
+                                        </div>
+                                        <div class="roadmap-item-content">
+                                            <div class="roadmap-item-title">第05章：配置与技巧</div>
+                                            <div class="roadmap-item-desc">环境变量、配置文件、使用技巧</div>
+                                            <div class="roadmap-item-meta">
+                                                <span class="roadmap-item-time">20 分钟</span>
+                                                <span class="roadmap-item-difficulty">中等</span>
+                                            </div>
+                                        </div>
+                                        <a href="chapter-05.html" class="roadmap-item-link">
+                                            <svg class="icon icon-sm" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/>
+                                            </svg>
+                                        </a>
+                                    </div>
+
+                                    <div class="roadmap-item" data-status="pending" data-page="chapter-06">
+                                        <div class="roadmap-item-marker">
+                                            <svg class="roadmap-item-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"/>
+                                            </svg>
+                                        </div>
+                                        <div class="roadmap-item-content">
+                                            <div class="roadmap-item-title">第06-10章：进阶功能</div>
+                                            <div class="roadmap-item-desc">Git 集成、多模型支持、扩展功能等</div>
+                                            <div class="roadmap-item-meta">
+                                                <span class="roadmap-item-time">45 分钟</span>
+                                                <span class="roadmap-item-difficulty">较难</span>
+                                            </div>
+                                        </div>
+                                        <a href="chapter-06.html" class="roadmap-item-link">
+                                            <svg class="icon icon-sm" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/>
+                                            </svg>
+                                        </a>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- 第三阶段：实战应用 -->
+                            <div class="roadmap-phase">
+                                <div class="roadmap-phase-header">
+                                    <h3 class="roadmap-phase-title">第三阶段：实战应用</h3>
+                                    <span class="roadmap-phase-time">约 1-2 小时</span>
+                                </div>
+
+                                <div class="roadmap-items">
+                                    <div class="roadmap-item" data-status="pending" data-page="scenario-01-excel-cleaning">
+                                        <div class="roadmap-item-marker">
+                                            <svg class="roadmap-item-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 17v-2m3 2v-4m3 4v-6m2 10H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/>
+                                            </svg>
+                                        </div>
+                                        <div class="roadmap-item-content">
+                                            <div class="roadmap-item-title">实战一：Excel 数据清洗</div>
+                                            <div class="roadmap-item-desc">用 AI 自动处理 Excel 表格，清洗脏数据</div>
+                                            <div class="roadmap-item-meta">
+                                                <span class="roadmap-item-time">20 分钟</span>
+                                                <span class="roadmap-item-difficulty">中等</span>
+                                            </div>
+                                        </div>
+                                        <a href="scenario-01-excel-cleaning.html" class="roadmap-item-link">
+                                            <svg class="icon icon-sm" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/>
+                                            </svg>
+                                        </a>
+                                    </div>
+
+                                    <div class="roadmap-item" data-status="pending" data-page="scenario-02-file-organize">
+                                        <div class="roadmap-item-marker">
+                                            <svg class="roadmap-item-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 7v10a2 2 0 002 2h14a2 2 0 002-2V9a2 2 0 00-2-2h-6l-2-2H5a2 2 0 00-2 2z"/>
+                                            </svg>
+                                        </div>
+                                        <div class="roadmap-item-content">
+                                            <div class="roadmap-item-title">实战二：文件整理</div>
+                                            <div class="roadmap-item-desc">用 AI 自动整理文件夹，按类型归档文件</div>
+                                            <div class="roadmap-item-meta">
+                                                <span class="roadmap-item-time">15 分钟</span>
+                                                <span class="roadmap-item-difficulty">简单</span>
+                                            </div>
+                                        </div>
+                                        <a href="scenario-02-file-organize.html" class="roadmap-item-link">
+                                            <svg class="icon icon-sm" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/>
+                                            </svg>
+                                        </a>
+                                    </div>
+
+                                    <div class="roadmap-item" data-status="pending" data-page="scenario-03-report">
+                                        <div class="roadmap-item-marker">
+                                            <svg class="roadmap-item-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/>
+                                            </svg>
+                                        </div>
+                                        <div class="roadmap-item-content">
+                                            <div class="roadmap-item-title">实战三：报告生成</div>
+                                            <div class="roadmap-item-desc">用 AI 自动生成工作报告、总结文档</div>
+                                            <div class="roadmap-item-meta">
+                                                <span class="roadmap-item-time">20 分钟</span>
+                                                <span class="roadmap-item-difficulty">中等</span>
+                                            </div>
+                                        </div>
+                                        <a href="scenario-03-report.html" class="roadmap-item-link">
+                                            <svg class="icon icon-sm" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/>
+                                            </svg>
+                                        </a>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- 第四阶段：问题排查 -->
+                            <div class="roadmap-phase">
+                                <div class="roadmap-phase-header">
+                                    <h3 class="roadmap-phase-title">随时可查：问题排查</h3>
+                                    <span class="roadmap-phase-time">遇到问题时查看</span>
+                                </div>
+
+                                <div class="roadmap-items">
+                                    <div class="roadmap-item" data-status="pending" data-page="troubleshooting">
+                                        <div class="roadmap-item-marker">
+                                            <svg class="roadmap-item-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/>
+                                            </svg>
+                                        </div>
+                                        <div class="roadmap-item-content">
+                                            <div class="roadmap-item-title">故障排查指南</div>
+                                            <div class="roadmap-item-desc">安装失败、命令报错、网络问题等常见问题的解决方案</div>
+                                            <div class="roadmap-item-meta">
+                                                <span class="roadmap-item-time">随时查看</span>
+                                                <span class="roadmap-item-difficulty">工具</span>
+                                            </div>
+                                        </div>
+                                        <a href="troubleshooting.html" class="roadmap-item-link">
+                                            <svg class="icon icon-sm" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/>
+                                            </svg>
+                                        </a>
+                                    </div>
+
+                                    <div class="roadmap-item" data-status="pending" data-page="cost-saving">
+                                        <div class="roadmap-item-marker">
+                                            <svg class="roadmap-item-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/>
+                                            </svg>
+                                        </div>
+                                        <div class="roadmap-item-content">
+                                            <div class="roadmap-item-title">省钱技巧</div>
+                                            <div class="roadmap-item-desc">如何控制 API 使用成本，使用免费/便宜的模型</div>
+                                            <div class="roadmap-item-meta">
+                                                <span class="roadmap-item-time">随时查看</span>
+                                                <span class="roadmap-item-difficulty">工具</span>
+                                            </div>
+                                        </div>
+                                        <a href="cost-saving.html" class="roadmap-item-link">
+                                            <svg class="icon icon-sm" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/>
+                                            </svg>
+                                        </a>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- 进度概览 -->
+                        <div class="roadmap-progress">
+                            <h3>你的学习进度</h3>
+                            <div class="roadmap-progress-bar">
+                                <div class="roadmap-progress-fill" id="roadmapProgressFill" style="width: 0%"></div>
+                            </div>
+                            <div class="roadmap-progress-stats">
+                                <div class="roadmap-progress-stat">
+                                    <span class="roadmap-progress-value" id="roadmapCompleted">0</span>
+                                    <span class="roadmap-progress-label">已完成</span>
+                                </div>
+                                <div class="roadmap-progress-stat">
+                                    <span class="roadmap-progress-value" id="roadmapTotal">14</span>
+                                    <span class="roadmap-progress-label">总计</span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- 图例 -->
+                        <div class="roadmap-legend">
+                            <div class="roadmap-legend-item">
+                                <div class="roadmap-legend-dot" style="background: var(--border-color);"></div>
+                                <span>未开始</span>
+                            </div>
+                            <div class="roadmap-legend-item">
+                                <div class="roadmap-legend-dot" style="background: var(--primary-color);"></div>
+                                <span>进行中</span>
+                            </div>
+                            <div class="roadmap-legend-item">
+                                <div class="roadmap-legend-dot" style="background: var(--success-color);"></div>
+                                <span>已完成</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- 快捷操作 -->
+                    <div class="roadmap-actions">
+                        <h3>想直接开始？</h3>
+                        <div style="display: flex; gap: 16px; flex-wrap: wrap; margin-top: 16px;">
+                            <a href="quickstart.html" class="btn btn-primary">
+                                <svg class="icon icon-sm" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"/>
+                                </svg>
+                                10分钟快速跑通
+                            </a>
+                            <a href="chapter-01.html" class="btn btn-secondary">
+                                <svg class="icon icon-sm" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253"/>
+                                </svg>
+                                系统学习
+                            </a>
+                        </div>
+                    </div>
+                </article>
+            </div>
+        </main>
+    </div>
+
+    <script src="../js/main.js"></script>
+    <script>
+        // 路线图进度管理
+        (function() {
+            const STORAGE_KEY = 'claude-roadmap-progress';
+            const items = document.querySelectorAll('.roadmap-item');
+
+            // 加载进度
+            function loadProgress() {
+                const saved = localStorage.getItem(STORAGE_KEY);
+                return saved ? JSON.parse(saved) : {};
+            }
+
+            // 保存进度
+            function saveProgress(progress) {
+                localStorage.setItem(STORAGE_KEY, JSON.stringify(progress));
+            }
+
+            // 更新单个项目状态
+            function updateItemStatus(pageId, status) {
+                const progress = loadProgress();
+                progress[pageId] = status;
+                saveProgress(progress);
+                updateUI();
+            }
+
+            // 更新界面
+            function updateUI() {
+                const progress = loadProgress();
+                let completed = 0;
+                let total = items.length;
+
+                items.forEach(item => {
+                    const pageId = item.dataset.page;
+                    const status = progress[pageId] || 'pending';
+
+                    // 更新项目状态
+                    item.dataset.status = status;
+
+                    // 更新标记图标
+                    const marker = item.querySelector('.roadmap-item-marker');
+                    if (status === 'completed') {
+                        marker.style.background = 'var(--success-color)';
+                        completed++;
+                    } else if (status === 'in-progress') {
+                        marker.style.background = 'var(--primary-color)';
+                    } else {
+                        marker.style.background = 'var(--border-color)';
+                    }
+                });
+
+                // 更新进度条
+                const percentage = Math.round((completed / total) * 100);
+                document.getElementById('roadmapProgressFill').style.width = percentage + '%';
+                document.getElementById('roadmapCompleted').textContent = completed;
+                document.getElementById('roadmapTotal').textContent = total;
+
+                // 更新全局进度
+                if (window.updateProgress) {
+                    window.updateProgress(percentage);
+                }
+            }
+
+            // 标记当前页面为进行中
+            function markCurrentPage() {
+                const currentPage = document.body.dataset.pageId;
+                if (currentPage && currentPage !== 'roadmap') {
+                    updateItemStatus(currentPage, 'in-progress');
+                }
+            }
+
+            // 点击切换状态
+            items.forEach(item => {
+                item.addEventListener('click', (e) => {
+                    if (!e.target.closest('.roadmap-item-link')) {
+                        const pageId = item.dataset.page;
+                        const currentStatus = item.dataset.status;
+
+                        let newStatus;
+                        if (currentStatus === 'pending') {
+                            newStatus = 'in-progress';
+                        } else if (currentStatus === 'in-progress') {
+                            newStatus = 'completed';
+                        } else {
+                            newStatus = 'pending';
+                        }
+
+                        updateItemStatus(pageId, newStatus);
+                    }
+                });
+            });
+
+            // 初始化
+            markCurrentPage();
+            updateUI();
+        })();
+    </script>
+</body>
+</html>

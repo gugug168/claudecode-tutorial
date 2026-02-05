@@ -1,0 +1,21 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="520" viewBox="0 0 1200 520">
+  <defs>
+    <linearGradient id="bg" x1="0" x2="1" y1="0" y2="1">
+      <stop offset="0" stop-color="#0b1220"/>
+      <stop offset="1" stop-color="#111827"/>
+    </linearGradient>
+  </defs>
+  <rect x="0" y="0" width="1200" height="520" rx="18" fill="url(#bg)"/>
+  <rect x="22" y="22" width="1156" height="476" rx="14" fill="#0f172a" stroke="#334155"/>
+  <g font-family="ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, 'Liberation Mono', 'Courier New', monospace" font-size="22" fill="#e2e8f0">
+    <text x="48" y="72" fill="#94a3b8">Mac Terminal</text>
+    <text x="48" y="120"><tspan fill="#60a5fa">~ %</tspan> node -v</text>
+    <text x="48" y="156" fill="#a7f3d0">v20.11.1</text>
+    <text x="48" y="208"><tspan fill="#60a5fa">~ %</tspan> npm -v</text>
+    <text x="48" y="244" fill="#a7f3d0">10.2.4</text>
+    <text x="48" y="296"><tspan fill="#60a5fa">~ %</tspan> claude --version</text>
+    <text x="48" y="332" fill="#a7f3d0">claude-code version 2.x.y</text>
+    <text x="48" y="396" fill="#94a3b8">说明：你的版本号可能不同，只要能看到版本号就算成功。</text>
+    <text x="48" y="432" fill="#94a3b8">如果提示 command not found，请回到 A1：故障排查。</text>
+  </g>
+</svg>

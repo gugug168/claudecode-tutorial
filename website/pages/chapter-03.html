@@ -1,0 +1,480 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>第03章：Git 存档与版本管理 - Claude Code 教程</title>
+    <link rel="stylesheet" href="../css/style.css">
+</head>
+<body>
+    <div class="app-container">
+        <aside class="sidebar" id="sidebar">
+            <div class="sidebar-header">
+                <a href="../index.html" style="display: flex; align-items: center; gap: 12px; text-decoration: none;">
+                    <div class="logo">C</div>
+                    <span class="logo-text">Claude Code 教程</span>
+                </a>
+            </div>
+            <div class="sidebar-search">
+                <div class="search-box">
+                    <span class="search-icon" aria-hidden="true">
+                        <svg class="icon icon-xs"><use href="../images/icons.svg#icon-search"></use></svg>
+                    </span>
+                    <input type="text" placeholder="搜索章节...">
+                </div>
+            </div>
+            <nav class="sidebar-nav" id="sidebarNav"></nav>
+        </aside>
+
+        <main class="main-content">
+            <header class="top-nav">
+                <div class="top-nav-left">
+                    <button class="menu-toggle" id="menuToggle" aria-label="打开目录">
+                        <svg class="icon icon-sm" aria-hidden="true"><use href="../images/icons.svg#icon-menu"></use></svg>
+                    </button>
+                    <nav class="breadcrumb">
+                        <a href="../index.html">首页</a>
+                        <span class="separator">/</span>
+                        <span class="current">第03章</span>
+                    </nav>
+                </div>
+                <div class="top-nav-right">
+                    <div class="progress-indicator">
+                        <span>学习进度</span>
+                        <div class="progress-bar">
+                            <div class="progress-fill" id="progressFill" style="width: 0%"></div>
+                        </div>
+                        <span class="progress-text" id="progressText">0%</span>
+                    </div>
+                </div>
+            </header>
+
+            <div class="content-wrapper">
+                <header class="article-header">
+                    <div class="article-breadcrumb">
+                        <a href="../index.html">首页</a> / <span>第03章：Git 存档与版本管理</span>
+                    </div>
+                    <h1 class="article-title">第03章：Git 存档与版本管理</h1>
+                    <div class="article-meta">
+                        <span class="article-meta-item">
+                            <svg class="icon icon-xs" aria-hidden="true"><use href="../images/icons.svg#icon-clock"></use></svg>
+                            预计时间：45分钟
+                        </span>
+                        <span class="article-meta-item">
+                            <svg class="icon icon-xs" aria-hidden="true"><use href="../images/icons.svg#icon-signal"></use></svg>
+                            难度：简单
+                        </span>
+                        <span class="article-meta-item">
+                            <svg class="icon icon-xs" aria-hidden="true"><use href="../images/icons.svg#icon-tag"></use></svg>
+                            类别：必修
+                        </span>
+                    </div>
+                </header>
+
+                <article class="article-content">
+                    <!-- 配图：Git版本控制 -->
+                    <div class="section-image">
+                        <img src="../images/external/img_62d972907ea4ff88.png" alt="Git版本控制工作流" loading="lazy">
+                        <div class="section-image-caption">Git 让你能随时回到文件的任何历史版本</div>
+                    </div>
+
+                    <div class="alert alert-info">
+                        <div class="alert-title">📌 章节说明</div>
+                        <p><strong>前置知识：</strong>已完成第02章，熟悉 Claude Code 基本操作。</p>
+                        <p><strong>本章价值：</strong>Git 是开发者的"时光机"，让你随时能回到过去的任何一个版本。用 Claude Code 操作 Git，<strong>不需要记住任何 Git 命令</strong>。</p>
+                    </div>
+
+                    <h2 id="what-is-git">Git 是什么？</h2>
+
+                    <div style="background: var(--bg-card); padding: 24px; border-radius: var(--radius-md); border: 1px solid var(--border-color); margin: 24px 0; font-family: monospace;">
+Git 就像文件的 "时光机"
+
+┌────────────────────────────────────────┐
+│                                        │
+│   今天 → 明天 → 后天                    │
+│    ↓       ↓       ↓                   │
+│  版本1   版本2   版本3                  │
+│                                        │
+│   随时可以回到任何一个版本！             │
+│                                        │
+└────────────────────────────────────────┘
+                    </div>
+
+                    <h3>为什么需要 Git？</h3>
+
+                    <table style="margin: 24px 0;">
+                        <thead>
+                            <tr>
+                                <th>场景</th>
+                                <th>没有 Git</th>
+                                <th>有 Git</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>改错了</td>
+                                <td>没办法，重来</td>
+                                <td>一键回退</td>
+                            </tr>
+                            <tr>
+                                <td>想对比</td>
+                                <td>不记得改了啥</td>
+                                <td>清楚看到差异</td>
+                            </tr>
+                            <tr>
+                                <td>多版本</td>
+                                <td>file_v1、file_v2、file_final...</td>
+                                <td>自动管理</td>
+                            </tr>
+                            <tr>
+                                <td>误删除</td>
+                                <td>文件没了，永远没了</td>
+                                <td>随时恢复</td>
+                            </tr>
+                        </tbody>
+                    </table>
+
+                    <div class="alert alert-success">
+                        <div class="alert-title">🎯 用 Claude Code 操作 Git 的优势</div>
+                        <p><strong>传统方式：</strong></p>
+                        <ul>
+                            <li>❌ 需要记一堆命令（git add, git commit, git push...）</li>
+                            <li>❌ 命令参数复杂，容易出错</li>
+                            <li>❌ 不知道什么时候该用什么命令</li>
+                        </ul>
+                        <p><strong>用 Claude Code：</strong></p>
+                        <ul>
+                            <li>✅ 用自然语言描述即可</li>
+                            <li>✅ Claude 自动选择合适的命令</li>
+                            <li>✅ 不需要记任何 Git 命令</li>
+                        </ul>
+                    </div>
+
+                    <h2 id="install-git">第一步：安装 Git（5分钟）</h2>
+
+                    <h3>Windows 用户</h3>
+                    <ol>
+                        <li>访问 <a href="https://git-scm.com/" target="_blank">git-scm.com</a></li>
+                        <li>下载 Windows 版本</li>
+                        <li>运行安装程序，一路 Next 即可</li>
+                        <li>验证：打开命令行，输入 <code>git --version</code></li>
+                    </ol>
+
+                    <div class="code-block-wrapper">
+                        <div class="code-header">
+                            <span class="code-lang">terminal</span>
+                            <button class="code-copy">复制代码</button>
+                        </div>
+                        <pre><code class="language-bash">git --version
+# 应该显示类似：git version 2.43.0.windows.1</code></pre>
+                    </div>
+
+                    <h3>Mac 用户</h3>
+
+                    <p>Mac 系统通常已经自带 Git。</p>
+
+                    <div class="code-block-wrapper">
+                        <div class="code-header">
+                            <span class="code-lang">bash</span>
+                            <button class="code-copy">复制代码</button>
+                        </div>
+                        <pre><code class="language-bash"># 检查是否已安装
+git --version
+
+# 如果没有，系统会提示安装 Xcode Command Line Tools
+# 按提示安装即可</code></pre>
+                    </div>
+
+                    <h2 id="init">第二步：第一次初始化 Git（10分钟）</h2>
+
+                    <h3>创建一个测试项目</h3>
+
+                    <div class="code-block-wrapper">
+                        <div class="code-header">
+                            <span class="code-lang">terminal</span>
+                            <button class="code-copy">复制代码</button>
+                        </div>
+                        <pre><code class="language-bash"># 创建项目文件夹
+ mkdir my-first-git
+ cd my-first-git
+
+# 启动 Claude Code
+claude</code></pre>
+                    </div>
+
+                    <h3>让 Claude 帮你初始化</h3>
+
+                    <p>在 Claude Code 中输入：</p>
+
+                    <div style="background: var(--bg-card); padding: 16px; border-radius: var(--radius-md); border: 1px solid var(--border-color); margin: 16px 0;">
+                        <code>请帮这个文件夹初始化 Git，并创建第一个存档，提交信息写 "初始版本"</code>
+                    </div>
+
+                    <div class="alert alert-info">
+                        <div class="alert-title">🔍 Claude 会自动做什么？</div>
+                        <ol>
+                            <li>运行 <code>git init</code> 初始化仓库</li>
+                            <li>创建 <code>.gitignore</code> 文件（忽略不需要存档的文件）</li>
+                            <li>运行 <code>git add .</code> 添加所有文件</li>
+                            <li>运行 <code>git commit -m "初始版本"</code> 创建存档</li>
+                        </ol>
+                    </div>
+
+                    <h2 id="daily">第三步：日常存档（15分钟）</h2>
+
+                    <h3>修改文件后存档</h3>
+
+                    <div style="background: var(--bg-card); padding: 16px; border-radius: var(--radius-md); border: 1px solid var(--border-color); margin: 16px 0;">
+                        <code>我修改了一些文件，请帮我 Git 存档，提交信息写 "更新了登录功能"</code>
+                    </div>
+
+                    <div class="alert alert-info">
+                        <div class="alert-title">🔍 Claude 会自动做什么？</div>
+                        <ol>
+                            <li>检查哪些文件被修改了</li>
+                            <li>运行 <code>git add .</code> 添加修改</li>
+                            <li>运行 <code>git commit</code> 创建存档</li>
+                        </ol>
+                    </div>
+
+                    <h3>良好的提交信息写法</h3>
+
+                    <table style="margin: 24px 0;">
+                        <thead>
+                            <tr>
+                                <th>好的提交信息 ✅</th>
+                                <th>不好的提交信息 ❌</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>"修复了登录页面的样式问题"</td>
+                                <td>"更新"</td>
+                            </tr>
+                            <tr>
+                                <td>"新增了用户头像上传功能"</td>
+                                <td>"改了一些东西"</td>
+                            </tr>
+                            <tr>
+                                <td>"更新了 README 文档"</td>
+                                <td>"123"</td>
+                            </tr>
+                        </tbody>
+                    </table>
+
+                    <div class="alert alert-warning">
+                        <div class="alert-title">💡 原则</div>
+                        <p>提交信息要清晰描述"做了什么"，让未来的你看到就知道改了什么。</p>
+                    </div>
+
+                    <h2 id="history">第四步：查看历史和差异（10分钟）</h2>
+
+                    <h3>查看历史记录</h3>
+
+                    <div style="background: var(--bg-card); padding: 16px; border-radius: var(--radius-md); border: 1px solid var(--border-color); margin: 16px 0;">
+                        <code>请显示 Git 历史记录</code>
+                    </div>
+
+                    <p>你会看到类似：</p>
+
+                    <div style="background: var(--bg-code); padding: 16px; border-radius: var(--radius-md); margin: 16px 0; font-family: monospace;">
+                        commit 1: 修复了登录 bug (今天 14:30)<br>
+                        commit 2: 更新了首页样式 (今天 10:00)<br>
+                        commit 3: 初始版本 (昨天 16:00)
+                    </div>
+
+                    <h3>查看某个版本改了什么</h3>
+
+                    <div style="background: var(--bg-card); padding: 16px; border-radius: var(--radius-md); border: 1px solid var(--border-color); margin: 16px 0;">
+                        <code>请显示当前版本和上一个版本的差异</code>
+                    </div>
+
+                    <h2 id="rollback">第五步：回退到之前的版本（5分钟）</h2>
+
+                    <h3>回退操作</h3>
+
+                    <div style="background: var(--bg-card); padding: 16px; border-radius: var(--radius-md); border: 1px solid var(--border-color); margin: 16px 0;">
+                        <code>请回退到上一个版本</code>
+                    </div>
+
+                    <p>或者指定具体版本：</p>
+
+                    <div style="background: var(--bg-card); padding: 16px; border-radius: var(--radius-md); border: 1px solid var(--border-color); margin: 16px 0;">
+                        <code>请回退到 "更新了首页样式" 那个版本</code>
+                    </div>
+
+                    <h3>恢复误删的文件</h3>
+
+                    <div style="background: var(--bg-card); padding: 16px; border-radius: var(--radius-md); border: 1px solid var(--border-color); margin: 16px 0;">
+                        <code>我不小心删除了 config.py，请从 Git 恢复</code>
+                    </div>
+
+                    <h2 id="scenarios">常用场景</h2>
+
+                    <h3>场景1：开始新功能前先存档</h3>
+
+                    <div style="background: var(--bg-card); padding: 16px; border-radius: var(--radius-md); border: 1px solid var(--border-color); margin: 16px 0;">
+                        <code>Git 存档当前状态，提交信息写 "开始新功能前的稳定版本"</code>
+                    </div>
+
+                    <div class="alert alert-success">
+                        <p><strong>好处：</strong>如果新功能改乱了，随时可以回退到这个稳定版本。</p>
+                    </div>
+
+                    <h3>场景2：改错了想回退</h3>
+
+                    <div style="background: var(--bg-card); padding: 16px; border-radius: var(--radius-md); border: 1px solid var(--border-color); margin: 16px 0;">
+                        <code>我刚才的改法有问题，请回退到上一个版本</code>
+                    </div>
+
+                    <h3>场景3：查看改了什么</h3>
+
+                    <div style="background: var(--bg-card); padding: 16px; border-radius: var(--radius-md); border: 1px solid var(--border-color); margin: 16px 0;">
+                        <code>请显示我这次修改了哪些内容</code>
+                    </div>
+
+                    <h3>场景4：只想存档部分文件</h3>
+
+                    <div style="background: var(--bg-card); padding: 16px; border-radius: var(--radius-md); border: 1px solid var(--border-color); margin: 16px 0;">
+                        <code>我只想存档 index.html 和 style.css，其他文件暂不提交</code>
+                    </div>
+
+                    <h3>场景5：放弃所有未提交的修改</h3>
+
+                    <div style="background: var(--bg-card); padding: 16px; border-radius: var(--radius-md); border: 1px solid var(--border-color); margin: 16px 0;">
+                        <code>请放弃所有未提交的修改，恢复到上次存档的状态</code>
+                    </div>
+
+                    <div class="alert alert-warning">
+                        <p><strong>警告：</strong>这个操作会删除所有未保存的修改，请谨慎使用！</p>
+                    </div>
+
+                    <h3>场景6：对比两个版本的差异</h3>
+
+                    <div style="background: var(--bg-card); padding: 16px; border-radius: var(--radius-md); border: 1px solid var(--border-color); margin: 16px 0;">
+                        <code>请对比 "初始版本" 和 "更新了首页样式" 这两个版本的差异</code>
+                    </div>
+
+                    <h3>场景7：查看某个文件的修改历史</h3>
+
+                    <div style="background: var(--bg-card); padding: 16px; border-radius: var(--radius-md); border: 1px solid var(--border-color); margin: 16px 0;">
+                        <code>请显示 index.js 这个文件的修改历史</code>
+                    </div>
+
+                    <h2 id="workflow">推荐的工作流程</h2>
+
+                    <div style="background: var(--bg-card); padding: 24px; border-radius: var(--radius-md); border: 1px solid var(--border-color); margin: 24px 0; font-family: monospace;">
+推荐工作流程：
+
+┌─────────────────────────────────────────┐
+│                                         │
+│  1. 开始工作前                           │
+│     → Git 存档，标记"开始前的稳定版本"    │
+│                                         │
+│  2. 完成一个小功能                       │
+│     → Git 存档，写清楚做了什么           │
+│                                         │
+│  3. 改错了或想回退                       │
+│     → 随时回到任何一个存档点             │
+│                                         │
+│  4. 一天工作结束                         │
+│     → Git 存档，标记"今天完成的内容"      │
+│                                         │
+└─────────────────────────────────────────┘
+                    </div>
+
+                    <div class="alert alert-info">
+                        <div class="alert-title">💡 最佳实践</div>
+                        <ul>
+                            <li><strong>频繁存档：</strong>每完成一个小功能就存档一次，不要攒到最后</li>
+                            <li><strong>写清信息：</strong>提交信息要能让你看一眼就知道改了什么</li>
+                            <li><strong>不要害怕：</strong>有 Git 在，任何修改都可以回退，放心大胆地尝试</li>
+                        </ul>
+                    </div>
+
+                    <h2 id="no-memorize">不需要记住的 Git 命令</h2>
+
+                    <p>用 Claude Code，你<strong>不需要</strong>记这些命令：</p>
+
+                    <table style="margin: 24px 0;">
+                        <thead>
+                            <tr>
+                                <th>命令</th>
+                                <th>用途</th>
+                                <th>Claude 帮你执行</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr><td><code>git init</code></td><td>初始化仓库</td><td>✅</td></tr>
+                            <tr><td><code>git add</code></td><td>添加文件到暂存区</td><td>✅</td></tr>
+                            <tr><td><code>git commit</code></td><td>创建存档</td><td>✅</td></tr>
+                            <tr><td><code>git log</code></td><td>查看历史</td><td>✅</td></tr>
+                            <tr><td><code>git diff</code></td><td>查看差异</td><td>✅</td></tr>
+                            <tr><td><code>git reset</code></td><td>回退版本</td><td>✅</td></tr>
+                            <tr><td><code>git revert</code></td><td>撤销提交</td><td>✅</td></tr>
+                            <tr><td><code>git checkout</code></td><td>恢复文件</td><td>✅</td></tr>
+                            <tr><td><code>git status</code></td><td>查看状态</td><td>✅</td></tr>
+                        </tbody>
+                    </table>
+
+                    <div class="alert alert-success">
+                        <div class="alert-title">🎯 总结</div>
+                        <p><strong>你只需要用自然语言告诉 Claude 你想做什么！</strong></p>
+                    </div>
+
+                    <section class="quiz" id="quiz">
+                        <div class="quiz-title">本章自检（3分钟）</div>
+                        <div class="quiz-hint">点开问题查看答案，能讲清楚就算掌握。</div>
+                        <details>
+                            <summary>为什么学习 Claude Code 一定要学 Git 存档？</summary>
+                            <div class="quiz-answer">因为 AI 可能改错文件；Git 能让你随时回退到“改之前”的状态，心理更稳，操作更大胆。</div>
+                        </details>
+                        <details>
+                            <summary>把当前状态“存一份档”的最核心命令是什么？</summary>
+                            <div class="quiz-answer">通常是：<code>git add -A</code> 然后 <code>git commit -m \"说明\"</code>（不同项目流程可能略有差异）。</div>
+                        </details>
+                        <details>
+                            <summary>怎么查看历史记录，找到可以回退的版本？</summary>
+                            <div class="quiz-answer">用 <code>git log</code> 查看提交历史，找到对应的 commit。</div>
+                        </details>
+                        <details>
+                            <summary>回退版本前，最安全的习惯是什么？</summary>
+                            <div class="quiz-answer">先再存一次档（或确认工作区干净），避免把当前未保存的修改弄丢。</div>
+                        </details>
+                    </section>
+
+                    <button class="btn btn-secondary mark-complete-btn" style="margin: 32px 0 24px;">
+                        <svg class="icon icon-sm" aria-hidden="true"><use href="../images/icons.svg#icon-circle"></use></svg>
+                        标记为已完成（保存进度）
+                    </button>
+
+                    <nav class="chapter-nav">
+                        <a href="chapter-02.html" class="chapter-nav-card">
+                            <svg class="icon" aria-hidden="true"><use href="../images/icons.svg#icon-arrow-left"></use></svg>
+                            <div class="content">
+                                <div class="label">上一章</div>
+                                <div class="title">第02章：命令详解</div>
+                            </div>
+                        </a>
+                        <a href="chapter-04.html" class="chapter-nav-card next">
+                            <svg class="icon" aria-hidden="true"><use href="../images/icons.svg#icon-arrow-right"></use></svg>
+                            <div class="content">
+                                <div class="label">下一章</div>
+                                <div class="title">第04章：实战场景</div>
+                            </div>
+                        </a>
+                    </nav>
+                </article>
+            </div>
+
+            <footer class="footer">
+                <div class="footer-copyright">&copy; 2025 Claude Code 教程网站</div>
+            </footer>
+        </main>
+
+        <div class="overlay" id="overlay"></div>
+    </div>
+
+    <script src="../js/main.js"></script>
+</body>
+</html>

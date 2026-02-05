@@ -1,0 +1,160 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>P2-1：场景包（带练习素材） - Claude Code 教程</title>
+    <link rel="stylesheet" href="../css/style.css">
+</head>
+<body data-page-id="scenario-pack">
+    <div class="app-container">
+        <aside class="sidebar" id="sidebar">
+            <div class="sidebar-header">
+                <a href="../index.html" style="display: flex; align-items: center; gap: 12px; text-decoration: none;">
+                    <div class="logo">C</div>
+                    <span class="logo-text">Claude Code 教程</span>
+                </a>
+            </div>
+            <div class="sidebar-search">
+                <div class="search-box">
+                    <span class="search-icon" aria-hidden="true">
+                        <svg class="icon icon-xs"><use href="../images/icons.svg#icon-search"></use></svg>
+                    </span>
+                    <input type="text" placeholder="搜索章节...">
+                </div>
+            </div>
+            <nav class="sidebar-nav" id="sidebarNav"></nav>
+        </aside>
+
+        <main class="main-content">
+            <header class="top-nav">
+                <div class="top-nav-left">
+                    <button class="menu-toggle" id="menuToggle" aria-label="打开目录">
+                        <svg class="icon icon-sm" aria-hidden="true"><use href="../images/icons.svg#icon-menu"></use></svg>
+                    </button>
+                    <nav class="breadcrumb">
+                        <a href="../index.html">首页</a>
+                        <span class="separator">/</span>
+                        <span class="current">场景包</span>
+                    </nav>
+                </div>
+                <div class="top-nav-right">
+                    <div class="progress-indicator">
+                        <span>学习进度</span>
+                        <div class="progress-bar">
+                            <div class="progress-fill" id="progressFill" style="width: 0%"></div>
+                        </div>
+                        <span class="progress-text" id="progressText">0%</span>
+                    </div>
+                </div>
+            </header>
+
+            <div class="content-wrapper">
+                <header class="article-header">
+                    <div class="article-breadcrumb">
+                        <a href="../index.html">首页</a> / <span>P2-1：场景包（带练习素材）</span>
+                    </div>
+                    <h1 class="article-title">P2-1：场景包（带练习素材）</h1>
+                    <div class="article-meta">
+                        <span class="article-meta-item">
+                            <svg class="icon icon-xs" aria-hidden="true"><use href="../images/icons.svg#icon-clock"></use></svg>
+                            随时练习
+                        </span>
+                        <span class="article-meta-item">
+                            <svg class="icon icon-xs" aria-hidden="true"><use href="../images/icons.svg#icon-tag"></use></svg>
+                            类别：附录
+                        </span>
+                    </div>
+                </header>
+
+                <article class="article-content">
+                    <!-- 配图：实战练习场景 -->
+                    <div class="section-image">
+                        <img src="../images/external/img_009e5ff7433ac98c.png" alt="Claude Code实战练习场景" loading="lazy">
+                        <div class="section-image-caption">通过真实场景练习，快速掌握 Claude Code 的实际应用</div>
+                    </div>
+
+                    <div class="alert alert-info">
+                        <div class="alert-title">这页怎么用？（新手最省心）</div>
+                        <ol>
+                            <li>先选一个你最想练的场景。</li>
+                            <li>下载练习素材（可用 Excel 直接打开 CSV）。</li>
+                            <li>复制“一键提示词”，在 Claude Code 里执行。</li>
+                            <li>对照“验收标准”检查结果。</li>
+                        </ol>
+                    </div>
+
+                    <div class="chapter-grid" style="margin-top: 24px;">
+                        <div class="chapter-card" data-path="scenario-01-excel-cleaning.html">
+                            <div class="chapter-header">
+                                <span class="chapter-number">S1</span>
+                                <span class="chapter-title">工程台账清洗（Excel）</span>
+                            </div>
+                            <p class="chapter-desc">去重、统一日期/单位、补齐缺失字段，输出干净的台账 + 清洗报告。</p>
+                            <div class="chapter-meta">
+                                <span><svg class="icon icon-xs" aria-hidden="true"><use href="../images/icons.svg#icon-clock"></use></svg> 20分钟</span>
+                                <span><svg class="icon icon-xs" aria-hidden="true"><use href="../images/icons.svg#icon-signal"></use></svg> 简单</span>
+                            </div>
+                        </div>
+
+                        <div class="chapter-card" data-path="scenario-02-file-organize.html">
+                            <div class="chapter-header">
+                                <span class="chapter-number">S2</span>
+                                <span class="chapter-title">资料归档（文件整理）</span>
+                            </div>
+                            <p class="chapter-desc">按“日期/类型/项目”自动建文件夹、移动文件、生成归档清单。</p>
+                            <div class="chapter-meta">
+                                <span><svg class="icon icon-xs" aria-hidden="true"><use href="../images/icons.svg#icon-clock"></use></svg> 15分钟</span>
+                                <span><svg class="icon icon-xs" aria-hidden="true"><use href="../images/icons.svg#icon-signal"></use></svg> 简单</span>
+                            </div>
+                        </div>
+
+                        <div class="chapter-card" data-path="scenario-03-report.html">
+                            <div class="chapter-header">
+                                <span class="chapter-number">S3</span>
+                                <span class="chapter-title">日报/周报生成（模板化）</span>
+                            </div>
+                            <p class="chapter-desc">把零散记录整理成结构化日报/周报，输出 Markdown/Word 可复制版本。</p>
+                            <div class="chapter-meta">
+                                <span><svg class="icon icon-xs" aria-hidden="true"><use href="../images/icons.svg#icon-clock"></use></svg> 15分钟</span>
+                                <span><svg class="icon icon-xs" aria-hidden="true"><use href="../images/icons.svg#icon-signal"></use></svg> 简单</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="alert alert-warning" style="margin-top: 24px;">
+                        <div class="alert-title">提醒：先在“你自己的练习文件夹”里做</div>
+                        <p>文件整理/批量改动前，建议先 Git 存档或复制一份文件夹，避免误操作。</p>
+                        <p>遇到报错先看：<a href="troubleshooting.html">A1：故障排查（按症状）</a></p>
+                    </div>
+
+                    <nav class="chapter-nav">
+                        <a href="appendix.html" class="chapter-nav-card">
+                            <svg class="icon" aria-hidden="true"><use href="../images/icons.svg#icon-arrow-left"></use></svg>
+                            <div class="content">
+                                <div class="label">返回</div>
+                                <div class="title">速查手册</div>
+                            </div>
+                        </a>
+                        <a href="scenario-01-excel-cleaning.html" class="chapter-nav-card next">
+                            <svg class="icon" aria-hidden="true"><use href="../images/icons.svg#icon-arrow-right"></use></svg>
+                            <div class="content">
+                                <div class="label">开始练习</div>
+                                <div class="title">S1：工程台账清洗（Excel）</div>
+                            </div>
+                        </a>
+                    </nav>
+                </article>
+            </div>
+
+            <footer class="footer">
+                <div class="footer-copyright">&copy; 2025 Claude Code 教程网站</div>
+            </footer>
+        </main>
+
+        <div class="overlay" id="overlay"></div>
+    </div>
+
+    <script src="../js/main.js"></script>
+</body>
+</html>

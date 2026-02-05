@@ -1,0 +1,368 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Claude Code 零基础入门教程 - 面向电脑小白和土木工程人士的完整教程">
+    <meta name="keywords" content="Claude Code, AI编程, 教程, 零基础, 小白入门">
+    <title>Claude Code 零基础入门教程 - 10分钟跑通，90分钟上手</title>
+    <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+    <div class="app-container">
+        <!-- 侧边栏 -->
+        <aside class="sidebar" id="sidebar">
+            <div class="sidebar-header">
+                <div class="logo">C</div>
+                <span class="logo-text">Claude Code 教程</span>
+            </div>
+            <div class="sidebar-search">
+                <div class="search-box">
+                    <span class="search-icon" aria-hidden="true">
+                        <svg class="icon icon-xs"><use href="images/icons.svg#icon-search"></use></svg>
+                    </span>
+                    <input type="text" placeholder="搜索章节..." id="searchInput">
+                </div>
+            </div>
+            <nav class="sidebar-nav" id="sidebarNav">
+                <!-- 章节列表将由 JavaScript 生成 -->
+            </nav>
+        </aside>
+
+        <!-- 主内容区 -->
+        <main class="main-content">
+            <!-- 顶部导航 -->
+            <header class="top-nav">
+                <div class="top-nav-left">
+                    <button class="menu-toggle" id="menuToggle" aria-label="打开目录">
+                        <svg class="icon icon-sm" aria-hidden="true"><use href="images/icons.svg#icon-menu"></use></svg>
+                    </button>
+                </div>
+                <div class="top-nav-right">
+                    <div class="progress-indicator">
+                        <span>学习进度</span>
+                        <div class="progress-bar">
+                            <div class="progress-fill" id="progressFill" style="width: 0%"></div>
+                        </div>
+                        <span class="progress-text" id="progressText">0%</span>
+                    </div>
+                </div>
+            </header>
+
+            <!-- 内容区域 -->
+            <div class="content-wrapper">
+                <!-- Hero 区域 -->
+                <section class="hero-section">
+                    <!-- Hero横幅图 -->
+                    <div class="hero-banner">
+                        <img src="images/external/img_355a9470404eab38.png" alt="Claude Code CLI终端界面" loading="lazy">
+                    </div>
+
+                    <h1 class="hero-title">Claude Code 零基础入门教程</h1>
+                    <p class="hero-subtitle">
+                        面向电脑小白和土木工程人士的完整教程。<br>
+                        10分钟跑通第一次成功，90分钟掌握核心用法，6小时完成全套课程。
+                    </p>
+                    <p style="margin-top: -10px; margin-bottom: 32px; color: var(--text-secondary);">
+                        推荐顺序：<a href="pages/quickstart.html">10分钟跑通</a> → <a href="pages/concepts.html">概念扫盲</a> → <a href="pages/chapter-01.html">第01章</a>
+                    </p>
+                    <div class="hero-badges">
+                        <span class="badge badge-success">
+                            <svg class="icon icon-xs" aria-hidden="true"><use href="images/icons.svg#icon-check"></use></svg>
+                            作者出品
+                        </span>
+                        <span class="badge">
+                            <svg class="icon icon-xs" aria-hidden="true"><use href="images/icons.svg#icon-book"></use></svg>
+                            10个章节
+                        </span>
+                        <span class="badge">
+                            <svg class="icon icon-xs" aria-hidden="true"><use href="images/icons.svg#icon-clock"></use></svg>
+                            约6小时完整学习
+                        </span>
+                        <span class="badge">
+                            <svg class="icon icon-xs" aria-hidden="true"><use href="images/icons.svg#icon-target"></use></svg>
+                            实战案例
+                        </span>
+                    </div>
+
+                    <div class="os-switcher" data-os-switcher>
+                        <div class="os-switcher-title">
+                            <svg class="icon icon-xs" aria-hidden="true"><use href="images/icons.svg#icon-list"></use></svg>
+                            我用的系统（用于自动隐藏另一套步骤）
+                        </div>
+                        <div class="os-switcher-actions">
+                            <button type="button" class="os-btn" data-os-value="windows">Windows</button>
+                            <button type="button" class="os-btn" data-os-value="mac">Mac</button>
+                            <button type="button" class="os-btn" data-os-value="all">都显示</button>
+                        </div>
+                    </div>
+                    <div class="hero-buttons">
+                        <a href="pages/quickstart.html" class="btn btn-primary" id="primaryLearningBtn">
+                            <svg class="icon icon-sm" aria-hidden="true"><use href="images/icons.svg#icon-target"></use></svg>
+                            10分钟跑通
+                        </a>
+                        <a href="pages/chapter-01.html" class="btn btn-secondary" id="secondaryLearningBtn">
+                            <svg class="icon icon-sm" aria-hidden="true"><use href="images/icons.svg#icon-list"></use></svg>
+                            从第一章开始
+                        </a>
+                    </div>
+                    <p id="continueHint" style="display: none; margin-top: -40px; margin-bottom: 60px; color: var(--text-muted); font-size: 14px;"></p>
+                </section>
+
+                <!-- 为什么学习 Claude Code -->
+                <section class="path-section" id="why-learn">
+                    <h2 class="section-title">
+                        <span class="section-icon" aria-hidden="true">
+                            <svg class="icon icon-sm"><use href="images/icons.svg#icon-spark"></use></svg>
+                        </span>
+                        为什么学习 Claude Code？
+                    </h2>
+                    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 20px;">
+                        <div class="chapter-card" style="cursor: default; position: relative;">
+                            <div class="chapter-header">
+                                <span class="chapter-number">01</span>
+                                <span class="chapter-title">自动化日常任务</span>
+                            </div>
+                            <p class="chapter-desc">
+                                自动处理 Excel 数据、整理文件、生成报告，
+                                让你从重复劳动中解放出来。
+                            </p>
+                            <div class="card-decoration">
+                                <img src="images/external/img_8719eb6111e637cc.jpg" alt="自动化" loading="lazy">
+                            </div>
+                        </div>
+                        <div class="chapter-card" style="cursor: default; position: relative;">
+                            <div class="chapter-header">
+                                <span class="chapter-number">02</span>
+                                <span class="chapter-title">零编程基础也能用</span>
+                            </div>
+                            <p class="chapter-desc">
+                                不需要学习复杂的编程语法，
+                                用自然语言就能告诉 AI 你想做什么。
+                            </p>
+                            <div class="card-decoration">
+                                <img src="images/external/img_08b37e8fa4d39054.jpg" alt="零基础" loading="lazy">
+                            </div>
+                        </div>
+                        <div class="chapter-card" style="cursor: default; position: relative;">
+                            <div class="chapter-header">
+                                <span class="chapter-number">03</span>
+                                <span class="chapter-title">适合土木专业人士</span>
+                            </div>
+                            <p class="chapter-desc">
+                                专门面向非 IT 人士设计，
+                                案例和练习都贴近日常工作场景。
+                            </p>
+                            <div class="card-decoration">
+                                <img src="images/external/img_d45c305ed9df9fe5.jpg" alt="土木工程" loading="lazy">
+                            </div>
+                        </div>
+                        <div class="chapter-card" style="cursor: default; position: relative;">
+                            <div class="chapter-header">
+                                <span class="chapter-number">04</span>
+                                <span class="chapter-title">中文友好</span>
+                            </div>
+                            <p class="chapter-desc">
+                                支持国产 AI 模型（智谱、豆包等），
+                                中文交互体验更好。
+                            </p>
+                            <div class="card-decoration">
+                                <img src="images/external/img_61f7095b14e03120.jpg" alt="中文友好" loading="lazy">
+                            </div>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- 学习路径 -->
+                <section class="path-section" id="course-path">
+                    <h2 class="section-title">
+                        <span class="section-icon" aria-hidden="true">
+                            <svg class="icon icon-sm"><use href="images/icons.svg#icon-list"></use></svg>
+                        </span>
+                        完整学习路径
+                    </h2>
+
+                    <!-- 必修课程 -->
+                    <h3 style="font-size: 20px; font-weight: 600; margin: 32px 0 16px; color: var(--primary-light);">
+                        <svg class="icon icon-xs" aria-hidden="true"><use href="images/icons.svg#icon-book"></use></svg>
+                        必修课程 - 从零到熟练
+                    </h3>
+                    <div class="chapter-grid" id="requiredCourses">
+                        <!-- 由 JavaScript 生成 -->
+                    </div>
+
+                    <!-- 进阶课程 -->
+                    <h3 style="font-size: 20px; font-weight: 600; margin: 32px 0 16px; color: var(--secondary-color);">
+                        <svg class="icon icon-xs" aria-hidden="true"><use href="images/icons.svg#icon-spark"></use></svg>
+                        进阶课程 - 提升技能
+                    </h3>
+                    <div class="chapter-grid" id="advancedCourses">
+                        <!-- 由 JavaScript 生成 -->
+                    </div>
+
+                    <!-- 实战课程 -->
+                    <h3 style="font-size: 20px; font-weight: 600; margin: 32px 0 16px; color: var(--success-color);">
+                        <svg class="icon icon-xs" aria-hidden="true"><use href="images/icons.svg#icon-target"></use></svg>
+                        实战开发 - 真实项目
+                    </h3>
+                    <div class="chapter-grid" id="practiceCourses">
+                        <!-- 由 JavaScript 生成 -->
+                    </div>
+                </section>
+
+                <!-- 开始学习前的准备 -->
+                <section class="path-section">
+                    <h2 class="section-title">
+                        <span class="section-icon" aria-hidden="true">
+                            <svg class="icon icon-sm"><use href="images/icons.svg#icon-check"></use></svg>
+                        </span>
+                        开始学习前的准备
+                    </h2>
+                    <div style="background: var(--bg-card); border: 1px solid var(--border-color); border-radius: var(--radius-md); padding: 24px; display: flex; gap: 24px; flex-wrap: wrap;">
+                        <div style="flex: 1; min-width: 280px;">
+                            <h3 style="font-size: 18px; margin-bottom: 16px;">你需要：</h3>
+                            <ul style="list-style: none; padding: 0;">
+                                <li style="display: flex; align-items: center; gap: 12px; padding: 12px 0; border-bottom: 1px solid var(--border-color);">
+                                    <span style="width: 24px; height: 24px; background: var(--primary-color); border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 12px;">1</span>
+                                    <span>一台 Windows 或 Mac 电脑</span>
+                                </li>
+                                <li style="display: flex; align-items: center; gap: 12px; padding: 12px 0; border-bottom: 1px solid var(--border-color);">
+                                    <span style="width: 24px; height: 24px; background: var(--primary-color); border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 12px;">2</span>
+                                    <span>约 6 小时的学习时间（可分多次完成）</span>
+                                </li>
+                                <li style="display: flex; align-items: center; gap: 12px; padding: 12px 0; border-bottom: 1px solid var(--border-color);">
+                                    <span style="width: 24px; height: 24px; background: var(--primary-color); border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 12px;">3</span>
+                                    <span>能使用电脑的基本操作（打字、打开文件）</span>
+                                </li>
+                                <li style="display: flex; align-items: center; gap: 12px; padding: 12px 0;">
+                                    <span style="width: 24px; height: 24px; background: var(--primary-color); border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 12px;">4</span>
+                                    <span>一个国产 AI 的 API Key（教程会教你如何获取）</span>
+                                </li>
+                            </ul>
+                        </div>
+                        <div style="flex: 0 0 280px;">
+                            <img src="images/external/img_62d972907ea4ff88.png" alt="Claude Code学习界面" class="prep-image" style="width: 100%; height: auto; border-radius: var(--radius-md); box-shadow: var(--shadow);" loading="lazy">
+                        </div>
+                    </div>
+                </section>
+
+                <!-- 常见问题 -->
+                <section class="path-section">
+                    <h2 class="section-title">
+                        <span class="section-icon" aria-hidden="true">
+                            <svg class="icon icon-sm"><use href="images/icons.svg#icon-help"></use></svg>
+                        </span>
+                        常见问题
+                    </h2>
+                    <div style="display: flex; flex-direction: column; gap: 16px;">
+                        <div class="alert alert-info">
+                            <div class="alert-title">Q: 我完全不会编程，能学吗？</div>
+                            <div>完全可以！本教程就是面向零基础人群设计的。你只需要会用电脑打字、浏览网页就行。</div>
+                        </div>
+                        <div class="alert alert-info">
+                            <div class="alert-title">Q: Claude Code 是免费的吗？</div>
+                            <div>Claude Code CLI 本身是免费的，但需要连接 AI 模型才能使用（模型调用通常会产生费用/额度消耗）。本教程目前开放阅读，后续可能调整为收费或部分内容收费。</div>
+                        </div>
+                        <div class="alert alert-info">
+                            <div class="alert-title">Q: 学完需要多久？</div>
+                            <div>必修课程约 3-4 小时，全部课程约 6 小时。你可以按自己的节奏学习，随时可以暂停和继续。</div>
+                        </div>
+                        <div class="alert alert-info">
+                            <div class="alert-title">Q: 需要安装什么软件？</div>
+                            <div>需要安装 Node.js 和 Claude Code CLI（必需）。Python 属于“可选项”（做 Excel/数据脚本时再装也来得及）。第一章会详细教你如何安装，一步步跟着做就行。</div>
+                        </div>
+                    </div>
+                </section>
+
+                <section class="path-section" id="progress-tools">
+                    <h2 class="section-title">
+                        <span class="section-icon" aria-hidden="true">
+                            <svg class="icon icon-sm"><use href="images/icons.svg#icon-list"></use></svg>
+                        </span>
+                        进度管理
+                    </h2>
+                    <div class="alert alert-info">
+                        <div class="alert-title">提示</div>
+                        <div>学习进度只保存在当前浏览器。换电脑/换浏览器会丢失，建议导出备份。</div>
+                    </div>
+                    <div style="display: flex; gap: 12px; flex-wrap: wrap; margin-top: 16px;">
+                        <button class="btn btn-secondary" id="exportProgressBtn">
+                            <svg class="icon icon-sm" aria-hidden="true"><use href="images/icons.svg#icon-list"></use></svg>
+                            导出进度
+                        </button>
+                        <label class="btn btn-secondary" for="importProgressFile" style="cursor: pointer;">
+                            <svg class="icon icon-sm" aria-hidden="true"><use href="images/icons.svg#icon-book"></use></svg>
+                            导入进度
+                        </label>
+                        <input id="importProgressFile" type="file" accept="application/json" style="display:none" />
+                        <button class="btn btn-secondary btn-danger" id="resetProgressBtn">
+                            <svg class="icon icon-sm" aria-hidden="true"><use href="images/icons.svg#icon-help"></use></svg>
+                            重置进度
+                        </button>
+                    </div>
+                </section>
+
+                <!-- 开始学习按钮 -->
+                <section style="text-align: center; margin: 60px 0;">
+                    <a href="pages/quickstart.html" class="btn btn-primary" style="font-size: 18px; padding: 16px 40px;">
+                        <svg class="icon icon-sm" aria-hidden="true"><use href="images/icons.svg#icon-target"></use></svg>
+                        现在开始：10分钟跑通
+                    </a>
+                    <p style="margin-top: 20px; color: var(--text-muted);">
+                        或者从侧边栏选择任意章节开始学习（推荐先看“概念扫盲”）
+                    </p>
+                </section>
+            </div>
+
+            <!-- 页脚 -->
+            <footer class="footer">
+                <div class="footer-links">
+                    <a href="https://github.com/anthropics/claude-code" target="_blank">GitHub</a>
+                    <a href="https://docs.anthropic.com/en/docs/claude-code/overview" target="_blank">官方文档</a>
+                    <a href="pages/appendix.html">速查手册</a>
+                </div>
+                <div class="footer-copyright">
+                    &copy; 2025 Claude Code 教程网站 | 面向电脑小白和土木工程人士
+                </div>
+            </footer>
+        </main>
+
+        <!-- 遮罩层 -->
+        <div class="overlay" id="overlay"></div>
+    </div>
+
+    <script src="js/main.js"></script>
+    <script>
+        // 首页额外的脚本：按类别显示章节（使用 main.js 的 courseData，避免重复维护）
+        document.addEventListener('DOMContentLoaded', () => {
+            const requiredContainer = document.getElementById('requiredCourses');
+            const advancedContainer = document.getElementById('advancedCourses');
+            const practiceContainer = document.getElementById('practiceCourses');
+
+            const chapters = window.courseData?.chapters || [];
+
+            const createCard = (ch) => `
+                <a class="chapter-card" href="${ch.path}" data-path="${ch.path}">
+                    <div class="chapter-header">
+                        <span class="chapter-number">${ch.number}</span>
+                        <span class="chapter-title">${ch.title}</span>
+                    </div>
+                    <p class="chapter-desc">${ch.desc}</p>
+                    <div class="chapter-meta">
+                        <span>${window.iconSvg('icon-clock')} ${ch.time}</span>
+                        <span>${window.iconSvg('icon-signal')} ${ch.difficulty}</span>
+                    </div>
+                </a>
+            `;
+
+            const required = chapters.filter(c => c.category === '必修');
+            const advanced = chapters.filter(c => c.category === '进阶');
+            const practice = chapters.filter(c => c.category === '实战');
+
+            requiredContainer.innerHTML = required.map(createCard).join('');
+            advancedContainer.innerHTML = advanced.map(createCard).join('');
+            practiceContainer.innerHTML = practice.map(createCard).join('');
+        });
+    </script>
+</body>
+</html>

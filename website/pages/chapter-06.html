@@ -1,0 +1,394 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>第06章：MCP 服务器扩展 - Claude Code 教程</title>
+    <link rel="stylesheet" href="../css/style.css">
+</head>
+<body>
+    <div class="app-container">
+        <aside class="sidebar" id="sidebar">
+            <div class="sidebar-header">
+                <a href="../index.html" style="display: flex; align-items: center; gap: 12px; text-decoration: none;">
+                    <div class="logo">C</div>
+                    <span class="logo-text">Claude Code 教程</span>
+                </a>
+            </div>
+            <div class="sidebar-search">
+                <div class="search-box">
+                    <span class="search-icon" aria-hidden="true">
+                        <svg class="icon icon-xs"><use href="../images/icons.svg#icon-search"></use></svg>
+                    </span>
+                    <input type="text" placeholder="搜索章节...">
+                </div>
+            </div>
+            <nav class="sidebar-nav" id="sidebarNav"></nav>
+        </aside>
+
+        <main class="main-content">
+            <header class="top-nav">
+                <div class="top-nav-left">
+                    <button class="menu-toggle" id="menuToggle" aria-label="打开目录">
+                        <svg class="icon icon-sm" aria-hidden="true"><use href="../images/icons.svg#icon-menu"></use></svg>
+                    </button>
+                    <nav class="breadcrumb">
+                        <a href="../index.html">首页</a>
+                        <span class="separator">/</span>
+                        <span class="current">第06章</span>
+                    </nav>
+                </div>
+                <div class="top-nav-right">
+                    <div class="progress-indicator">
+                        <span>学习进度</span>
+                        <div class="progress-bar">
+                            <div class="progress-fill" id="progressFill" style="width: 0%"></div>
+                        </div>
+                        <span class="progress-text" id="progressText">0%</span>
+                    </div>
+                </div>
+            </header>
+
+            <div class="content-wrapper">
+                <header class="article-header">
+                    <div class="article-breadcrumb">
+                        <a href="../index.html">首页</a> / <span>第06章：MCP 服务器扩展</span>
+                    </div>
+                    <h1 class="article-title">第06章：MCP 服务器扩展</h1>
+                    <div class="article-meta">
+                        <span class="article-meta-item">
+                            <svg class="icon icon-xs" aria-hidden="true"><use href="../images/icons.svg#icon-clock"></use></svg>
+                            预计时间：50分钟
+                        </span>
+                        <span class="article-meta-item">
+                            <svg class="icon icon-xs" aria-hidden="true"><use href="../images/icons.svg#icon-signal"></use></svg>
+                            难度：进阶
+                        </span>
+                        <span class="article-meta-item">
+                            <svg class="icon icon-xs" aria-hidden="true"><use href="../images/icons.svg#icon-tag"></use></svg>
+                            类别：进阶
+                        </span>
+                    </div>
+                </header>
+
+                <article class="article-content">
+                    <!-- 配图：MCP扩展架构 -->
+                    <div class="section-image">
+                        <img src="../images/external/img_62d972907ea4ff88.png" alt="MCP服务器扩展架构" loading="lazy">
+                        <div class="section-image-caption">MCP 让 Claude Code 能连接外部资源：文件系统、数据库、API等</div>
+                    </div>
+
+                    <div class="alert alert-info">
+                        <div class="alert-title">📌 章节说明</div>
+                        <p><strong>前置知识：</strong>已完成必修课程，熟悉 Claude Code 基本操作。</p>
+                        <p><strong>本章价值：</strong>MCP（Model Context Protocol）是 Claude 的扩展协议，让它能连接数据库、API、文件系统等外部资源。</p>
+                    </div>
+
+                    <h2 id="what-is-mcp">什么是 MCP？</h2>
+
+                    <p>MCP = Model Context Protocol（模型上下文协议）</p>
+
+                    <div style="background: var(--bg-card); padding: 24px; border-radius: var(--radius-md); border: 1px solid var(--border-color); margin: 24px 0; font-family: monospace;">
+没有 MCP 的 Claude Code：
+┌─────────────────────────────────┐
+│         Claude Code             │
+│                                 │
+│    只能访问当前工作区的文件       │
+└─────────────────────────────────┘
+
+有了 MCP 的 Claude Code：
+┌─────────────────────────────────────────────────┐
+│                 Claude Code                     │
+├─────────────────────────────────────────────────┤
+│                                                 │
+│    ┌──────────┐  ┌──────────┐  ┌──────────┐   │
+│    │  MCP     │  │  MCP     │  │  MCP     │   │
+│    │ Server 1 │  │ Server 2 │  │ Server 3 │   │
+│    └──────────┘  └──────────┘  └──────────┘   │
+│         ↓             ↓             ↓          │
+│    ┌──────────┐  ┌──────────┐  ┌──────────┐   │
+│    │ 文件系统  │  │  数据库   │  │  API    │   │
+│    │ 任意路径  │  │ PostgreSQL│  │ 搜索    │   │
+│    └──────────┘  └──────────┘  └──────────┘   │
+│                                                 │
+└─────────────────────────────────────────────────┘
+                    </div>
+
+                    <h3>MCP 能做什么？</h3>
+
+                    <table style="margin: 24px 0;">
+                        <thead>
+                            <tr>
+                                <th>功能</th>
+                                <th>说明</th>
+                                <th>实用度</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>文件系统访问</td>
+                                <td>访问任意位置的文件</td>
+                                <td>⭐⭐⭐</td>
+                            </tr>
+                            <tr>
+                                <td>数据库查询</td>
+                                <td>直接查询数据库</td>
+                                <td>⭐⭐⭐</td>
+                            </tr>
+                            <tr>
+                                <td>网页搜索</td>
+                                <td>获取最新信息</td>
+                                <td>⭐⭐</td>
+                            </tr>
+                            <tr>
+                                <td>API 调用</td>
+                                <td>调用外部服务</td>
+                                <td>⭐⭐</td>
+                            </tr>
+                            <tr>
+                                <td>Git 操作</td>
+                                <td>增强的 Git 功能</td>
+                                <td>⭐⭐</td>
+                            </tr>
+                        </tbody>
+                    </table>
+
+                    <h2 id="config">配置 MCP 服务器</h2>
+
+                    <h3>配置文件位置</h3>
+
+                    <p>MCP 配置文件位于：</p>
+
+                    <div class="code-block-wrapper">
+                        <div class="code-header">
+                            <span class="code-lang">bash</span>
+                            <button class="code-copy">复制代码</button>
+                        </div>
+                        <pre><code class="language-bash">~/.claude/mcp-servers.json</code></pre>
+                    </div>
+
+                    <p>Windows 用户路径：</p>
+
+                    <div class="code-block-wrapper">
+                        <div class="code-header">
+                            <span class="code-lang">bash</span>
+                            <button class="code-copy">复制代码</button>
+                        </div>
+                        <pre><code class="language-bash">C:\Users\你的用户名\.claude\mcp-servers.json</code></pre>
+                    </div>
+
+                    <h3>配置文件格式</h3>
+
+                    <div class="code-block-wrapper">
+                        <div class="code-header">
+                            <span class="code-lang">json</span>
+                            <button class="code-copy">复制代码</button>
+                        </div>
+                        <pre><code class="language-json">{
+  "mcpServers": {
+    "服务器名称": {
+      "command": "启动命令",
+      "args": ["参数1", "参数2"],
+      "env": {
+        "环境变量名": "环境变量值"
+      }
+    }
+  }
+}</code></pre>
+                    </div>
+
+                    <h2 id="common-mcp">常用 MCP 服务器</h2>
+
+                    <h3>1. 文件系统 MCP</h3>
+
+                    <p>允许 Claude Code 访问任意位置的文件。</p>
+
+                    <div class="code-block-wrapper">
+                        <div class="code-header">
+                            <span class="code-lang">json</span>
+                            <button class="code-copy">复制代码</button>
+                        </div>
+                        <pre><code class="language-json">{
+  "mcpServers": {
+    "filesystem": {
+      "command": "npx",
+      "args": ["-y", "@modelcontextprotocol/server-filesystem", "E:\\我的文件"]
+    }
+  }
+}</code></pre>
+                    </div>
+
+                    <h3>2. Git MCP</h3>
+
+                    <p>增强的 Git 操作功能。</p>
+
+                    <div class="code-block-wrapper">
+                        <div class="code-header">
+                            <span class="code-lang">json</span>
+                            <button class="code-copy">复制代码</button>
+                        </div>
+                        <pre><code class="language-json">{
+  "mcpServers": {
+    "git": {
+      "command": "npx",
+      "args": ["-y", "@modelcontextprotocol/server-git", "--repository", "."]
+    }
+  }
+}</code></pre>
+                    </div>
+
+                    <h3>3. PostgreSQL 数据库 MCP</h3>
+
+                    <p>直接查询 PostgreSQL 数据库。</p>
+
+                    <div class="code-block-wrapper">
+                        <div class="code-header">
+                            <span class="code-lang">json</span>
+                            <button class="code-copy">复制代码</button>
+                        </div>
+                        <pre><code class="language-json">{
+  "mcpServers": {
+    "postgres": {
+      "command": "npx",
+      "args": ["-y", "@modelcontextprotocol/server-postgres", "postgresql://用户名:密码@localhost:5432/数据库名"]
+    }
+  }
+}</code></pre>
+                    </div>
+
+                    <h3>4. Fetch MCP（获取网页内容）</h3>
+
+                    <div class="code-block-wrapper">
+                        <div class="code-header">
+                            <span class="code-lang">json</span>
+                            <button class="code-copy">复制代码</button>
+                        </div>
+                        <pre><code class="language-json">{
+  "mcpServers": {
+    "fetch": {
+      "command": "npx",
+      "args": ["-y", "@modelcontextprotocol/server-fetch"]
+    }
+  }
+}</code></pre>
+                    </div>
+
+                    <h2 id="usage">使用 MCP</h2>
+
+                    <h3>基本用法</h3>
+
+                    <p>配置好 MCP 后，在 Claude Code 中直接告诉 Claude 使用哪个 MCP：</p>
+
+                    <div style="background: var(--bg-card); padding: 16px; border-radius: var(--radius-md); border: 1px solid var(--border-color); margin: 16px 0;">
+                        <code>用 Git MCP 查看最近的提交历史<br>
+                        用文件系统 MCP 读取 ~/projects/api/config.yaml<br>
+                        用搜索 MCP 搜索 "Claude Code 教程"</code>
+                    </div>
+
+                    <h2 id="list">常用 MCP 服务器清单</h2>
+
+                    <table style="margin: 24px 0;">
+                        <thead>
+                            <tr>
+                                <th>MCP 名称</th>
+                                <th>用途</th>
+                                <th>安装命令</th>
+                                <th>需要配置</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>filesystem</td>
+                                <td>访问任意文件系统</td>
+                                <td><code>@modelcontextprotocol/server-filesystem</code></td>
+                                <td>路径</td>
+                            </tr>
+                            <tr>
+                                <td>git</td>
+                                <td>增强 Git 操作</td>
+                                <td><code>@modelcontextprotocol/server-git</code></td>
+                                <td>仓库路径</td>
+                            </tr>
+                            <tr>
+                                <td>postgres</td>
+                                <td>PostgreSQL 数据库</td>
+                                <td><code>@modelcontextprotocol/server-postgres</code></td>
+                                <td>连接字符串</td>
+                            </tr>
+                            <tr>
+                                <td>brave-search</td>
+                                <td>网页搜索</td>
+                                <td><code>@modelcontextprotocol/server-brave-search</code></td>
+                                <td>API Key</td>
+                            </tr>
+                            <tr>
+                                <td>fetch</td>
+                                <td>获取网页内容</td>
+                                <td><code>@modelcontextprotocol/server-fetch</code></td>
+                                <td>无</td>
+                            </tr>
+                            <tr>
+                                <td>sqlite</td>
+                                <td>SQLite 数据库</td>
+                                <td><code>@modelcontextprotocol/server-sqlite</code></td>
+                                <td>数据库文件</td>
+                            </tr>
+                        </tbody>
+                    </table>
+
+                    <section class="quiz" id="quiz">
+                        <div class="quiz-title">本章自检（3分钟）</div>
+                        <div class="quiz-hint">点开问题查看答案，能讲清楚就算掌握。</div>
+                        <details>
+                            <summary>MCP 是什么？解决了什么问题？</summary>
+                            <div class="quiz-answer">MCP 是扩展协议，让 Claude Code 能连接外部工具/资源（文件系统、Git、数据库、网页获取/搜索等），从“只会聊天”变成“能做事”。</div>
+                        </details>
+                        <details>
+                            <summary>为什么 MCP 相关配置要特别注意安全？</summary>
+                            <div class="quiz-answer">因为它可能让模型访问你的文件/网络/数据库；权限开太大可能造成泄露或误操作，应最小权限原则。</div>
+                        </details>
+                        <details>
+                            <summary>遇到 MCP 安装/启动失败，你第一步会做什么？</summary>
+                            <div class="quiz-answer">先看报错原文，确认依赖（Node/npm）正常；再用“按症状”排查页定位问题。</div>
+                        </details>
+                        <details>
+                            <summary>如何判断一个 MCP 工具有必要接入？</summary>
+                            <div class="quiz-answer">看是否能减少重复劳动且风险可控：例如 Git/本目录文件系统较常用；数据库/全盘访问则谨慎。</div>
+                        </details>
+                    </section>
+
+                    <button class="btn btn-secondary mark-complete-btn" style="margin: 32px 0 24px;">
+                        <svg class="icon icon-sm" aria-hidden="true"><use href="../images/icons.svg#icon-circle"></use></svg>
+                        标记为已完成（保存进度）
+                    </button>
+
+                    <nav class="chapter-nav">
+                        <a href="chapter-05.html" class="chapter-nav-card">
+                            <svg class="icon" aria-hidden="true"><use href="../images/icons.svg#icon-arrow-left"></use></svg>
+                            <div class="content">
+                                <div class="label">上一章</div>
+                                <div class="title">第05章：提示词模板</div>
+                            </div>
+                        </a>
+                        <a href="chapter-07.html" class="chapter-nav-card next">
+                            <svg class="icon" aria-hidden="true"><use href="../images/icons.svg#icon-arrow-right"></use></svg>
+                            <div class="content">
+                                <div class="label">下一章</div>
+                                <div class="title">第07章：SKILL 技能</div>
+                            </div>
+                        </a>
+                    </nav>
+                </article>
+            </div>
+
+            <footer class="footer">
+                <div class="footer-copyright">&copy; 2025 Claude Code 教程网站</div>
+            </footer>
+        </main>
+
+        <div class="overlay" id="overlay"></div>
+    </div>
+
+    <script src="../js/main.js"></script>
+</body>
+</html>

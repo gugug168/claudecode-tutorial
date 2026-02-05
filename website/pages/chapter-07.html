@@ -1,0 +1,280 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>第07章：SKILL 自定义技能 - Claude Code 教程</title>
+    <link rel="stylesheet" href="../css/style.css">
+</head>
+<body>
+    <div class="app-container">
+        <aside class="sidebar" id="sidebar">
+            <div class="sidebar-header">
+                <a href="../index.html" style="display: flex; align-items: center; gap: 12px; text-decoration: none;">
+                    <div class="logo">C</div>
+                    <span class="logo-text">Claude Code 教程</span>
+                </a>
+            </div>
+            <div class="sidebar-search">
+                <div class="search-box">
+                    <span class="search-icon" aria-hidden="true">
+                        <svg class="icon icon-xs"><use href="../images/icons.svg#icon-search"></use></svg>
+                    </span>
+                    <input type="text" placeholder="搜索章节...">
+                </div>
+            </div>
+            <nav class="sidebar-nav" id="sidebarNav"></nav>
+        </aside>
+
+        <main class="main-content">
+            <header class="top-nav">
+                <div class="top-nav-left">
+                    <button class="menu-toggle" id="menuToggle" aria-label="打开目录">
+                        <svg class="icon icon-sm" aria-hidden="true"><use href="../images/icons.svg#icon-menu"></use></svg>
+                    </button>
+                    <nav class="breadcrumb">
+                        <a href="../index.html">首页</a>
+                        <span class="separator">/</span>
+                        <span class="current">第07章</span>
+                    </nav>
+                </div>
+                <div class="top-nav-right">
+                    <div class="progress-indicator">
+                        <span>学习进度</span>
+                        <div class="progress-bar">
+                            <div class="progress-fill" id="progressFill" style="width: 0%"></div>
+                        </div>
+                        <span class="progress-text" id="progressText">0%</span>
+                    </div>
+                </div>
+            </header>
+
+            <div class="content-wrapper">
+                <header class="article-header">
+                    <div class="article-breadcrumb">
+                        <a href="../index.html">首页</a> / <span>第07章：SKILL 自定义技能</span>
+                    </div>
+                    <h1 class="article-title">第07章：SKILL 自定义技能</h1>
+                    <div class="article-meta">
+                        <span class="article-meta-item">
+                            <svg class="icon icon-xs" aria-hidden="true"><use href="../images/icons.svg#icon-clock"></use></svg>
+                            预计时间：40分钟
+                        </span>
+                        <span class="article-meta-item">
+                            <svg class="icon icon-xs" aria-hidden="true"><use href="../images/icons.svg#icon-signal"></use></svg>
+                            难度：进阶
+                        </span>
+                        <span class="article-meta-item">
+                            <svg class="icon icon-xs" aria-hidden="true"><use href="../images/icons.svg#icon-tag"></use></svg>
+                            类别：进阶
+                        </span>
+                    </div>
+                </header>
+
+                <article class="article-content">
+                    <!-- 配图：SKILL自定义技能 -->
+                    <div class="section-image">
+                        <img src="../images/external/img_355a9470404eab38.png" alt="SKILL自定义技能系统" loading="lazy">
+                        <div class="section-image-caption">SKILL 让你把常用操作做成可复用的快捷指令</div>
+                    </div>
+
+                    <div class="alert alert-info">
+                        <div class="alert-title">📌 章节说明</div>
+                        <p><strong>本章价值：</strong>创建可复用的技能模板，让常用操作一键执行。如果你经常重复某个操作，把它做成 SKILL 吧！</p>
+                    </div>
+
+                    <h2 id="what-is-skill">什么是 SKILL？</h2>
+
+                    <p>SKILL 是一种可复用的提示词模板，类似于"快捷指令"或"宏"。</p>
+
+                    <table style="margin: 24px 0;">
+                        <thead>
+                            <tr>
+                                <th>直接提问</th>
+                                <th>使用 SKILL</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>每次都要输入完整的提示词</td>
+                                <td>输入简短的命令即可</td>
+                            </tr>
+                            <tr>
+                                <td>容易遗漏关键步骤</td>
+                                <td>每次执行相同的流程</td>
+                            </tr>
+                            <tr>
+                                <td>无法分享给团队</td>
+                                <td>可以团队共享</td>
+                            </tr>
+                        </tbody>
+                    </table>
+
+                    <h2 id="location">SKILL 文件位置和结构</h2>
+
+                    <p>SKILL 文件存放在：</p>
+
+                    <div class="code-block-wrapper">
+                        <div class="code-header">
+                            <span class="code-lang">bash</span>
+                            <button class="code-copy">复制代码</button>
+                        </div>
+                        <pre><code class="language-bash">~/.claude/skills/你的技能名/
+├── skill.json      # 技能配置文件
+└── prompt.md       # 提示词模板</code></pre>
+                    </div>
+
+                    <h3>skill.json 结构</h3>
+
+                    <div class="code-block-wrapper">
+                        <div class="code-header">
+                            <span class="code-lang">json</span>
+                            <button class="code-copy">复制代码</button>
+                        </div>
+                        <pre><code class="language-json">{
+  "name": "代码审查",
+  "description": "对代码进行全面审查，找出潜在问题",
+  "arguments": []
+}</code></pre>
+                    </div>
+
+                    <h3>prompt.md 模板</h3>
+
+                    <div class="code-block-wrapper">
+                        <div class="code-header">
+                            <span class="code-lang">markdown</span>
+                            <button class="code-copy">复制代码</button>
+                        </div>
+                        <pre><code class="language-bash">你是一位资深代码审查员。请对以下代码进行全面审查，重点关注：
+
+1. **安全问题**：SQL注入、XSS、权限验证等
+2. **性能问题**：循环效率、数据库查询、内存使用等
+3. **代码规范**：命名、注释、结构等
+4. **潜在bug**：边界条件、异常处理等
+
+请按严重程度（高/中/低）分类输出问题，并给出修复建议。</code></pre>
+                    </div>
+
+                    <h2 id="using">使用 SKILL</h2>
+
+                    <p>创建 SKILL 后，可以在 Claude Code 中这样使用：</p>
+
+                    <div style="background: var(--bg-card); padding: 16px; border-radius: var(--radius-md); border: 1px solid var(--border-color); margin: 16px 0;">
+                        <code>/代码审查 请帮我审查 app.js 这个文件</code>
+                    </div>
+
+                    <h2 id="examples">常用 SKILL 示例</h2>
+
+                    <h3>示例1：周报生成 SKILL</h3>
+
+                    <div class="code-block-wrapper">
+                        <div class="code-header">
+                            <span class="code-lang">json</span>
+                            <button class="code-copy">复制代码</button>
+                        </div>
+                        <pre><code class="language-json">// skill.json
+{
+  "name": "周报生成",
+  "description": "根据工作内容生成专业周报",
+  "arguments": []
+}</code></pre>
+                    </div>
+
+                    <h3>示例2：Excel 数据清洗 SKILL</h3>
+
+                    <div class="code-block-wrapper">
+                        <div class="code-header">
+                            <span class="code-lang">json</span>
+                            <button class="code-copy">复制代码</button>
+                        </div>
+                        <pre><code class="language-json">// skill.json
+{
+  "name": "数据清洗",
+  "description": "清洗 Excel 数据：去重、格式统一、空值处理",
+  "arguments": []
+}</code></pre>
+                    </div>
+
+                    <h3>示例3：文件整理 SKILL</h3>
+
+                    <div class="code-block-wrapper">
+                        <div class="code-header">
+                            <span class="code-lang">json</span>
+                            <button class="code-copy">复制代码</button>
+                        </div>
+                        <pre><code class="language-json">// skill.json
+{
+  "name": "文件整理",
+  "description": "按类型整理文件夹中的文件",
+  "arguments": []
+}</code></pre>
+                    </div>
+
+                    <h2 id="team">团队 SKILL 共享</h2>
+
+                    <div class="alert alert-success">
+                        <div class="alert-title">🎯 团队协作</div>
+                        <p>可以创建团队 SKILL 仓库，让所有人使用相同的技能模板。</p>
+                        <ol>
+                            <li>在 GitHub 创建仓库存放 SKILL 文件</li>
+                            <li>团队成员 clone 到本地的 <code>~/.claude/skills/</code> 目录</li>
+                            <li>所有人都能使用相同的技能</li>
+                        </ol>
+                    </div>
+
+                    <section class="quiz" id="quiz">
+                        <div class="quiz-title">本章自检（3分钟）</div>
+                        <div class="quiz-hint">点开问题查看答案，能讲清楚就算掌握。</div>
+                        <details>
+                            <summary>SKILL 的作用是什么？</summary>
+                            <div class="quiz-answer">把常用操作做成可复用模板/命令，减少重复打字，让“常用流程一键执行”。</div>
+                        </details>
+                        <details>
+                            <summary>SKILL 通常存放在哪里？</summary>
+                            <div class="quiz-answer">一般在用户目录下的 <code>~/.claude/skills/</code>（不同环境可能略有差异）。</div>
+                        </details>
+                        <details>
+                            <summary>一个 SKILL 最核心的两个文件是什么？</summary>
+                            <div class="quiz-answer">常见是 <code>skill.json</code> + <code>prompt.md</code>（定义元信息与提示词模板）。</div>
+                        </details>
+                        <details>
+                            <summary>如何使用一个 SKILL？</summary>
+                            <div class="quiz-answer">在 Claude Code 中输入 <code>/技能名 参数</code>（参数可选），按技能定义执行。</div>
+                        </details>
+                    </section>
+
+                    <button class="btn btn-secondary mark-complete-btn" style="margin: 32px 0 24px;">
+                        <svg class="icon icon-sm" aria-hidden="true"><use href="../images/icons.svg#icon-circle"></use></svg>
+                        标记为已完成（保存进度）
+                    </button>
+
+                    <nav class="chapter-nav">
+                        <a href="chapter-06.html" class="chapter-nav-card">
+                            <svg class="icon" aria-hidden="true"><use href="../images/icons.svg#icon-arrow-left"></use></svg>
+                            <div class="content">
+                                <div class="label">上一章</div>
+                                <div class="title">第06章：MCP 扩展</div>
+                            </div>
+                        </a>
+                        <a href="chapter-08.html" class="chapter-nav-card next">
+                            <svg class="icon" aria-hidden="true"><use href="../images/icons.svg#icon-arrow-right"></use></svg>
+                            <div class="content">
+                                <div class="label">下一章</div>
+                                <div class="title">第08章：搭配 Trae 使用</div>
+                            </div>
+                        </a>
+                    </nav>
+                </article>
+            </div>
+
+            <footer class="footer">
+                <div class="footer-copyright">&copy; 2025 Claude Code 教程网站</div>
+            </footer>
+        </main>
+
+        <div class="overlay" id="overlay"></div>
+    </div>
+
+    <script src="../js/main.js"></script>
+</body>
+</html>

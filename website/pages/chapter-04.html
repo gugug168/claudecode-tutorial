@@ -1,0 +1,505 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>第04章：实战场景 - Claude Code 教程</title>
+    <link rel="stylesheet" href="../css/style.css">
+</head>
+<body>
+    <div class="app-container">
+        <aside class="sidebar" id="sidebar">
+            <div class="sidebar-header">
+                <a href="../index.html" style="display: flex; align-items: center; gap: 12px; text-decoration: none;">
+                    <div class="logo">C</div>
+                    <span class="logo-text">Claude Code 教程</span>
+                </a>
+            </div>
+            <div class="sidebar-search">
+                <div class="search-box">
+                    <span class="search-icon" aria-hidden="true">
+                        <svg class="icon icon-xs"><use href="../images/icons.svg#icon-search"></use></svg>
+                    </span>
+                    <input type="text" placeholder="搜索章节...">
+                </div>
+            </div>
+            <nav class="sidebar-nav" id="sidebarNav"></nav>
+        </aside>
+
+        <main class="main-content">
+            <header class="top-nav">
+                <div class="top-nav-left">
+                    <button class="menu-toggle" id="menuToggle" aria-label="打开目录">
+                        <svg class="icon icon-sm" aria-hidden="true"><use href="../images/icons.svg#icon-menu"></use></svg>
+                    </button>
+                    <nav class="breadcrumb">
+                        <a href="../index.html">首页</a>
+                        <span class="separator">/</span>
+                        <span class="current">第04章</span>
+                    </nav>
+                </div>
+                <div class="top-nav-right">
+                    <div class="progress-indicator">
+                        <span>学习进度</span>
+                        <div class="progress-bar">
+                            <div class="progress-fill" id="progressFill" style="width: 0%"></div>
+                        </div>
+                        <span class="progress-text" id="progressText">0%</span>
+                    </div>
+                </div>
+            </header>
+
+            <div class="content-wrapper">
+                <header class="article-header">
+                    <div class="article-breadcrumb">
+                        <a href="../index.html">首页</a> / <span>第04章：实战场景</span>
+                    </div>
+                    <h1 class="article-title">第04章：实战场景 - Excel/文件整理/报告生成</h1>
+                    <div class="article-meta">
+                        <span class="article-meta-item">
+                            <svg class="icon icon-xs" aria-hidden="true"><use href="../images/icons.svg#icon-clock"></use></svg>
+                            预计时间：60分钟
+                        </span>
+                        <span class="article-meta-item">
+                            <svg class="icon icon-xs" aria-hidden="true"><use href="../images/icons.svg#icon-signal"></use></svg>
+                            难度：中等
+                        </span>
+                        <span class="article-meta-item">
+                            <svg class="icon icon-xs" aria-hidden="true"><use href="../images/icons.svg#icon-tag"></use></svg>
+                            类别：必修
+                        </span>
+                    </div>
+                </header>
+
+                <article class="article-content">
+                    <!-- 配图：实战场景概览 -->
+                    <div class="section-image">
+                        <img src="../images/external/img_355a9470404eab38.png" alt="Claude Code实战场景" loading="lazy">
+                        <div class="section-image-caption">用自然语言完成日常重复性工作</div>
+                    </div>
+
+                    <div class="alert alert-info">
+                        <div class="alert-title">📌 章节说明</div>
+                        <p><strong>前置知识：</strong>已完成第03章 Git 存档，熟悉 Claude Code 基本操作。</p>
+                        <p><strong>本章价值：</strong>前几章是基础，本章是<strong>实战应用</strong>。这些场景覆盖了非技术人员 60% 的日常工作。</p>
+                    </div>
+
+                    <h2 id="intro">本章覆盖的场景</h2>
+
+                    <p>这些都是<strong>非技术人员日常工作中最常遇到</strong>的任务：</p>
+
+                    <table style="margin: 24px 0;">
+                        <thead>
+                            <tr>
+                                <th>场景</th>
+                                <th>难度</th>
+                                <th>实用度</th>
+                                <th>预计时间</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>Excel 数据清洗</td>
+                                <td>⭐⭐</td>
+                                <td>⭐⭐⭐</td>
+                                <td>20分钟</td>
+                            </tr>
+                            <tr>
+                                <td>文件夹整理</td>
+                                <td>⭐</td>
+                                <td>⭐⭐⭐</td>
+                                <td>15分钟</td>
+                            </tr>
+                            <tr>
+                                <td>批量重命名</td>
+                                <td>⭐</td>
+                                <td>⭐⭐⭐</td>
+                                <td>10分钟</td>
+                            </tr>
+                            <tr>
+                                <td>周报生成</td>
+                                <td>⭐</td>
+                                <td>⭐⭐</td>
+                                <td>5分钟</td>
+                            </tr>
+                            <tr>
+                                <td>会议纪要</td>
+                                <td>⭐</td>
+                                <td>⭐⭐</td>
+                                <td>5分钟</td>
+                            </tr>
+                            <tr>
+                                <td>发票清单整理</td>
+                                <td>⭐⭐</td>
+                                <td>⭐⭐⭐</td>
+                                <td>15分钟</td>
+                            </tr>
+                            <tr>
+                                <td>联系方式提取</td>
+                                <td>⭐⭐</td>
+                                <td>⭐⭐</td>
+                                <td>10分钟</td>
+                            </tr>
+                        </tbody>
+                    </table>
+
+                    <h2 id="excel">场景1：Excel 数据处理（20分钟）</h2>
+
+                    <h3>任务：清洗销售数据</h3>
+
+                    <p>假设你有一个杂乱的销售数据表格 <code>sales_data.xlsx</code>，需要清洗。</p>
+
+                    <div class="code-block-wrapper">
+                        <div class="code-header">
+                            <span class="code-lang">bash</span>
+                            <button class="code-copy">复制代码</button>
+                        </div>
+                        <pre><code class="language-bash">claude ~/Documents</code></pre>
+                    </div>
+
+                    <p>然后输入：</p>
+
+                    <div style="background: var(--bg-card); padding: 16px; border-radius: var(--radius-md); border: 1px solid var(--border-color); margin: 16px 0;">
+                        <code>我有一个 sales_data.xlsx 文件，请帮我：<br>
+1. 读取这个文件<br>
+2. 去除重复行<br>
+3. 统一日期格式为 YYYY-MM-DD<br>
+4. 计算总销售额<br>
+5. 生成一个清洗后的文件和分析报告</code>
+                    </div>
+
+                    <div class="alert alert-info">
+                        <div class="alert-title">🔍 Claude 会做什么？</div>
+                        <ol>
+                            <li>读取 Excel 文件（用 Python 的 pandas 库）</li>
+                            <li>写一个 Python 脚本清洗数据</li>
+                            <li>计算统计数据</li>
+                            <li>生成新的 Excel 文件 <code>sales_data_cleaned.xlsx</code></li>
+                            <li>生成一个分析报告 <code>sales_report.md</code></li>
+                        </ol>
+                    </div>
+
+                    <h3>提示词模板：Excel 数据清洗</h3>
+
+                    <div style="background: var(--bg-card); padding: 16px; border-radius: var(--radius-md); border: 1px solid var(--primary-color); margin: 16px 0;">
+                        <div class="alert-title">📋 模板</div>
+                        <div class="code-block-wrapper">
+                            <div class="code-header">
+                                <span class="code-lang">提示词</span>
+                                <button class="code-copy">复制代码</button>
+                            </div>
+                            <pre><code class="language-bash">请帮我清洗 [文件名]：
+1. 去除重复行
+2. 统一日期格式为 YYYY-MM-DD
+3. 空值处理：数值列用平均值填充，文本列用 "未知" 填充
+4. 去除前后空格
+5. 给出清洗前后对比</code></pre>
+                        </div>
+                    </div>
+
+                    <h2 id="organize">场景2：整理杂乱文件夹（15分钟）</h2>
+
+                    <h3>任务：整理下载文件夹</h3>
+
+                    <p>下载文件夹通常很乱，让我们整理它：</p>
+
+                    <div style="background: var(--bg-card); padding: 16px; border-radius: var(--radius-md); border: 1px solid var(--border-color); margin: 16px 0;">
+                        <code>请帮我整理这个文件夹：<br>
+1. 图片文件（jpg/png/gif）放到 images/ 文件夹<br>
+2. 文档文件（pdf/docx/txt）放到 docs/ 文件夹<br>
+3. 压缩文件（zip/rar/7z）放到 archives/ 文件夹<br>
+4. 视频文件（mp4/mov/avi）放到 videos/ 文件夹<br>
+5. 其他文件放到 others/ 文件夹<br>
+<br>
+请生成一个整理清单，告诉我每个文件去了哪里</code>
+                    </div>
+
+                    <h3>提示词模板：文件整理</h3>
+
+                    <div style="background: var(--bg-card); padding: 16px; border-radius: var(--radius-md); border: 1px solid var(--primary-color); margin: 16px 0;">
+                        <div class="alert-title">📋 模板</div>
+                        <div class="code-block-wrapper">
+                            <div class="code-header">
+                                <span class="code-lang">提示词</span>
+                                <button class="code-copy">复制代码</button>
+                            </div>
+                            <pre><code class="language-bash">请整理 [文件夹路径]：
+- 图片文件（jpg/png/gif）→ images/
+- 文档文件（pdf/docx/txt）→ docs/
+- 压缩文件（zip/rar）→ archives/
+- 其他文件 → others/
+
+生成整理清单</code></pre>
+                        </div>
+                    </div>
+
+                    <h2 id="rename">场景3：批量重命名文件（10分钟）</h2>
+
+                    <h3>任务：重命名照片文件</h3>
+
+                    <div style="background: var(--bg-card); padding: 16px; border-radius: var(--radius-md); border: 1px solid var(--border-color); margin: 16px 0;">
+                        <code>请把这些照片重命名：<br>
+格式：2024-01-15_001.jpg<br>
+按拍摄日期排序（从 EXIF 读取）<br>
+如果无法读取日期，就用文件的修改日期</code>
+                    </div>
+
+                    <h2 id="weekly">场景4：生成周报（5分钟）</h2>
+
+                    <h3>任务：根据工作内容生成结构化周报</h3>
+
+                    <div style="background: var(--bg-card); padding: 16px; border-radius: var(--radius-md); border: 1px solid var(--border-color); margin: 16px 0;">
+                        <code>根据以下内容生成周报：<br>
+<br>
+本周完成的工作：<br>
+1. 修复了登录页面的样式问题<br>
+2. 新增了用户头像上传功能<br>
+3. 更新了帮助文档<br>
+4. 参加了产品评审会议<br>
+<br>
+下周计划：<br>
+1. 开始开发消息通知功能<br>
+2. 优化首页加载速度<br>
+3. 准备用户测试<br>
+<br>
+遇到的问题：<br>
+1. 第三方接口不太稳定<br>
+2. 设计图还没给全<br>
+<br>
+请生成结构化的周报，格式要专业</code>
+                    </div>
+
+                    <h3>提示词模板：周报生成</h3>
+
+                    <div style="background: var(--bg-card); padding: 16px; border-radius: var(--radius-md); border: 1px solid var(--primary-color); margin: 16px 0;">
+                        <div class="alert-title">📋 模板</div>
+                        <div class="code-block-wrapper">
+                            <div class="code-header">
+                                <span class="code-lang">提示词</span>
+                                <button class="code-copy">复制代码</button>
+                            </div>
+                            <pre><code class="language-bash">根据以下内容生成周报：
+
+本周完成的工作：
+[列出工作]
+
+下周计划：
+[列出计划]
+
+遇到的问题：
+[列出问题]
+
+格式要专业，包含：本周进展、下周计划、风险与问题</code></pre>
+                        </div>
+                    </div>
+
+                    <h2 id="meeting">场景5：会议纪要（5分钟）</h2>
+
+                    <h3>任务：整理会议记录</h3>
+
+                    <div style="background: var(--bg-card); padding: 16px; border-radius: var(--radius-md); border: 1px solid var(--border-color); margin: 16px 0;">
+                        <code>请整理以下会议记录，输出：<br>
+1. 会议摘要（3-5 句话）<br>
+2. 参会人员与角色<br>
+3. 讨论的主要议题<br>
+4. 待办清单（格式：- [ ] 任务 | 负责人 | 截止日期）<br>
+5. 需要跟进的问题<br>
+<br>
+会议时间：2025-01-10 14:00-15:30<br>
+参会人：张三（开发）、李四（产品）、王五（测试）<br>
+<br>
+会议内容：<br>
+[粘贴会议内容]</code>
+                    </div>
+
+                    <h3>提示词模板：会议纪要</h3>
+
+                    <div style="background: var(--bg-card); padding: 16px; border-radius: var(--radius-md); border: 1px solid var(--primary-color); margin: 16px 0;">
+                        <div class="alert-title">📋 模板</div>
+                        <div class="code-block-wrapper">
+                            <div class="code-header">
+                                <span class="code-lang">提示词</span>
+                                <button class="code-copy">复制代码</button>
+                            </div>
+                            <pre><code class="language-bash">请整理以下会议记录，输出：
+1. 会议摘要（3-5 句话）
+2. 参会人员与角色
+3. 讨论的主要议题
+4. 待办清单（格式：- [ ] 任务 | 负责人 | 截止日期）
+5. 需要跟进的问题
+
+会议内容：
+[粘贴内容]</code></pre>
+                        </div>
+                    </div>
+
+                    <h2 id="invoices">场景6：发票清单整理（15分钟）</h2>
+
+                    <h3>任务：从杂乱的数据中提取发票信息</h3>
+
+                    <div class="alert alert-info">
+                        <div class="alert-title">📋 场景说明</div>
+                        <p>财务部门发来一堆发票数据，格式混乱，需要整理成标准的报销清单。</p>
+                    </div>
+
+                    <p>假设你有一个 <code>invoices.xlsx</code> 文件，数据格式如下：</p>
+
+                    <div style="background: var(--bg-code); padding: 16px; border-radius: var(--radius-md); margin: 16px 0; font-family: monospace; font-size: 14px;">
+                        日期    发票号码    金额(元)    类型<br>
+                        2024.01.15  12345678  ¥256.00  办公用品<br>
+                        2024/1/16   87654321  1280.50  差旅费<br>
+                        01-17-2024  11223344  ¥56.00   交通费
+                    </div>
+
+                    <p>在 Claude Code 中输入：</p>
+
+                    <div style="background: var(--bg-card); padding: 16px; border-radius: var(--radius-md); border: 1px solid var(--border-color); margin: 16px 0;">
+                        <code>请处理 invoices.xlsx 文件：<br><br>
+1. 统一日期格式为 YYYY-MM-DD<br>
+2. 统一金额格式（去掉 ¥ 符号，保留两位小数）<br>
+3. 添加"报销类别"列：办公用品→管理费用，差旅费→差旅费用，交通费→交通费用<br>
+4. 计算总金额<br>
+5. 生成一个新的报销清单.xlsx</code>
+                    </div>
+
+                    <h3>提示词模板：发票整理</h3>
+
+                    <div style="background: var(--bg-card); padding: 16px; border-radius: var(--radius-md); border: 1px solid var(--primary-color); margin: 16px 0;">
+                        <div class="alert-title">📋 模板</div>
+                        <div class="code-block-wrapper">
+                            <div class="code-header">
+                                <span class="code-lang">提示词</span>
+                                <button class="code-copy">复制代码</button>
+                            </div>
+                            <pre><code class="language-bash">请整理 [文件名] 发票数据：
+1. 统一日期格式为 YYYY-MM-DD
+2. 提取/清洗金额数据（数字格式）
+3. 标准化发票号码格式
+4. 按类型分类统计
+5. 生成汇总报告</code></pre>
+                        </div>
+                    </div>
+
+                    <h2 id="contacts">场景7：联系方式提取（10分钟）</h2>
+
+                    <h3>任务：从文本中提取联系方式</h3>
+
+                    <div class="alert alert-info">
+                        <div class="alert-title">📋 场景说明</div>
+                        <p>活动报名信息、客户资料等通常以文本形式存在，需要提取出联系方式整理成表格。</p>
+                    </div>
+
+                    <p>假设你有一个 <code>registrations.txt</code> 文件：</p>
+
+                    <div style="background: var(--bg-code); padding: 16px; border-radius: var(--radius-md); margin: 16px 0; font-family: monospace; font-size: 14px;">
+                        报名表单：<br><br>
+                        张三，手机：13812345678，邮箱：zhangsan@example.com<br>
+                        李四 电话 139-8765-4321 邮箱 lisi@example.com<br>
+                        王五 158 1111 2222 wangwu@qq.com
+                    </div>
+
+                    <p>在 Claude Code 中输入：</p>
+
+                    <div style="background: var(--bg-card); padding: 16px; border-radius: var(--radius-md); border: 1px solid var(--border-color); margin: 16px 0;">
+                        <code>请从 registrations.txt 提取联系方式：<br><br>
+1. 提取姓名、手机号、邮箱<br>
+2. 统一手机号格式（去掉横杠和空格）<br>
+3. 生成一个 Excel 文件，列名为：姓名、手机号、邮箱<br>
+4. 验证邮箱格式是否正确</code>
+                    </div>
+
+                    <h3>提示词模板：信息提取</h3>
+
+                    <div style="background: var(--bg-card); padding: 16px; border-radius: var(--radius-md); border: 1px solid var(--primary-color); margin: 16px 0;">
+                        <div class="alert-title">📋 模板</div>
+                        <div class="code-block-wrapper">
+                            <div class="code-header">
+                                <span class="code-lang">提示词</span>
+                                <button class="code-copy">复制代码</button>
+                            </div>
+                            <pre><code class="language-bash">请从 [文件] 提取 [目标信息]：
+- 提取字段：[列出字段]
+- 输出格式：Excel/CSV
+- 列名：[指定列名]
+- 数据验证：[验证规则]</code></pre>
+                        </div>
+                    </div>
+
+                    <h2 id="faq">常见问题</h2>
+
+                    <div class="alert alert-warning">
+                        <div class="alert-title">Q1: Excel 文件太大怎么办？</div>
+                        <p>可以告诉 Claude 分批次处理：</p>
+                        <div style="background: var(--bg-card); padding: 16px; border-radius: var(--radius-md); border: 1px solid var(--border-color); margin: 16px 0;">
+                            <code>数据量较大，请：<br>
+1. 先分析数据结构（列名、类型）<br>
+2. 给出清洗方案<br>
+3. 分批次处理（每次 1000 行）<br>
+4. 最后合并结果</code>
+                        </div>
+                    </div>
+
+                    <div class="alert alert-warning">
+                        <div class="alert-title">Q2: 文件整理会不会搞乱？</div>
+                        <p>Claude 会先生成整理清单给你确认。你也可以让 Claude 只生成清单，不执行移动：</p>
+                        <div style="background: var(--bg-card); padding: 16px; border-radius: var(--radius-md); border: 1px solid var(--border-color); margin: 16px 0;">
+                            <code>请只生成整理清单，不要移动文件</code>
+                        </div>
+                    </div>
+
+                    <section class="quiz" id="quiz">
+                        <div class="quiz-title">本章自检（3分钟）</div>
+                        <div class="quiz-hint">点开问题查看答案，能讲清楚就算掌握。</div>
+                        <details>
+                            <summary>用 Claude Code 处理 Excel/文件整理时，最先要说清楚的三件事是什么？</summary>
+                            <div class="quiz-answer">文件/范围是什么、你要的目标是什么、有哪些约束（不要改什么/输出什么格式）。</div>
+                        </details>
+                        <details>
+                            <summary>怎么避免“它一口气改太多，返工很痛”？</summary>
+                            <div class="quiz-answer">先让它给计划（或用 Plan 思路），确认后再执行；把任务拆小，一次只处理一个文件/一个目标。</div>
+                        </details>
+                        <details>
+                            <summary>批量移动/重命名之前，最安全的准备动作是什么？</summary>
+                            <div class="quiz-answer">先备份或 Git 存档；并在自己的练习/项目文件夹内操作，避免系统目录。</div>
+                        </details>
+                        <details>
+                            <summary>你希望最终交付物是什么，应该怎么写？</summary>
+                            <div class="quiz-answer">明确写“输出文件名/格式/内容”，例如生成 <code>report.md</code>、生成清洗后 CSV、生成归档清单。</div>
+                        </details>
+                    </section>
+
+                    <button class="btn btn-secondary mark-complete-btn" style="margin: 32px 0 24px;">
+                        <svg class="icon icon-sm" aria-hidden="true"><use href="../images/icons.svg#icon-circle"></use></svg>
+                        标记为已完成（保存进度）
+                    </button>
+
+                    <nav class="chapter-nav">
+                        <a href="chapter-03.html" class="chapter-nav-card">
+                            <svg class="icon" aria-hidden="true"><use href="../images/icons.svg#icon-arrow-left"></use></svg>
+                            <div class="content">
+                                <div class="label">上一章</div>
+                                <div class="title">第03章：Git 存档</div>
+                            </div>
+                        </a>
+                        <a href="chapter-05.html" class="chapter-nav-card next">
+                            <svg class="icon" aria-hidden="true"><use href="../images/icons.svg#icon-arrow-right"></use></svg>
+                            <div class="content">
+                                <div class="label">下一章</div>
+                                <div class="title">第05章：提示词模板</div>
+                            </div>
+                        </a>
+                    </nav>
+                </article>
+            </div>
+
+            <footer class="footer">
+                <div class="footer-copyright">&copy; 2025 Claude Code 教程网站</div>
+            </footer>
+        </main>
+
+        <div class="overlay" id="overlay"></div>
+    </div>
+
+    <script src="../js/main.js"></script>
+</body>
+</html>

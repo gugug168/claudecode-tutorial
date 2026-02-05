@@ -1,0 +1,488 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>附录：速查手册 - Claude Code 教程</title>
+    <link rel="stylesheet" href="../css/style.css">
+</head>
+<body>
+    <div class="app-container">
+        <aside class="sidebar" id="sidebar">
+            <div class="sidebar-header">
+                <a href="../index.html" style="display: flex; align-items: center; gap: 12px; text-decoration: none;">
+                    <div class="logo">C</div>
+                    <span class="logo-text">Claude Code 教程</span>
+                </a>
+            </div>
+            <div class="sidebar-search">
+                <div class="search-box">
+                    <span class="search-icon" aria-hidden="true">
+                        <svg class="icon icon-xs"><use href="../images/icons.svg#icon-search"></use></svg>
+                    </span>
+                    <input type="text" placeholder="搜索章节...">
+                </div>
+            </div>
+            <nav class="sidebar-nav" id="sidebarNav"></nav>
+        </aside>
+
+        <main class="main-content">
+            <header class="top-nav">
+                <div class="top-nav-left">
+                    <button class="menu-toggle" id="menuToggle" aria-label="打开目录">
+                        <svg class="icon icon-sm" aria-hidden="true"><use href="../images/icons.svg#icon-menu"></use></svg>
+                    </button>
+                    <nav class="breadcrumb">
+                        <a href="../index.html">首页</a>
+                        <span class="separator">/</span>
+                        <span class="current">速查手册</span>
+                    </nav>
+                </div>
+                <div class="top-nav-right">
+                    <div class="progress-indicator">
+                        <span>学习进度</span>
+                        <div class="progress-bar">
+                            <div class="progress-fill" id="progressFill" style="width: 0%"></div>
+                        </div>
+                        <span class="progress-text" id="progressText">0%</span>
+                    </div>
+                </div>
+            </header>
+
+            <div class="content-wrapper">
+                <header class="article-header">
+                    <div class="article-breadcrumb">
+                        <a href="../index.html">首页</a> / <span>附录：速查手册</span>
+                    </div>
+                    <h1 class="article-title">附录：速查手册</h1>
+                    <div class="article-meta">
+                        <span class="article-meta-item">
+                            <svg class="icon icon-xs" aria-hidden="true"><use href="../images/icons.svg#icon-clock"></use></svg>
+                            随时查阅
+                        </span>
+                        <span class="article-meta-item">
+                            <svg class="icon icon-xs" aria-hidden="true"><use href="../images/icons.svg#icon-tag"></use></svg>
+                            类别：附录
+                        </span>
+                    </div>
+                </header>
+
+                <article class="article-content">
+                    <!-- 配图：速查参考 -->
+                    <div class="section-image">
+                        <img src="../images/external/img_355a9470404eab38.png" alt="Claude Code速查手册" loading="lazy">
+                        <div class="section-image-caption">快速查找命令、配置和常见问题解决方案</div>
+                    </div>
+
+                    <div class="alert alert-info">
+                        <div class="alert-title">💡 使用说明</div>
+                        <p>这是一个快速参考指南，当你忘记某个命令或需要查找某个操作时，可以快速在这里找到答案。</p>
+                    </div>
+
+                    <h2 id="install">A.1 安装速查表</h2>
+
+                    <table style="margin: 24px 0;">
+                        <thead>
+                            <tr>
+                                <th>软件</th>
+                                <th>下载地址</th>
+                                <th>验证命令</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>Python（可选）</td>
+                                <td><a href="https://python.org" target="_blank">python.org</a></td>
+                                <td><code>python --version</code></td>
+                            </tr>
+                            <tr>
+                                <td>Node.js</td>
+                                <td><a href="https://nodejs.org" target="_blank">nodejs.org</a></td>
+                                <td><code>node --version</code></td>
+                            </tr>
+                            <tr>
+                                <td>Git</td>
+                                <td><a href="https://git-scm.com" target="_blank">git-scm.com</a></td>
+                                <td><code>git --version</code></td>
+                            </tr>
+                            <tr>
+                                <td>Claude Code</td>
+                                <td><code>npm install -g @anthropic-ai/claude-code</code></td>
+                                <td><code>claude --version</code></td>
+                            </tr>
+                        </tbody>
+                    </table>
+
+                    <h2 id="commands">A.2 命令速查表</h2>
+
+                    <h3>启动命令</h3>
+
+                    <table style="margin: 24px 0;">
+                        <thead>
+                            <tr>
+                                <th>操作</th>
+                                <th>命令</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr><td>启动（当前目录）</td><td><code>claude</code></td></tr>
+                            <tr><td>启动（指定目录）</td><td><code>claude /path/to/dir</code></td></tr>
+                            <tr><td>只读模式</td><td><code>claude --read-only</code></td></tr>
+                            <tr><td>危险模式</td><td><code>claude --dangerous</code></td></tr>
+                            <tr><td>Codex 模式</td><td><code>claude --codex</code></td></tr>
+                            <tr><td>系统级权限</td><td><code>claude --allow-system-wide</code></td></tr>
+                        </tbody>
+                    </table>
+
+                    <h3>斜杠命令</h3>
+
+                    <table style="margin: 24px 0;">
+                        <thead>
+                            <tr>
+                                <th>类别</th>
+                                <th>命令</th>
+                                <th>功能</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr><td>对话</td><td><code>/new</code></td><td>新建对话</td></tr>
+                            <tr><td>对话</td><td><code>/clear</code></td><td>清空对话历史</td></tr>
+                            <tr><td>对话</td><td><code>/history</code></td><td>查看历史记录</td></tr>
+                            <tr><td>对话</td><td><code>/exit</code></td><td>退出 Claude Code</td></tr>
+                            <tr><td>模式</td><td><code>/plan</code></td><td>进入 Plan 模式</td></tr>
+                            <tr><td>模式</td><td><code>/edit</code></td><td>进入编辑模式</td></tr>
+                            <tr><td>模式</td><td><code>/read-only</code></td><td>切换只读模式</td></tr>
+                            <tr><td>模式</td><td><code>/dangerous</code></td><td>切换危险模式</td></tr>
+                            <tr><td>帮助</td><td><code>/help</code></td><td>显示帮助信息</td></tr>
+                            <tr><td>帮助</td><td><code>/status</code></td><td>查看当前状态</td></tr>
+                            <tr><td>帮助</td><td><code>/config</code></td><td>查看配置信息</td></tr>
+                        </tbody>
+                    </table>
+
+                    <h2 id="prompts">A.3 提示词模板速查</h2>
+
+                    <table style="margin: 24px 0;">
+                        <thead>
+                            <tr>
+                                <th>场景</th>
+                                <th>提示词模板</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>理解代码</td>
+                                <td><code>请帮我理解 [文件名]：这是什么？结构如何？怎么运行？</code></td>
+                            </tr>
+                            <tr>
+                                <td>修改文件</td>
+                                <td><code>请修改 [文件名]：目标 [描述]，约束 [不要做什么]</code></td>
+                            </tr>
+                            <tr>
+                                <td>处理数据</td>
+                                <td><code>请处理 [文件]：清洗、分析、生成报告</code></td>
+                            </tr>
+                            <tr>
+                                <td>整理文件</td>
+                                <td><code>请整理 [文件夹]：按类型分类，移动到对应文件夹，生成清单</code></td>
+                            </tr>
+                            <tr>
+                                <td>生成文档</td>
+                                <td><code>请根据 [内容] 生成 [类型] 文档，格式要专业</code></td>
+                            </tr>
+                            <tr>
+                                <td>Git 存档</td>
+                                <td><code>请 Git 存档当前状态，提交信息写 [描述]</code></td>
+                            </tr>
+                        </tbody>
+                    </table>
+
+                    <h2 id="git">A.4 Git 速查</h2>
+
+                    <p><strong>用 Claude Code 操作 Git，不需要记命令！</strong></p>
+
+                    <table style="margin: 24px 0;">
+                        <thead>
+                            <tr>
+                                <th>操作</th>
+                                <th>告诉 Claude</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr><td>初始化 Git</td><td><code>请帮这个文件夹初始化 Git</code></td></tr>
+                            <tr><td>创建存档</td><td><code>请 Git 存档，信息写 "xxx"</code></td></tr>
+                            <tr><td>查看历史</td><td><code>请显示 Git 历史记录</code></td></tr>
+                            <tr><td>查看差异</td><td><code>请显示修改了什么内容</code></td></tr>
+                            <tr><td>回退版本</td><td><code>请回退到上一个版本</code></td></tr>
+                            <tr><td>恢复文件</td><td><code>请从 Git 恢复 xxx 文件</code></td></tr>
+                            <tr><td>放弃修改</td><td><code>请放弃所有未提交的修改</code></td></tr>
+                        </tbody>
+                    </table>
+
+                    <h2 id="mcp">A.5 MCP 速查</h2>
+
+                    <h3>配置文件位置</h3>
+
+                    <div class="code-block-wrapper">
+                        <div class="code-header">
+                            <span class="code-lang">bash</span>
+                            <button class="code-copy">复制代码</button>
+                        </div>
+                        <pre><code class="language-bash">~/.claude/mcp-servers.json</code></pre>
+                    </div>
+
+                    <h3>常用 MCP 列表</h3>
+
+                    <table style="margin: 24px 0;">
+                        <thead>
+                            <tr>
+                                <th>MCP</th>
+                                <th>用途</th>
+                                <th>安装包</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr><td>filesystem</td><td>访问任意文件</td><td><code>@modelcontextprotocol/server-filesystem</code></td></tr>
+                            <tr><td>git</td><td>增强 Git</td><td><code>@modelcontextprotocol/server-git</code></td></tr>
+                            <tr><td>postgres</td><td>PostgreSQL</td><td><code>@modelcontextprotocol/server-postgres</code></td></tr>
+                            <tr><td>sqlite</td><td>SQLite</td><td><code>@modelcontextprotocol/server-sqlite</code></td></tr>
+                            <tr><td>fetch</td><td>获取网页</td><td><code>@modelcontextprotocol/server-fetch</code></td></tr>
+                            <tr><td>brave-search</td><td>网页搜索</td><td><code>@modelcontextprotocol/server-brave-search</code></td></tr>
+                        </tbody>
+                    </table>
+
+                    <h2 id="skill">A.6 SKILL 速查</h2>
+
+                    <table style="margin: 24px 0;">
+                        <thead>
+                            <tr>
+                                <th>项目</th>
+                                <th>路径/命令</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr><td>SKILL 位置</td><td><code>~/.claude/skills/</code></td></tr>
+                            <tr><td>创建 SKILL</td><td>在 skills 目录下创建文件夹</td></tr>
+                            <tr><td>SKILL 结构</td><td><code>skill.json</code> + <code>prompt.md</code></td></tr>
+                            <tr><td>使用 SKILL</td><td><code>/技能名 参数</code></td></tr>
+                        </tbody>
+                    </table>
+
+                    <h2 id="faq">A.7 常见问题速查</h2>
+
+                    <h3>安装问题</h3>
+
+                    <table style="margin: 24px 0;">
+                        <thead>
+                            <tr>
+                                <th>问题</th>
+                                <th>解决方案</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>npm 命令找不到</td>
+                                <td>重新安装 Node.js，确保勾选 "Add to PATH"</td>
+                            </tr>
+                            <tr>
+                                <td>Python 命令找不到</td>
+                                <td>重新安装 Python，确保勾选 "Add Python to PATH"</td>
+                            </tr>
+                            <tr>
+                                <td>claude 命令报错</td>
+                                <td>检查 npm 全局路径，重新安装 Claude Code</td>
+                            </tr>
+                            <tr>
+                                <td>Mac 提示权限不足</td>
+                                <td>使用 <code>sudo npm install -g @anthropic-ai/claude-code</code></td>
+                            </tr>
+                        </tbody>
+                    </table>
+
+                    <h3>使用问题</h3>
+
+                    <table style="margin: 24px 0;">
+                        <thead>
+                            <tr>
+                                <th>问题</th>
+                                <th>解决方案</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>Claude 不回答</td>
+                                <td>检查 API Key 配置，确认网络连接</td>
+                            </tr>
+                            <tr>
+                                <td>不能修改文件</td>
+                                <td>检查是否在只读模式，使用 <code>/edit</code> 退出</td>
+                            </tr>
+                            <tr>
+                                <td>不知道当前模式</td>
+                                <td>输入 <code>/status</code> 查看</td>
+                            </tr>
+                            <tr>
+                                <td>如何退出</td>
+                                <td>输入 <code>/exit</code> 或按 <code>Ctrl+C</code></td>
+                            </tr>
+                        </tbody>
+                    </table>
+
+                    <h2 id="decision">A.8 权限决策树</h2>
+
+                    <div style="background: var(--bg-card); padding: 24px; border-radius: var(--radius-md); border: 1px solid var(--border-color); margin: 24px 0; font-family: monospace; white-space: pre;">
+你要做什么？
+│
+├─ 只是看看/学习
+│  → claude --read-only
+│  最安全，完全不会修改文件
+│
+├─ 修改自己的文件
+│  → claude （默认）
+│  最常用，安全且有保护
+│
+├─ 修改很多文件/批量操作
+│  → claude --dangerous
+│  方便但危险，要有备份
+│
+└─ 需要操作多个文件夹
+   → claude --allow-system-wide
+   权限很大，谨慎使用
+                    </div>
+
+                    <h2 id="roadmap">A.9 学习路线图</h2>
+
+                    <h3>零基础入门路线</h3>
+                    <ol>
+                        <li>第01章：环境安装（50分钟）</li>
+                        <li>第02章：命令详解（40分钟）</li>
+                        <li>第03章：Git 存档（45分钟）</li>
+                    </ol>
+
+                    <h3>进阶学习路线</h3>
+                    <ol>
+                        <li>第04章：实战场景（60分钟）</li>
+                        <li>第05章：提示词模板（35分钟）</li>
+                        <li>第06章：MCP 扩展（50分钟）</li>
+                        <li>第07章：SKILL 技能（40分钟）</li>
+                    </ol>
+
+                    <h3>实战项目路线</h3>
+                    <ol>
+                        <li>第09章：需求先行（60分钟）</li>
+                        <li>第10章：开发流程（90分钟）</li>
+                        <li>自己完成一个实际项目</li>
+                    </ol>
+
+                    <h2 id="config">A.10 快速参考</h2>
+
+                    <div class="alert alert-info" style="margin-top: 24px;">
+                        <div class="alert-title">新手常用</div>
+                        <p><a href="troubleshooting.html">A1：故障排查（按症状）</a>（遇到报错先看这里）</p>
+                        <p><a href="cost-saving.html">A2：省钱与避坑</a>（减少无效对话，避免烧额度）</p>
+                        <p><a href="scenario-pack.html">P2-1：场景包（带练习素材）</a>（拿来就练）</p>
+                    </div>
+
+                    <h2 id="progress-tools">A.11 进度管理</h2>
+                    <div class="alert alert-warning">
+                        <div class="alert-title">说明</div>
+                        <p>进度只保存在你当前浏览器（localStorage）。换电脑/换浏览器会丢失，建议导出备份。</p>
+                    </div>
+
+                    <div style="display: flex; gap: 12px; flex-wrap: wrap; margin: 16px 0;">
+                        <button class="btn btn-secondary" id="exportProgressBtn">
+                            <svg class="icon icon-sm" aria-hidden="true"><use href="../images/icons.svg#icon-list"></use></svg>
+                            导出进度
+                        </button>
+                        <label class="btn btn-secondary" for="importProgressFile" style="cursor: pointer;">
+                            <svg class="icon icon-sm" aria-hidden="true"><use href="../images/icons.svg#icon-book"></use></svg>
+                            导入进度
+                        </label>
+                        <input id="importProgressFile" type="file" accept="application/json" style="display:none" />
+                        <button class="btn btn-secondary btn-danger" id="resetProgressBtn">
+                            <svg class="icon icon-sm" aria-hidden="true"><use href="../images/icons.svg#icon-help"></use></svg>
+                            重置进度
+                        </button>
+                    </div>
+
+                    <h3>键盘快捷键</h3>
+
+                    <table style="margin: 24px 0;">
+                        <thead>
+                            <tr>
+                                <th>快捷键</th>
+                                <th>功能</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr><td><code>Ctrl + C</code></td><td>退出 Claude Code</td></tr>
+                            <tr><td><code>Ctrl + D</code></td><td>退出 Claude Code</td></tr>
+                            <tr><td><code>Ctrl + L</code></td><td>清屏</td></tr>
+                            <tr><td><code>↑ / ↓</code></td><td>浏览历史命令</td></tr>
+                        </tbody>
+                    </table>
+
+                    <h3>环境变量</h3>
+
+                    <table style="margin: 24px 0;">
+                        <thead>
+                            <tr>
+                                <th>变量</th>
+                                <th>用途</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr><td><code>ANTHROPIC_API_KEY</code></td><td>Anthropic 官方 Key（部分版本/场景使用）</td></tr>
+                            <tr><td><code>ANTHROPIC_AUTH_TOKEN</code></td><td>Anthropic 兼容 Token（国内转发/第三方常用，如智谱）</td></tr>
+                            <tr><td><code>ANTHROPIC_BASE_URL</code></td><td>API 端点地址（不同服务商不同）</td></tr>
+                            <tr><td><code>API_TIMEOUT_MS</code></td><td>超时（毫秒），网络慢时可适当调大</td></tr>
+                            <tr><td><code>CLAUDE_CODE_DISABLE_NONESSENTIAL_TRAFFIC</code></td><td>减少非必要网络请求（可选）</td></tr>
+                        </tbody>
+                    </table>
+
+                    <h3>配置文件位置</h3>
+
+                    <table style="margin: 24px 0;">
+                        <thead>
+                            <tr>
+                                <th>配置</th>
+                                <th>位置</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr><td>全局配置</td><td><code>~/.claude/settings.json</code></td></tr>
+                            <tr><td>项目配置</td><td><code>.claude/settings.json</code></td></tr>
+                            <tr><td>MCP 配置</td><td><code>~/.claude/mcp-servers.json</code></td></tr>
+                            <tr><td>SKILLS 目录</td><td><code>~/.claude/skills/</code></td></tr>
+                        </tbody>
+                    </table>
+
+                    <nav class="chapter-nav">
+                        <a href="chapter-10.html" class="chapter-nav-card">
+                            <svg class="icon" aria-hidden="true"><use href="../images/icons.svg#icon-arrow-left"></use></svg>
+                            <div class="content">
+                                <div class="label">上一章</div>
+                                <div class="title">第10章：正规开发流程</div>
+                            </div>
+                        </a>
+                        <a href="../index.html" class="chapter-nav-card next">
+                            <svg class="icon" aria-hidden="true"><use href="../images/icons.svg#icon-home"></use></svg>
+                            <div class="content">
+                                <div class="label">返回</div>
+                                <div class="title">首页</div>
+                            </div>
+                        </a>
+                    </nav>
+                </article>
+            </div>
+
+            <footer class="footer">
+                <div class="footer-copyright">&copy; 2025 Claude Code 教程网站</div>
+            </footer>
+        </main>
+
+        <div class="overlay" id="overlay"></div>
+    </div>
+
+    <script src="../js/main.js"></script>
+</body>
+</html>

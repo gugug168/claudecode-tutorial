@@ -1,0 +1,176 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>A2：省钱与避坑 - Claude Code 教程</title>
+    <link rel="stylesheet" href="../css/style.css">
+</head>
+<body data-page-id="cost-saving">
+    <div class="app-container">
+        <aside class="sidebar" id="sidebar">
+            <div class="sidebar-header">
+                <a href="../index.html" style="display: flex; align-items: center; gap: 12px; text-decoration: none;">
+                    <div class="logo">C</div>
+                    <span class="logo-text">Claude Code 教程</span>
+                </a>
+            </div>
+            <div class="sidebar-search">
+                <div class="search-box">
+                    <span class="search-icon" aria-hidden="true">
+                        <svg class="icon icon-xs"><use href="../images/icons.svg#icon-search"></use></svg>
+                    </span>
+                    <input type="text" placeholder="搜索章节...">
+                </div>
+            </div>
+            <nav class="sidebar-nav" id="sidebarNav"></nav>
+        </aside>
+
+        <main class="main-content">
+            <header class="top-nav">
+                <div class="top-nav-left">
+                    <button class="menu-toggle" id="menuToggle" aria-label="打开目录">
+                        <svg class="icon icon-sm" aria-hidden="true"><use href="../images/icons.svg#icon-menu"></use></svg>
+                    </button>
+                    <nav class="breadcrumb">
+                        <a href="../index.html">首页</a>
+                        <span class="separator">/</span>
+                        <span class="current">省钱与避坑</span>
+                    </nav>
+                </div>
+                <div class="top-nav-right">
+                    <div class="progress-indicator">
+                        <span>学习进度</span>
+                        <div class="progress-bar">
+                            <div class="progress-fill" id="progressFill" style="width: 0%"></div>
+                        </div>
+                        <span class="progress-text" id="progressText">0%</span>
+                    </div>
+                </div>
+            </header>
+
+            <div class="content-wrapper">
+                <header class="article-header">
+                    <div class="article-breadcrumb">
+                        <a href="../index.html">首页</a> / <span>A2：省钱与避坑</span>
+                    </div>
+                    <h1 class="article-title">A2：省钱与避坑</h1>
+                    <div class="article-meta">
+                        <span class="article-meta-item">
+                            <svg class="icon icon-xs" aria-hidden="true"><use href="../images/icons.svg#icon-clock"></use></svg>
+                            预计时间：10分钟
+                        </span>
+                        <span class="article-meta-item">
+                            <svg class="icon icon-xs" aria-hidden="true"><use href="../images/icons.svg#icon-tag"></use></svg>
+                            类别：附录
+                        </span>
+                    </div>
+                </header>
+
+                <article class="article-content">
+                    <!-- 配图：高效使用Claude Code -->
+                    <div class="section-image">
+                        <img src="../images/external/img_62d972907ea4ff88.png" alt="高效使用Claude Code" loading="lazy">
+                        <div class="section-image-caption">明确目标、分步执行，让AI帮你高效完成任务</div>
+                    </div>
+
+                    <div class="alert alert-info">
+                        <div class="alert-title">新手最容易“烧钱/白忙”的 3 个原因</div>
+                        <ol>
+                            <li>一上来就丢一大段内容，让模型反复猜。</li>
+                            <li>目标不明确：让它“随便优化/随便看看”。</li>
+                            <li>不给约束：它改得越多，返工越多。</li>
+                        </ol>
+                    </div>
+
+                    <h2 id="rule">三条省钱铁律（照做就省）</h2>
+                    <ol>
+                        <li><strong>先小后大：</strong>先用 1 个最小例子跑通，再把完整文件交给它。</li>
+                        <li><strong>先问后做：</strong>先让 Claude 问你 3 个关键问题，确认需求再执行。</li>
+                        <li><strong>先定边界：</strong>明确“允许改什么 / 不允许改什么 / 输出格式”。</li>
+                    </ol>
+
+                    <h2 id="split">大文件/长对话怎么处理？（避免超长失败）</h2>
+                    <ul>
+                        <li>把任务拆成 3 步：提取 → 清洗 → 输出。</li>
+                        <li>一次只处理一个文件/一个函数/一个表。</li>
+                        <li>让 Claude 先给“计划 + 你确认后再执行”。</li>
+                    </ul>
+
+                    <h2 id="templates">万能省钱提示词模板（直接复制）</h2>
+
+                    <h3>模板1：先问清楚再动手（最省）</h3>
+                    <div class="code-block-wrapper">
+                        <div class="code-header">
+                            <span class="code-lang">提示词</span>
+                            <button class="code-copy">复制代码</button>
+                        </div>
+                        <pre><code class="language-bash">我有一个任务：[一句话说明]
+在你开始做之前，请先问我 3 个你最需要确认的问题（只问问题，先别执行）。</code></pre>
+                    </div>
+
+                    <h3>模板2：只改最少的地方（减少返工）</h3>
+                    <div class="code-block-wrapper">
+                        <div class="code-header">
+                            <span class="code-lang">提示词</span>
+                            <button class="code-copy">复制代码</button>
+                        </div>
+                        <pre><code class="language-bash">请修改 [文件名/内容]，目标是：[目标]
+约束：
+1) 不要改动无关内容
+2) 如果需要新增文件/删除文件，先征求我确认
+3) 输出：只告诉我“改了什么 + 为什么”</code></pre>
+                    </div>
+
+                    <h3>模板3：分三步处理数据（稳定又省）</h3>
+                    <div class="code-block-wrapper">
+                        <div class="code-header">
+                            <span class="code-lang">提示词</span>
+                            <button class="code-copy">复制代码</button>
+                        </div>
+                        <pre><code class="language-bash">请按 3 步完成：
+1) 先告诉我你准备怎么做（计划）
+2) 我确认后再执行
+3) 执行后给我结果 + 可复用的命令/脚本</code></pre>
+                    </div>
+
+                    <div class="alert alert-success">
+                        <div class="alert-title">最关键的一句话</div>
+                        <p>你越“说清楚”，就越省钱；你越“让它猜”，就越烧钱。</p>
+                    </div>
+
+                    <button class="btn btn-secondary mark-complete-btn" style="margin: 32px 0 24px;">
+                        <svg class="icon icon-sm" aria-hidden="true"><use href="../images/icons.svg#icon-circle"></use></svg>
+                        标记为已完成（保存进度）
+                    </button>
+
+                    <nav class="chapter-nav">
+                        <a href="troubleshooting.html" class="chapter-nav-card">
+                            <svg class="icon" aria-hidden="true"><use href="../images/icons.svg#icon-arrow-left"></use></svg>
+                            <div class="content">
+                                <div class="label">上一页</div>
+                                <div class="title">故障排查（按症状）</div>
+                            </div>
+                        </a>
+                        <a href="appendix.html" class="chapter-nav-card next">
+                            <svg class="icon" aria-hidden="true"><use href="../images/icons.svg#icon-arrow-right"></use></svg>
+                            <div class="content">
+                                <div class="label">继续</div>
+                                <div class="title">速查手册</div>
+                            </div>
+                        </a>
+                    </nav>
+                </article>
+            </div>
+
+            <footer class="footer">
+                <div class="footer-copyright">&copy; 2025 Claude Code 教程网站</div>
+            </footer>
+        </main>
+
+        <div class="overlay" id="overlay"></div>
+    </div>
+
+    <script src="../js/main.js"></script>
+</body>
+</html>

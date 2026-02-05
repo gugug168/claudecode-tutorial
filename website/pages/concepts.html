@@ -1,0 +1,195 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>00A：概念扫盲（必看） - Claude Code 教程</title>
+    <link rel="stylesheet" href="../css/style.css">
+</head>
+<body data-page-id="concepts">
+    <div class="app-container">
+        <aside class="sidebar" id="sidebar">
+            <div class="sidebar-header">
+                <a href="../index.html" style="display: flex; align-items: center; gap: 12px; text-decoration: none;">
+                    <div class="logo">C</div>
+                    <span class="logo-text">Claude Code 教程</span>
+                </a>
+            </div>
+            <div class="sidebar-search">
+                <div class="search-box">
+                    <span class="search-icon" aria-hidden="true">
+                        <svg class="icon icon-xs"><use href="../images/icons.svg#icon-search"></use></svg>
+                    </span>
+                    <input type="text" placeholder="搜索章节...">
+                </div>
+            </div>
+            <nav class="sidebar-nav" id="sidebarNav"></nav>
+        </aside>
+
+        <main class="main-content">
+            <header class="top-nav">
+                <div class="top-nav-left">
+                    <button class="menu-toggle" id="menuToggle" aria-label="打开目录">
+                        <svg class="icon icon-sm" aria-hidden="true"><use href="../images/icons.svg#icon-menu"></use></svg>
+                    </button>
+                    <nav class="breadcrumb">
+                        <a href="../index.html">首页</a>
+                        <span class="separator">/</span>
+                        <span class="current">概念扫盲</span>
+                    </nav>
+                </div>
+                <div class="top-nav-right">
+                    <div class="progress-indicator">
+                        <span>学习进度</span>
+                        <div class="progress-bar">
+                            <div class="progress-fill" id="progressFill" style="width: 0%"></div>
+                        </div>
+                        <span class="progress-text" id="progressText">0%</span>
+                    </div>
+                </div>
+            </header>
+
+            <div class="content-wrapper">
+                <header class="article-header">
+                    <div class="article-breadcrumb">
+                        <a href="../index.html">首页</a> / <span>00A：概念扫盲（必看）</span>
+                    </div>
+                    <h1 class="article-title">00A：概念扫盲（必看）</h1>
+                    <div class="article-meta">
+                        <span class="article-meta-item">
+                            <svg class="icon icon-xs" aria-hidden="true"><use href="../images/icons.svg#icon-clock"></use></svg>
+                            预计时间：15分钟
+                        </span>
+                        <span class="article-meta-item">
+                            <svg class="icon icon-xs" aria-hidden="true"><use href="../images/icons.svg#icon-signal"></use></svg>
+                            难度：超简单
+                        </span>
+                        <span class="article-meta-item">
+                            <svg class="icon icon-xs" aria-hidden="true"><use href="../images/icons.svg#icon-tag"></use></svg>
+                            类别：必修
+                        </span>
+                    </div>
+                </header>
+
+                <article class="article-content">
+                    <!-- 配图：Claude Code概念架构 -->
+                    <div class="section-image">
+                        <img src="../images/external/img_355a9470404eab38.png" alt="Claude Code工作原理" loading="lazy">
+                        <div class="section-image-caption">Claude Code 工作流程：从你的输入到AI响应</div>
+                    </div>
+
+                    <div class="alert alert-info">
+                        <div class="alert-title">为什么要看这页？</div>
+                        <p>新手最容易卡在“名词看不懂”：模型、Key、命令行、目录、权限……</p>
+                        <p>这页用<strong>大白话</strong>把它们的关系讲清楚，看完你就不慌了。</p>
+                    </div>
+
+                    <h2 id="map">一张图先看懂（建议收藏）</h2>
+                    <div style="background: var(--bg-card); padding: 24px; border-radius: var(--radius-md); border: 1px solid var(--border-color); margin: 24px 0; font-family: var(--font-mono); white-space: pre; overflow: auto;">
+你输入的“中文需求”
+        │
+        ▼
+Claude Code CLI（你电脑上的工具）
+        │  负责：读文件/写文件/跑命令/展示对话
+        │
+        ├─ 需要：权限（只读/默认/危险/系统级）
+        │
+        └─ 连接到：模型服务（真正回答你）
+                 │
+                 ├─ 需要：API Key（像“门禁卡/密码”）
+                 └─ 可能收费：按用量计费（别乱试太多）
+                    </div>
+
+                    <h2 id="terms">核心名词（你只要记住这几句）</h2>
+                    <table style="margin: 24px 0;">
+                        <thead>
+                            <tr>
+                                <th>名词</th>
+                                <th>你可以这样理解</th>
+                                <th>常见误解</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td><strong>Claude Code CLI</strong></td>
+                                <td>一个“会干活的命令行助手”（在你电脑上运行）</td>
+                                <td>不是网页聊天；它能读写你的文件</td>
+                            </tr>
+                            <tr>
+                                <td><strong>模型</strong></td>
+                                <td>真正“回答你/写代码”的大脑（在云端或本地）</td>
+                                <td>不是你电脑里的程序</td>
+                            </tr>
+                            <tr>
+                                <td><strong>API Key</strong></td>
+                                <td>连接模型服务的“门禁卡/密码”</td>
+                                <td>发给别人=可能被刷额度</td>
+                            </tr>
+                            <tr>
+                                <td><strong>工作目录</strong></td>
+                                <td>你让 Claude Code “在哪个文件夹里干活”</td>
+                                <td>不是系统盘根目录；别随便给全盘权限</td>
+                            </tr>
+                            <tr>
+                                <td><strong>权限模式</strong></td>
+                                <td>你允许它“能做什么”</td>
+                                <td>危险模式能删文件，慎用</td>
+                            </tr>
+                        </tbody>
+                    </table>
+
+                    <h2 id="safe">新手最安全的默认用法（强烈推荐）</h2>
+                    <ol>
+                        <li>只在你自己的项目文件夹里用（不要全盘）。</li>
+                        <li>先用默认模式/只读模式熟悉流程。</li>
+                        <li>任何“批量删除/批量移动”，先 Git 存档或备份。</li>
+                    </ol>
+
+                    <h2 id="privacy">隐私与脱敏（强烈建议）</h2>
+                    <ul>
+                        <li><strong>API Key</strong> 只放在环境变量/配置文件里，不要发聊天记录、不要截图发群。</li>
+                        <li><strong>公司/客户资料</strong> 先脱敏：姓名/电话/身份证/地址/合同金额等用占位符替换。</li>
+                        <li><strong>最小权限</strong>：只给 Claude Code 你希望它处理的那个文件夹，不要全盘授权。</li>
+                    </ul>
+
+                    <div class="alert alert-success">
+                        <div class="alert-title">你现在应该做什么？</div>
+                        <p>如果你还没跑通第一次成功：去 <a href="quickstart.html">10分钟跑通第一次成功</a>。</p>
+                        <p>如果你已经跑通了：去 <a href="chapter-02.html">第02章：命令详解</a> 把模式/权限学会。</p>
+                    </div>
+
+                    <button class="btn btn-secondary mark-complete-btn" style="margin: 32px 0 24px;">
+                        <svg class="icon icon-sm" aria-hidden="true"><use href="../images/icons.svg#icon-circle"></use></svg>
+                        标记为已完成（保存进度）
+                    </button>
+
+                    <nav class="chapter-nav">
+                        <a href="quickstart.html" class="chapter-nav-card">
+                            <svg class="icon" aria-hidden="true"><use href="../images/icons.svg#icon-arrow-left"></use></svg>
+                            <div class="content">
+                                <div class="label">上一页</div>
+                                <div class="title">10分钟跑通第一次成功</div>
+                            </div>
+                        </a>
+                        <a href="chapter-01.html" class="chapter-nav-card next">
+                            <svg class="icon" aria-hidden="true"><use href="../images/icons.svg#icon-arrow-right"></use></svg>
+                            <div class="content">
+                                <div class="label">下一步</div>
+                                <div class="title">第01章：环境安装与第一次成功</div>
+                            </div>
+                        </a>
+                    </nav>
+                </article>
+            </div>
+
+            <footer class="footer">
+                <div class="footer-copyright">&copy; 2025 Claude Code 教程网站</div>
+            </footer>
+        </main>
+
+        <div class="overlay" id="overlay"></div>
+    </div>
+
+    <script src="../js/main.js"></script>
+</body>
+</html>

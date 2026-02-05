@@ -1,0 +1,321 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>第10章：正规开发流程 - Claude Code 教程</title>
+    <link rel="stylesheet" href="../css/style.css">
+</head>
+<body>
+    <div class="app-container">
+        <aside class="sidebar" id="sidebar">
+            <div class="sidebar-header">
+                <a href="../index.html" style="display: flex; align-items: center; gap: 12px; text-decoration: none;">
+                    <div class="logo">C</div>
+                    <span class="logo-text">Claude Code 教程</span>
+                </a>
+            </div>
+            <div class="sidebar-search">
+                <div class="search-box">
+                    <span class="search-icon" aria-hidden="true">
+                        <svg class="icon icon-xs"><use href="../images/icons.svg#icon-search"></use></svg>
+                    </span>
+                    <input type="text" placeholder="搜索章节...">
+                </div>
+            </div>
+            <nav class="sidebar-nav" id="sidebarNav"></nav>
+        </aside>
+
+        <main class="main-content">
+            <header class="top-nav">
+                <div class="top-nav-left">
+                    <button class="menu-toggle" id="menuToggle" aria-label="打开目录">
+                        <svg class="icon icon-sm" aria-hidden="true"><use href="../images/icons.svg#icon-menu"></use></svg>
+                    </button>
+                    <nav class="breadcrumb">
+                        <a href="../index.html">首页</a>
+                        <span class="separator">/</span>
+                        <span class="current">第10章</span>
+                    </nav>
+                </div>
+                <div class="top-nav-right">
+                    <div class="progress-indicator">
+                        <span>学习进度</span>
+                        <div class="progress-bar">
+                            <div class="progress-fill" id="progressFill" style="width: 0%"></div>
+                        </div>
+                        <span class="progress-text" id="progressText">0%</span>
+                    </div>
+                </div>
+            </header>
+
+            <div class="content-wrapper">
+                <header class="article-header">
+                    <div class="article-breadcrumb">
+                        <a href="../index.html">首页</a> / <span>第10章：正规开发流程</span>
+                    </div>
+                    <h1 class="article-title">第10章：正规开发流程</h1>
+                    <div class="article-meta">
+                        <span class="article-meta-item">
+                            <svg class="icon icon-xs" aria-hidden="true"><use href="../images/icons.svg#icon-clock"></use></svg>
+                            预计时间：90分钟
+                        </span>
+                        <span class="article-meta-item">
+                            <svg class="icon icon-xs" aria-hidden="true"><use href="../images/icons.svg#icon-signal"></use></svg>
+                            难度：进阶
+                        </span>
+                        <span class="article-meta-item">
+                            <svg class="icon icon-xs" aria-hidden="true"><use href="../images/icons.svg#icon-tag"></use></svg>
+                            类别：实战
+                        </span>
+                    </div>
+                </header>
+
+                <article class="article-content">
+                    <!-- 配图：正规开发流程 -->
+                    <div class="section-image">
+                        <img src="../images/external/img_62d972907ea4ff88.png" alt="正规开发流程" loading="lazy">
+                        <div class="section-image-caption">从需求到上线的完整开发流程：规划、开发、部署</div>
+                    </div>
+
+                    <div class="alert alert-info">
+                        <div class="alert-title">📌 章节说明</div>
+                        <p><strong>本章价值：</strong>从需求到上线的完整开发流程，用 Plan 模式梳理需求、写文档、处理第三方对接、部署上线。</p>
+                    </div>
+
+                    <h2 id="plan">10.1 用 Plan 模式梳理需求</h2>
+
+                    <div class="code-block-wrapper">
+                        <div class="code-header">
+                            <span class="code-lang">bash</span>
+                            <button class="code-copy">复制代码</button>
+                        </div>
+                        <pre><code class="language-bash">claude
+/plan</code></pre>
+                    </div>
+
+                    <p>然后详细描述你的想法，Claude 会帮你：</p>
+                    <ul>
+                        <li>分析需求的完整性</li>
+                        <li>指出潜在的问题</li>
+                        <li>建议实现方案</li>
+                        <li>给出开发计划</li>
+                    </ul>
+
+                    <h2 id="docs">10.2 写项目需求文档</h2>
+
+                    <div class="alert alert-warning">
+                        <div class="alert-title">💡 MVP 思维：不要贪多</div>
+                        <p>先做最小可行产品，核心功能优先，多次迭代完善。</p>
+                    </div>
+
+                    <h3>需求文档结构示例</h3>
+
+                    <div style="background: var(--bg-card); padding: 20px; border-radius: var(--radius-md); border: 1px solid var(--border-color); margin: 16px 0;">
+                        <h4 style="margin-top: 0;">项目需求文档</h4>
+                        <p>1. 项目概述</p>
+                        <p>2. 目标用户</p>
+                        <p>3. 核心功能（MVP）</p>
+                        <p>4. 功能优先级</p>
+                        <p>5. 技术栈选择</p>
+                        <p>6. 时间计划</p>
+                        <p>7. 风险评估</p>
+                    </div>
+
+                    <h2 id="third-party">10.3 处理第三方对接</h2>
+
+                    <h3>常见第三方对接</h3>
+
+                    <table style="margin: 24px 0;">
+                        <thead>
+                            <tr>
+                                <th>类型</th>
+                                <th>需要准备</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>微信支付</td>
+                                <td>商户号、API密钥、证书文件</td>
+                            </tr>
+                            <tr>
+                                <td>企业微信</td>
+                                <td>企业ID、应用Secret、回调地址</td>
+                            </tr>
+                            <tr>
+                                <td>短信服务</td>
+                                <td>AccessKey、签名、模板ID</td>
+                            </tr>
+                            <tr>
+                                <td>地图服务</td>
+                                <td>API Key、服务密钥</td>
+                            </tr>
+                        </tbody>
+                    </table>
+
+                    <div class="alert alert-info">
+                        <div class="alert-title">📁 文档管理</div>
+                        <p>将第三方文档放入 <code>/doc</code> 文件夹，让 Claude Code 学习和理解：</p>
+                        <code>请阅读 /doc/wechat-pay.md，帮我理解微信支付的对接流程</code>
+                    </div>
+
+                    <h2 id="tech-design">10.4 写技术设计文档</h2>
+
+                    <h3>文档内容</h3>
+
+                    <ul>
+                        <li><strong>前端架构设计</strong>：页面结构、路由、状态管理</li>
+                        <li><strong>后端架构设计</strong>：API设计、数据库设计、认证方式</li>
+                        <li><strong>数据库设计</strong>：表结构、索引、关系</li>
+                        <li><strong>接口设计</strong>：请求格式、响应格式、错误码</li>
+                    </ul>
+
+                    <h2 id="rules">10.5 定下开发规矩</h2>
+
+                    <table style="margin: 24px 0;">
+                        <thead>
+                            <tr>
+                                <th>类型</th>
+                                <th>内容</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>代码规范</td>
+                                <td>命名规则、缩进、注释风格</td>
+                            </tr>
+                            <tr>
+                                <td>命名规范</td>
+                                <td>文件命名、变量命名、函数命名</td>
+                            </tr>
+                            <tr>
+                                <td>目录结构</td>
+                                <td>统一的文件夹组织方式</td>
+                            </tr>
+                            <tr>
+                                <td>Git 提交</td>
+                                <td>提交信息格式、分支策略</td>
+                            </tr>
+                        </tbody>
+                    </table>
+
+                    <h2 id="claude-md">10.6 在 CLAUDE.md 中写项目规则</h2>
+
+                    <div class="code-block-wrapper">
+                        <div class="code-header">
+                            <span class="code-lang">markdown</span>
+                            <button class="code-copy">复制代码</button>
+                        </div>
+                        <pre><code class="language-bash"># 项目概述
+[简述项目是做什么的]
+
+# 技术栈
+- 前端：React + TypeScript
+- 后端：Node.js + Express
+- 数据库：PostgreSQL
+
+# 开发规范
+1. 使用驼峰命名法
+2. 函数名要用动词开头
+3. 每个函数要有注释说明
+
+# 注意事项
+- 不要修改 config 目录下的文件
+- 所有 API 调用都要加错误处理
+- 提交前先运行测试</code></pre>
+                    </div>
+
+                    <h2 id="deploy">10.7 部署上线</h2>
+
+                    <h3>虚拟环境配置</h3>
+
+                    <div class="code-block-wrapper">
+                        <div class="code-header">
+                            <span class="code-lang">bash</span>
+                            <button class="code-copy">复制代码</button>
+                        </div>
+                        <pre><code class="language-bash"># 用 Claude Code 创建虚拟环境
+python -m venv venv
+source venv/bin/activate  # Linux/Mac
+# 或
+venv\Scripts\activate  # Windows</code></pre>
+                    </div>
+
+                    <h3>IP 上线查看</h3>
+
+                    <div class="alert alert-warning">
+                        <div class="alert-title">🔥 防火墙配置</div>
+                        <p>确保开放了必要的端口：</p>
+                        <ul>
+                            <li>HTTP: 80</li>
+                            <li>HTTPS: 443</li>
+                            <li>SSH: 22</li>
+                            <li>应用端口（如 3000）</li>
+                        </ul>
+                    </div>
+
+                    <h3>域名部署</h3>
+
+                    <ol>
+                        <li>购买域名</li>
+                        <li>域名解析（A记录指向服务器IP）</li>
+                        <li>配置 SSL 证书（Let's Encrypt 免费证书）</li>
+                        <li>Nginx 反向代理配置</li>
+                    </ol>
+
+                    <section class="quiz" id="quiz">
+                        <div class="quiz-title">本章自检（3分钟）</div>
+                        <div class="quiz-hint">点开问题查看答案，能讲清楚就算掌握。</div>
+                        <details>
+                            <summary>正规开发流程里，“先写计划”为什么重要？</summary>
+                            <div class="quiz-answer">能把需求拆解、识别风险与依赖，避免边做边改导致返工；也更容易让团队协作。</div>
+                        </details>
+                        <details>
+                            <summary>一个好的 Plan 至少应包含哪些内容？</summary>
+                            <div class="quiz-answer">目标、范围、步骤、验收标准、风险与回滚方案（尤其是会改文件/部署上线时）。</div>
+                        </details>
+                        <details>
+                            <summary>第三方对接最常见的坑是什么？</summary>
+                            <div class="quiz-answer">接口文档不一致/鉴权问题/环境差异；要先做最小可验证请求，并记录可复现步骤。</div>
+                        </details>
+                        <details>
+                            <summary>上线前你至少要做的两件事是什么？</summary>
+                            <div class="quiz-answer">确认配置与环境变量正确；做一次端到端验证（最小用例），并准备回滚方式。</div>
+                        </details>
+                    </section>
+
+                    <button class="btn btn-secondary mark-complete-btn" style="margin: 32px 0 24px;">
+                        <svg class="icon icon-sm" aria-hidden="true"><use href="../images/icons.svg#icon-circle"></use></svg>
+                        标记为已完成（保存进度）
+                    </button>
+
+                    <nav class="chapter-nav">
+                        <a href="chapter-09.html" class="chapter-nav-card">
+                            <svg class="icon" aria-hidden="true"><use href="../images/icons.svg#icon-arrow-left"></use></svg>
+                            <div class="content">
+                                <div class="label">上一章</div>
+                                <div class="title">第09章：需求先行</div>
+                            </div>
+                        </a>
+                        <a href="appendix.html" class="chapter-nav-card next">
+                            <svg class="icon" aria-hidden="true"><use href="../images/icons.svg#icon-arrow-right"></use></svg>
+                            <div class="content">
+                                <div class="label">下一章</div>
+                                <div class="title">附录：速查手册</div>
+                            </div>
+                        </a>
+                    </nav>
+                </article>
+            </div>
+
+            <footer class="footer">
+                <div class="footer-copyright">&copy; 2025 Claude Code 教程网站</div>
+            </footer>
+        </main>
+
+        <div class="overlay" id="overlay"></div>
+    </div>
+
+    <script src="../js/main.js"></script>
+</body>
+</html>

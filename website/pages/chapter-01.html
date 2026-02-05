@@ -1,0 +1,1228 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>第01章：环境安装与第一次成功 - Claude Code 教程</title>
+    <link rel="stylesheet" href="../css/style.css">
+</head>
+<body>
+    <div class="app-container">
+        <!-- 侧边栏 -->
+        <aside class="sidebar" id="sidebar">
+            <div class="sidebar-header">
+                <a href="../index.html" style="display: flex; align-items: center; gap: 12px; text-decoration: none;">
+                    <div class="logo">C</div>
+                    <span class="logo-text">Claude Code 教程</span>
+                </a>
+            </div>
+            <div class="sidebar-search">
+                <div class="search-box">
+                    <span class="search-icon" aria-hidden="true">
+                        <svg class="icon icon-xs"><use href="../images/icons.svg#icon-search"></use></svg>
+                    </span>
+                    <input type="text" placeholder="搜索章节...">
+                </div>
+            </div>
+            <nav class="sidebar-nav" id="sidebarNav"></nav>
+        </aside>
+
+        <!-- 主内容区 -->
+        <main class="main-content">
+            <!-- 顶部导航 -->
+            <header class="top-nav">
+                <div class="top-nav-left">
+                    <button class="menu-toggle" id="menuToggle" aria-label="打开目录">
+                        <svg class="icon icon-sm" aria-hidden="true"><use href="../images/icons.svg#icon-menu"></use></svg>
+                    </button>
+                    <nav class="breadcrumb">
+                        <a href="../index.html">首页</a>
+                        <span class="separator">/</span>
+                        <span class="current">第01章</span>
+                    </nav>
+                </div>
+                <div class="top-nav-right">
+                    <div class="progress-indicator">
+                        <span>学习进度</span>
+                        <div class="progress-bar">
+                            <div class="progress-fill" id="progressFill" style="width: 0%"></div>
+                        </div>
+                        <span class="progress-text" id="progressText">0%</span>
+                    </div>
+                </div>
+            </header>
+
+            <!-- 内容区域 -->
+            <div class="content-wrapper">
+                <!-- 文章头部 -->
+                <header class="article-header">
+                    <div class="article-breadcrumb">
+                        <a href="../index.html">首页</a> / <span>第01章：环境安装与第一次成功</span>
+                    </div>
+                    <h1 class="article-title">第01章：环境安装与第一次成功</h1>
+                    <div class="article-meta">
+                        <span class="article-meta-item">
+                            <svg class="icon icon-xs" aria-hidden="true"><use href="../images/icons.svg#icon-clock"></use></svg>
+                            预计时间：50分钟
+                        </span>
+                        <span class="article-meta-item">
+                            <svg class="icon icon-xs" aria-hidden="true"><use href="../images/icons.svg#icon-signal"></use></svg>
+                            难度：简单
+                        </span>
+                        <span class="article-meta-item">
+                            <svg class="icon icon-xs" aria-hidden="true"><use href="../images/icons.svg#icon-tag"></use></svg>
+                            类别：必修
+                        </span>
+                    </div>
+                </header>
+
+                <!-- 文章内容 -->
+                <article class="article-content">
+                    <!-- 章节定位 -->
+                    <div class="alert alert-info">
+                        <div class="alert-title">📌 章节说明</div>
+                        <p><strong>前置知识：</strong>无需任何编程基础，会使用电脑即可。</p>
+                        <p><strong>本章价值：</strong>把“能运行 Claude Code”这件事一次跑通，后面就能专心学怎么用。</p>
+                    </div>
+
+                    <!-- 学习目标 -->
+                    <div class="checklist" data-id="chapter-01-goals">
+                        <div class="checklist-title">🎯 本章学习目标</div>
+                        <div class="checklist-item">
+                            <input type="checkbox" id="goal-1">
+                            <label for="goal-1">分清楚“必装”和“可选”：Node.js / Claude Code / API Key / Python（可选）</label>
+                        </div>
+                        <div class="checklist-item">
+                            <input type="checkbox" id="goal-2">
+                            <label for="goal-2">成功安装 Node.js 并验证版本</label>
+                        </div>
+                        <div class="checklist-item">
+                            <input type="checkbox" id="goal-3">
+                            <label for="goal-3">成功安装 Claude Code CLI 并验证版本</label>
+                        </div>
+                        <div class="checklist-item">
+                            <input type="checkbox" id="goal-4">
+                            <label for="goal-4">配置 API Key 并成功连接</label>
+                        </div>
+                        <div class="checklist-item">
+                            <input type="checkbox" id="goal-5">
+                            <label for="goal-5">完成第一次对话测试</label>
+                        </div>
+                        <div class="checklist-item">
+                            <input type="checkbox" id="goal-6">
+                            <label for="goal-6">（可选）安装 Python：以后做 Excel/脚本时再装也行</label>
+                        </div>
+                    </div>
+
+                    <div class="os-switcher" data-os-switcher>
+                        <div class="os-switcher-title">
+                            <svg class="icon icon-xs" aria-hidden="true"><use href="../images/icons.svg#icon-list"></use></svg>
+                            请选择你的系统
+                        </div>
+                        <div class="os-switcher-actions">
+                            <button type="button" class="os-btn" data-os-value="windows">Windows</button>
+                            <button type="button" class="os-btn" data-os-value="mac">Mac</button>
+                            <button type="button" class="os-btn" data-os-value="all">都显示</button>
+                        </div>
+                    </div>
+
+                    <h2 id="background">背景知识：你真的需要装哪些？</h2>
+
+                    <!-- 配图：Claude Code CLI终端界面 -->
+                    <div class="section-image">
+                        <img src="../images/external/img_355a9470404eab38.png" alt="Claude Code CLI终端界面" loading="lazy">
+                        <div class="section-image-caption">Claude Code CLI 在终端中运行的界面</div>
+                    </div>
+
+                    <p>新手最容易被"装一堆东西"吓到。先记住这一句：<strong>Claude Code 官方只要求 Node.js（18+）</strong>，Python 不属于必装项。</p>
+
+                    <ul>
+                        <li><strong>Node.js（必装）：</strong>Claude Code CLI 本身是 Node.js 程序，没装 Node 就跑不起来。</li>
+                        <li><strong>Claude Code CLI（必装）：</strong>你要用的命令行工具本体。</li>
+                        <li><strong>API Key（必装）：</strong>连接模型服务的“钥匙”。没有它，Claude Code 不能回答你。</li>
+                        <li><strong>Python（可选）：</strong>只有当你要跑 Python 脚本/做 Excel 清洗时才需要；不装也能先把 Claude Code 学会、跑通。</li>
+                    </ul>
+
+                    <div class="alert alert-success">
+                        <div class="alert-title">📋 安装步骤概览</div>
+                        <table style="margin: 0; background: transparent;">
+                            <thead>
+                                <tr>
+                                    <th>步骤</th>
+                                    <th>内容</th>
+                                    <th>预计时间</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>0</td>
+                                    <td>Python（可选）</td>
+                                    <td>20 分钟</td>
+                                </tr>
+                                <tr>
+                                    <td>1</td>
+                                    <td>Node.js（必装）</td>
+                                    <td>10 分钟</td>
+                                </tr>
+                                <tr>
+                                    <td>2</td>
+                                    <td>Claude Code CLI（必装）</td>
+                                    <td>5 分钟</td>
+                                </tr>
+                                <tr>
+                                    <td>3</td>
+                                    <td>API 配置（必装）</td>
+                                    <td>10 分钟</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+
+                    <h2 id="python">第0步（可选）：安装 Python（做 Excel/脚本时）</h2>
+
+                    <h3 id="python-why">为什么需要 Python？</h3>
+                    <ul>
+                        <li>当你要做 Excel 清洗、跑数据脚本时，Claude Code 经常会让你运行 Python</li>
+                        <li>如果你现在只想先把 Claude Code 跑通，这一步可以先跳过</li>
+                    </ul>
+
+                    <div class="alert alert-info">
+                        <div class="alert-title">推荐版本</div>
+                        <p>教程建议安装 <strong>Python 3.10+</strong>（3.11/3.12 都可以）。Claude Code CLI 本身不依赖 Python，但很多数据处理脚本/库会用到。</p>
+                    </div>
+
+                    <div class="alert alert-info">
+                        <div class="alert-title">💡 小白建议</div>
+                        <p>想先快速成功：直接跳到 <a href="#nodejs">第1步：安装 Node.js</a>，把 Claude Code 先跑起来；Python 以后需要时再回来装。</p>
+                    </div>
+
+                    <div data-os="windows">
+                    <h3 id="python-windows">Windows 用户安装步骤</h3>
+
+                    <div class="checklist" data-id="python-install">
+                        <div class="checklist-title">📝 Windows 安装清单</div>
+                        <div class="checklist-item">
+                            <input type="checkbox" id="python-1">
+                            <label for="python-1">从 python.org 下载安装程序</label>
+                        </div>
+                        <div class="checklist-item">
+                            <input type="checkbox" id="python-2">
+                            <label for="python-2">勾选 "Add Python to PATH"</label>
+                        </div>
+                        <div class="checklist-item">
+                            <input type="checkbox" id="python-3">
+                            <label for="python-3">运行安装程序</label>
+                        </div>
+                        <div class="checklist-item">
+                            <input type="checkbox" id="python-4">
+                            <label for="python-4">验证安装成功</label>
+                        </div>
+                    </div>
+
+                    <h4>1. 下载安装程序</h4>
+                    <ol>
+                        <li>打开浏览器，访问 <a href="https://www.python.org/" target="_blank">python.org</a></li>
+                        <li>点击首页的大按钮 <strong>"Download Python"</strong></li>
+                        <li>等待下载完成</li>
+                    </ol>
+
+                    <div style="background: var(--bg-card); padding: 16px; border-radius: var(--radius-md); border: 1px solid var(--warning-color); margin: 16px 0;">
+                        <div class="alert-title">⚠️ 重要提醒</div>
+                        <p>安装时<strong>务必勾选</strong> "Add Python to PATH" 选项！</p>
+                        <p>如果不勾选，后面使用会出现问题。</p>
+                    </div>
+
+                    <h4>2. 运行安装程序</h4>
+                    <ol>
+                        <li>双击下载的安装程序</li>
+                        <li><strong>重要：勾选</strong> "Add Python to PATH"</li>
+                        <li>点击 "Install Now"</li>
+                        <li>等待安装完成</li>
+                    </ol>
+
+                    <h4>3. 验证安装</h4>
+                    <ol>
+                        <li>按 <code>Win + R</code>，输入 <code>cmd</code>，回车打开命令行</li>
+                        <li>输入以下命令：</li>
+                    </ol>
+
+                    <div class="code-block-wrapper">
+                        <div class="code-header">
+                            <span class="code-lang">powershell</span>
+                            <button class="code-copy">复制代码</button>
+                        </div>
+                        <pre><code class="language-powershell">python --version</code></pre>
+                    </div>
+
+                    <p>如果显示类似 <code>Python 3.x.x</code>，说明安装成功。</p>
+
+                    </div>
+
+                    <div data-os="mac">
+                    <h3 id="python-mac">Mac 用户安装步骤</h3>
+
+                    <p>Mac 系统通常已经自带 Python，但版本可能较旧。我们推荐使用 Homebrew 安装最新版本。</p>
+
+                    <div class="code-block-wrapper">
+                        <div class="code-header">
+                            <span class="code-lang">bash</span>
+                            <button class="code-copy">复制代码</button>
+                        </div>
+                        <pre><code class="language-bash"># 1. 打开"终端"应用（在"应用程序 > 实用工具"中）
+
+# 2. 检查是否已安装 Python
+python3 --version
+
+# 3. 如果没有或版本过低，使用 Homebrew 安装
+# 先安装 Homebrew（如果没有）
+/bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
+
+# 然后安装 Python
+brew install python
+
+# 4. 验证
+python3 --version</code></pre>
+                    </div>
+                    </div>
+
+                    <h2 id="nodejs">第1步：安装 Node.js（10分钟）</h2>
+
+                    <!-- 配图：Node.js安装终端 -->
+                    <div class="section-image">
+                        <img src="../images/external/img_2285663cddcdb292.png" alt="Node.js安装终端界面" loading="lazy">
+                        <div class="section-image-caption">在终端中安装和验证 Node.js</div>
+                    </div>
+
+                    <h3 id="nodejs-why">为什么需要 Node.js？</h3>
+                    <ul>
+                        <li>Claude Code CLI 是用 Node.js 编写的</li>
+                        <li>必须先安装 Node.js 才能运行 Claude Code</li>
+                        <li>官方要求 Node.js 18+（推荐安装 LTS 版本）</li>
+                    </ul>
+
+                    <div data-os="windows">
+                    <h3 id="nodejs-windows">Windows 用户安装步骤</h3>
+
+                    <!-- 下载引导：标注说明 -->
+                    <div class="download-guide">
+                        <div class="download-guide-header">
+                            <svg class="icon icon-sm" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 15l-2 5L9 9l11 4-5 2zm0 0l5 5M7.188 2.239l.777 2.897M5.136 7.965l-2.898-.777M13.95 4.05l-2.122 2.122m-5.657 5.656l-2.12 2.122"/>
+                            </svg>
+                            <span>下载引导：点哪里？</span>
+                        </div>
+                        <div class="download-guide-content">
+                            <div class="download-guide-visual">
+                                <div class="nodejs-page-mockup">
+                                    <div class="nodejs-header">nodejs.org</div>
+                                    <div class="nodejs-hero">
+                                        <div class="nodejs-title">Node.js</div>
+                                        <div class="nodejs-subtitle">JavaScript 运行时</div>
+                                    </div>
+                                    <div class="nodejs-download-section">
+                                        <div class="nodejs-download-card nodejs-lts">
+                                            <div class="nodejs-badge">LTS 推荐版本</div>
+                                            <div class="nodejs-version">20.10.0 LTS</div>
+                                            <div class="nodejs-download-btn nodejs-highlight">
+                                                <span class="nodejs-windows-icon"></span>
+                                                64-bit Windows Installer
+                                            </div>
+                                            <div class="nodejs-arrow">← 点这个！</div>
+                                        </div>
+                                        <div class="nodejs-download-card nodejs-current">
+                                            <div class="nodejs-badge-current">Current 版本</div>
+                                            <div class="nodejs-version">21.6.0 Current</div>
+                                            <div class="nodejs-download-btn">
+                                                <span class="nodejs-windows-icon"></span>
+                                                64-bit Windows Installer
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="download-guide-steps">
+                                <div class="download-guide-step">
+                                    <div class="download-guide-step-number">1</div>
+                                    <div class="download-guide-step-content">
+                                        <strong>打开官网</strong>
+                                        <p>点击访问 <a href="https://nodejs.org/" target="_blank">nodejs.org</a></p>
+                                    </div>
+                                </div>
+                                <div class="download-guide-step">
+                                    <div class="download-guide-step-number">2</div>
+                                    <div class="download-guide-step-content">
+                                        <strong>找到 LTS 版本</strong>
+                                        <p>页面左侧或最上方会显示 <span class="highlight-text">LTS 推荐版本</span></p>
+                                    </div>
+                                </div>
+                                <div class="download-guide-step">
+                                    <div class="download-guide-step-number">3</div>
+                                    <div class="download-guide-step-content">
+                                        <strong>点击下载按钮</strong>
+                                        <p>找到 "<strong>Windows Installer 64-bit</strong>" 按钮点击</p>
+                                    </div>
+                                </div>
+                                <div class="download-guide-tip">
+                                    <svg class="icon icon-xs" fill="currentColor" viewBox="0 0 20 20">
+                                        <path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7-4a1 1 0 11-2 0 1 1 0 012 0zM9 9a1 1 0 000 2v3a1 1 0 001 1h1a1 1 0 100-2v-3a1 1 0 00-1-1H9z" clip-rule="evenodd"/>
+                                    </svg>
+                                    <span><strong>注意：</strong>下载完成后是一个 .msi 文件，双击即可安装</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <h4>2. 运行安装程序</h4>
+                    <p>下载完成后，双击 <code>.msi</code> 安装包：</p>
+                    <ol>
+                        <li>双击安装包</li>
+                        <li>一路点击 "Next"</li>
+                        <li>最后点击 "Install"</li>
+                        <li>等待安装完成</li>
+                    </ol>
+
+                    <h4>3. 验证安装</h4>
+                    <ol>
+                        <li>打开命令行（CMD 或 PowerShell）</li>
+                        <li>输入：</li>
+                    </ol>
+
+                    <div class="code-block-wrapper">
+                        <div class="code-header">
+                            <span class="code-lang">powershell</span>
+                            <button class="code-copy">复制代码</button>
+                        </div>
+                        <pre><code class="language-powershell">node --version
+npm --version</code></pre>
+                    </div>
+
+                    <p>如果分别显示版本号（如 <code>v20.10.0</code> 和 <code>10.2.3</code>），说明安装成功。</p>
+
+                    </div>
+
+                    <div data-os="mac">
+                    <h3 id="nodejs-mac">Mac 用户安装步骤</h3>
+
+                    <!-- Mac 下载引导 -->
+                    <div class="download-guide">
+                        <div class="download-guide-header">
+                            <svg class="icon icon-sm" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 15l-2 5L9 9l11 4-5 2zm0 0l5 5M7.188 2.239l.777 2.897M5.136 7.965l-2.898-.777M13.95 4.05l-2.122 2.122m-5.657 5.656l-2.12 2.122"/>
+                            </svg>
+                            <span>Mac 安装：两种方式任选其一</span>
+                        </div>
+                        <div class="download-guide-content">
+                            <div class="mac-install-options">
+                                <div class="mac-install-option">
+                                    <div class="mac-install-option-header">
+                                        <div class="mac-install-option-icon">🍺</div>
+                                        <div class="mac-install-option-title">
+                                            <strong>方式一：Homebrew（推荐）</strong>
+                                            <span class="mac-install-option-badge">最简单</span>
+                                        </div>
+                                    </div>
+                                    <p>如果你已经安装了 Homebrew，一条命令即可安装：</p>
+                                    <div class="code-block-wrapper">
+                                        <div class="code-header">
+                                            <span class="code-lang">bash</span>
+                                            <button class="code-copy">复制代码</button>
+                                        </div>
+                                        <pre><code class="language-bash">brew install node</code></pre>
+                                    </div>
+                                    <p class="text-sm text-secondary">安装完成后运行 <code>node --version</code> 验证</p>
+                                </div>
+
+                                <div class="mac-install-option">
+                                    <div class="mac-install-option-header">
+                                        <div class="mac-install-option-icon">📦</div>
+                                        <div class="mac-install-option-title">
+                                            <strong>方式二：官网下载安装包</strong>
+                                            <span class="mac-install-option-badge-secondary">可视化</span>
+                                        </div>
+                                    </div>
+                                    <p>如果你不熟悉命令行，可以从官网下载安装包：</p>
+                                    <div class="download-guide-steps">
+                                        <div class="download-guide-step">
+                                            <div class="download-guide-step-number">1</div>
+                                            <div class="download-guide-step-content">
+                                                <strong>访问官网</strong>
+                                                <p>打开 <a href="https://nodejs.org/" target="_blank">nodejs.org</a></p>
+                                            </div>
+                                        </div>
+                                        <div class="download-guide-step">
+                                            <div class="download-guide-step-number">2</div>
+                                            <div class="download-guide-step-content">
+                                                <strong>选择 LTS 版本</strong>
+                                                <p>找到 LTS 推荐版本的 <strong>Mac Installer</strong> 按钮</p>
+                                            </div>
+                                        </div>
+                                        <div class="download-guide-step">
+                                            <div class="download-guide-step-number">3</div>
+                                            <div class="download-guide-step-content">
+                                                <strong>安装</strong>
+                                                <p>下载完成后双击 <code>.pkg</code> 文件，按提示安装</p>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <h4>验证安装</h4>
+                    <p>无论用哪种方式安装，都可以用以下命令验证：</p>
+
+                    <div class="code-block-wrapper">
+                        <div class="code-header">
+                            <span class="code-lang">bash</span>
+                            <button class="code-copy">复制代码</button>
+                        </div>
+                        <pre><code class="language-bash">node --version
+npm --version</code></pre>
+                    </div>
+
+                    <div data-os="windows">
+                        <div class="section-image">
+                            <img src="../images/screenshots/win_powershell_versions.svg" alt="Windows PowerShell：node/npm/claude 版本验证成功示意" loading="lazy">
+                            <div class="section-image-caption">成功标志：能看到 node、npm、claude 的版本号（示意图）</div>
+                        </div>
+                    </div>
+
+                    <div data-os="mac">
+                        <div class="section-image">
+                            <img src="../images/screenshots/mac_terminal_versions.svg" alt="Mac Terminal：node/npm/claude 版本验证成功示意" loading="lazy">
+                            <div class="section-image-caption">成功标志：能看到 node、npm、claude 的版本号（示意图）</div>
+                        </div>
+                    </div>
+
+                    <p>如果分别显示版本号，说明安装成功。</p>
+                    </div>
+
+                    <h2 id="cli">第2步：安装 Claude Code CLI（5分钟）</h2>
+
+                    <h3>安装命令</h3>
+                    <p>打开命令行（Windows 用 CMD/PowerShell，Mac 用终端），输入：</p>
+
+                    <div data-os="windows">
+                        <div class="code-block-wrapper">
+                            <div class="code-header">
+                                <span class="code-lang">powershell</span>
+                                <button class="code-copy">复制代码</button>
+                            </div>
+                            <pre><code class="language-powershell">npm install -g @anthropic-ai/claude-code</code></pre>
+                        </div>
+                    </div>
+
+                    <div data-os="mac">
+                        <div class="code-block-wrapper">
+                            <div class="code-header">
+                                <span class="code-lang">bash</span>
+                                <button class="code-copy">复制代码</button>
+                            </div>
+                            <pre><code class="language-bash">npm install -g @anthropic-ai/claude-code</code></pre>
+                        </div>
+                    </div>
+
+                    <h3>验证安装</h3>
+
+                    <div data-os="windows">
+                        <div class="code-block-wrapper">
+                            <div class="code-header">
+                                <span class="code-lang">powershell</span>
+                                <button class="code-copy">复制代码</button>
+                            </div>
+                            <pre><code class="language-powershell">claude --version</code></pre>
+                        </div>
+                    </div>
+
+                    <div data-os="mac">
+                        <div class="code-block-wrapper">
+                            <div class="code-header">
+                                <span class="code-lang">bash</span>
+                                <button class="code-copy">复制代码</button>
+                            </div>
+                            <pre><code class="language-bash">claude --version</code></pre>
+                        </div>
+                    </div>
+
+                    <p>如果显示版本号（如 <code>claude-code version 2.1.15</code>），说明安装成功。</p>
+
+                    <div class="alert alert-warning">
+                        <div class="alert-title">⚠️ 遇到问题？</div>
+                        <div data-os="mac">
+                            <p><strong>问题 1：权限错误（Mac）</strong></p>
+                            <p>如果提示权限不足，使用 sudo 命令：</p>
+                            <div class="code-block-wrapper">
+                                <div class="code-header">
+                                    <span class="code-lang">bash</span>
+                                    <button class="code-copy">复制代码</button>
+                                </div>
+                                <pre><code class="language-bash">sudo npm install -g @anthropic-ai/claude-code</code></pre>
+                            </div>
+                        </div>
+
+                        <p style="margin-top: 16px;"><strong>问题 2：网络很慢或失败</strong></p>
+                        <p>国内用户可以配置 npm 镜像源加速：</p>
+                        <div data-os="windows">
+                            <div class="code-block-wrapper">
+                                <div class="code-header">
+                                    <span class="code-lang">powershell</span>
+                                    <button class="code-copy">复制代码</button>
+                                </div>
+                                <pre><code class="language-powershell"># 查看当前源
+npm config get registry
+
+# 切换到淘宝镜像
+npm config set registry https://registry.npmmirror.com
+
+# 重新安装
+npm install -g @anthropic-ai/claude-code</code></pre>
+                            </div>
+                        </div>
+
+                        <div data-os="mac">
+                            <div class="code-block-wrapper">
+                                <div class="code-header">
+                                    <span class="code-lang">bash</span>
+                                    <button class="code-copy">复制代码</button>
+                                </div>
+                                <pre><code class="language-bash"># 查看当前源
+npm config get registry
+
+# 切换到淘宝镜像
+npm config set registry https://registry.npmmirror.com
+
+# 重新安装
+npm install -g @anthropic-ai/claude-code</code></pre>
+                            </div>
+                        </div>
+
+                        <p style="margin-top: 16px;"><strong>问题 3：找不到 claude 命令</strong></p>
+                        <p>检查 npm 全局安装路径：</p>
+                        <div data-os="windows">
+                            <div class="code-block-wrapper">
+                                <div class="code-header">
+                                    <span class="code-lang">powershell</span>
+                                    <button class="code-copy">复制代码</button>
+                                </div>
+                                <pre><code class="language-powershell"># 查看全局安装路径
+npm config get prefix</code></pre>
+                            </div>
+                        </div>
+
+                        <div data-os="mac">
+                            <div class="code-block-wrapper">
+                                <div class="code-header">
+                                    <span class="code-lang">bash</span>
+                                    <button class="code-copy">复制代码</button>
+                                </div>
+                                <pre><code class="language-bash"># 查看全局安装路径
+npm config get prefix</code></pre>
+                            </div>
+                        </div>
+
+                        <div data-os="windows">
+                            <p>Windows 用户：把上面输出的路径添加到系统环境变量 <code>PATH</code>，然后重新打开命令行。</p>
+                        </div>
+
+                        <div data-os="mac">
+                            <p>Mac 用户：通常重开一个终端窗口就能生效。</p>
+                        </div>
+
+                        <p style="margin-top: 16px;"><strong>问题 4：安装后版本不对</strong></p>
+                        <p>卸载旧版本重新安装：</p>
+                        <div data-os="windows">
+                            <div class="code-block-wrapper">
+                                <div class="code-header">
+                                    <span class="code-lang">powershell</span>
+                                    <button class="code-copy">复制代码</button>
+                                </div>
+                                <pre><code class="language-powershell">npm uninstall -g @anthropic-ai/claude-code
+npm install -g @anthropic-ai/claude-code</code></pre>
+                            </div>
+                        </div>
+
+                        <div data-os="mac">
+                            <div class="code-block-wrapper">
+                                <div class="code-header">
+                                    <span class="code-lang">bash</span>
+                                    <button class="code-copy">复制代码</button>
+                                </div>
+                                <pre><code class="language-bash">sudo npm uninstall -g @anthropic-ai/claude-code
+sudo npm install -g @anthropic-ai/claude-code</code></pre>
+                            </div>
+                        </div>
+                    </div>
+
+                    <h2 id="api">第3步：配置 API（10分钟）</h2>
+
+                    <p>Claude Code 需要连接 AI 服务才能工作。我们推荐使用国内的服务：</p>
+
+                    <table style="margin: 24px 0;">
+                        <thead>
+                            <tr>
+                                <th>服务商</th>
+                                <th>特点</th>
+                                <th>新用户优惠</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td><strong>智谱 AI</strong></td>
+                                <td>国产大模型，中文支持好</td>
+                                <td>可能有免费额度（以活动为准）</td>
+                            </tr>
+                            <tr>
+                                <td><strong>豆包</strong></td>
+                                <td>字节跳动出品，稳定</td>
+                                <td>可能有免费额度（以活动为准）</td>
+                            </tr>
+                            <tr>
+                                <td><strong>DeepSeek</strong></td>
+                                <td>性价比高</td>
+                                <td>价格便宜</td>
+                            </tr>
+                        </tbody>
+                    </table>
+
+                    <h3 id="glm">方式一：智谱 AI（推荐新手）</h3>
+
+                    <div class="alert alert-success">
+                        <div class="alert-title">
+                            <svg class="icon icon-xs" aria-hidden="true"><use href="../images/icons.svg#icon-spark"></use></svg>
+                            为什么推荐智谱 AI？
+                        </div>
+                        <ul>
+                            <li>通常会有一定免费额度（以智谱活动与账号情况为准）</li>
+                            <li>中文理解能力强</li>
+                            <li>API 简单易用</li>
+                            <li>响应速度快</li>
+                        </ul>
+                    </div>
+
+                    <h4>步骤1：注册账号</h4>
+                    <ol>
+                        <li>访问 <a href="https://open.bigmodel.cn/" target="_blank">智谱AI开放平台</a></li>
+                        <li>点击右上角"注册"按钮</li>
+                        <li>使用手机号注册（需要验证码）</li>
+                        <li>实名认证（根据要求，可能需要）</li>
+                    </ol>
+
+                    <h4>步骤2：获取 API Key</h4>
+                    <ol>
+                        <li>登录后，点击右上角头像</li>
+                        <li>选择 <strong>"API Key 管理"</strong></li>
+                        <li>点击 <strong>"创建新的 API Key"</strong></li>
+                        <li>设置一个名称（如 "Claude Code"）</li>
+                        <li><strong>重要：复制并保存</strong> 这个 Key，只显示一次！</li>
+                    </ol>
+
+                    <div class="alert alert-warning">
+                        <div class="alert-title">
+                            <svg class="icon icon-xs" aria-hidden="true"><use href="../images/icons.svg#icon-help"></use></svg>
+                            重要提醒
+                        </div>
+                        <p>API Key 类似于密码，要妥善保管：</p>
+                        <ul>
+                            <li>不要分享给他人</li>
+                            <li>不要提交到 GitHub 等公开平台</li>
+                            <li>建议保存在密码管理器中</li>
+                        </ul>
+                    </div>
+
+                    <h4>步骤3：用智谱官方“一键安装助手”（推荐）</h4>
+
+                    <p>智谱官方提供了一个向导工具，可以一步一步帮你把 Claude Code 的配置写好（适合新手，不容易漏步骤）。</p>
+
+                    <div data-os="windows">
+                        <div class="code-block-wrapper">
+                            <div class="code-header">
+                                <span class="code-lang">powershell</span>
+                                <button class="code-copy">复制代码</button>
+                            </div>
+                            <pre><code class="language-powershell">npx @z_ai/coding-helper</code></pre>
+                        </div>
+                    </div>
+
+                    <div data-os="mac">
+                        <div class="code-block-wrapper">
+                            <div class="code-header">
+                                <span class="code-lang">bash</span>
+                                <button class="code-copy">复制代码</button>
+                            </div>
+                            <pre><code class="language-bash">npx @z_ai/coding-helper</code></pre>
+                        </div>
+                    </div>
+
+                    <ol>
+                        <li>按提示选择 Claude Code / Anthropic 兼容配置</li>
+                        <li>选择服务商：智谱（GLM）</li>
+                        <li>粘贴你的智谱 API Key</li>
+                        <li>向导会自动写入配置，并提示你如何验证</li>
+                    </ol>
+
+                    <div class="alert alert-info">
+                        <div class="alert-title">
+                            <svg class="icon icon-xs" aria-hidden="true"><use href="../images/icons.svg#icon-help"></use></svg>
+                            小提示
+                        </div>
+                        <p>如果你已经手动配过环境变量/配置文件，向导也可以用来“对照检查”和补齐缺失项。</p>
+                    </div>
+
+                    <h4>步骤4：了解一下它到底改了什么（可选）</h4>
+                    <p>向导通常会把配置写到 <code>~/.claude/settings.json</code>（Windows 也在你的用户目录下）。核心就是这几项：</p>
+
+                    <div class="code-block-wrapper">
+                        <div class="code-header">
+                            <span class="code-lang">json</span>
+                            <button class="code-copy">复制代码</button>
+                        </div>
+                        <pre><code class="language-json">{
+  "env": {
+    "ANTHROPIC_AUTH_TOKEN": "你的智谱API-Key",
+    "ANTHROPIC_BASE_URL": "https://open.bigmodel.cn/api/anthropic",
+    "API_TIMEOUT_MS": "3000000",
+    "CLAUDE_CODE_DISABLE_NONESSENTIAL_TRAFFIC": "1"
+  }
+}</code></pre>
+                    </div>
+
+                    <h4>临时手动配置（只在当前终端生效，了解即可）</h4>
+                    <p>如果你想“快速试一下”，也可以先用环境变量临时跑通：</p>
+
+                    <div data-os="windows">
+                    <div class="code-block-wrapper">
+                        <div class="code-header">
+                            <span class="code-lang">powershell</span>
+                            <button class="code-copy">复制代码</button>
+                        </div>
+                        <pre><code class="language-powershell"># Windows PowerShell（替换为你的智谱 Key）
+$env:ANTHROPIC_AUTH_TOKEN="你的智谱API-Key"
+$env:ANTHROPIC_BASE_URL="https://open.bigmodel.cn/api/anthropic"
+$env:API_TIMEOUT_MS="3000000"
+$env:CLAUDE_CODE_DISABLE_NONESSENTIAL_TRAFFIC="1"</code></pre>
+                    </div>
+                    </div>
+
+                    <div data-os="windows">
+                    <div class="code-block-wrapper">
+                        <div class="code-header">
+                            <span class="code-lang">cmd</span>
+                            <button class="code-copy">复制代码</button>
+                        </div>
+                        <pre><code class="language-bash">REM Windows CMD（替换为你的智谱 Key；只在本窗口生效）
+set ANTHROPIC_AUTH_TOKEN=你的智谱API-Key
+set ANTHROPIC_BASE_URL=https://open.bigmodel.cn/api/anthropic
+set API_TIMEOUT_MS=3000000
+set CLAUDE_CODE_DISABLE_NONESSENTIAL_TRAFFIC=1</code></pre>
+                    </div>
+                    </div>
+
+                    <div data-os="mac">
+                    <div class="code-block-wrapper">
+                        <div class="code-header">
+                            <span class="code-lang">bash</span>
+                            <button class="code-copy">复制代码</button>
+                        </div>
+                        <pre><code class="language-bash"># Mac/Linux（替换为你的智谱 Key）
+export ANTHROPIC_AUTH_TOKEN="你的智谱API-Key"
+export ANTHROPIC_BASE_URL="https://open.bigmodel.cn/api/anthropic"
+export API_TIMEOUT_MS="3000000"
+export CLAUDE_CODE_DISABLE_NONESSENTIAL_TRAFFIC="1"</code></pre>
+                    </div>
+                    </div>
+
+                    <h4>永久配置（推荐：一次配置，之后不用每次都粘贴 Key）</h4>
+                    <div class="alert alert-info">
+                        <div class="alert-title">永久配置最简单的方法</div>
+                        <p>直接用上面的 <code>npx @z_ai/coding-helper</code>，它会把配置写进 <code>~/.claude/settings.json</code>。</p>
+                        <p>如果你要手动改文件：Windows 一般在 <code>C:\\Users\\你的用户名\\.claude\\settings.json</code>；Mac 在 <code>~/.claude/settings.json</code>。</p>
+                        <p>常见坑：文件没保存 / JSON 少了逗号或引号 / 写到了别的文件夹。</p>
+                    </div>
+
+                    <h3 id="deepseek">方式二：DeepSeek（可选）</h3>
+                    <p>建议你先按“智谱主线”跑通一次，再来配置 DeepSeek，会更容易排错。</p>
+
+                    <h4>步骤1：获取 DeepSeek API Key</h4>
+                    <ol>
+                        <li>访问 <a href="https://platform.deepseek.com/" target="_blank" rel="noopener">https://platform.deepseek.com/</a></li>
+                        <li>登录后进入 API Keys，创建并复制 Key（只显示一次）</li>
+                    </ol>
+
+                    <h4>步骤2：配置（先按 OpenAI 兼容方式尝试）</h4>
+                    <div class="alert alert-warning">
+                        <div class="alert-title">说明</div>
+                        <p>不同网关/版本的 BASE URL 可能不一样。如果你遇到 404/路径错误，把 <code>ANTHROPIC_BASE_URL</code> 在 <code>https://api.deepseek.com/v1</code> 与 <code>https://api.deepseek.com</code> 之间切换再试。</p>
+                    </div>
+
+                    <div data-os="windows">
+                        <div class="code-block-wrapper">
+                            <div class="code-header">
+                                <span class="code-lang">powershell</span>
+                                <button class="code-copy">复制代码</button>
+                            </div>
+                            <pre><code class="language-powershell"># Windows PowerShell（替换为你的 DeepSeek Key；只在本窗口生效）
+$env:ANTHROPIC_API_KEY="你的DeepSeek-API-Key"
+$env:ANTHROPIC_BASE_URL="https://api.deepseek.com/v1"</code></pre>
+                        </div>
+
+                        <div class="code-block-wrapper">
+                            <div class="code-header">
+                                <span class="code-lang">cmd</span>
+                                <button class="code-copy">复制代码</button>
+                            </div>
+                            <pre><code class="language-bash">REM Windows CMD（替换为你的 DeepSeek Key；只在本窗口生效）
+set ANTHROPIC_API_KEY=你的DeepSeek-API-Key
+set ANTHROPIC_BASE_URL=https://api.deepseek.com/v1</code></pre>
+                        </div>
+                    </div>
+
+                    <div data-os="mac">
+                        <div class="code-block-wrapper">
+                            <div class="code-header">
+                                <span class="code-lang">bash</span>
+                                <button class="code-copy">复制代码</button>
+                            </div>
+                            <pre><code class="language-bash"># Mac/Linux（替换为你的 DeepSeek Key；只在当前终端会话生效）
+export ANTHROPIC_API_KEY="你的DeepSeek-API-Key"
+export ANTHROPIC_BASE_URL="https://api.deepseek.com/v1"</code></pre>
+                        </div>
+                    </div>
+
+                    <h3 id="doubao">方式三：豆包（可选）</h3>
+
+                    <p>如果你更喜欢用字节跳动的豆包服务，配置方式类似：</p>
+
+                    <div data-os="windows">
+                        <div class="code-block-wrapper">
+                            <div class="code-header">
+                                <span class="code-lang">powershell</span>
+                                <button class="code-copy">复制代码</button>
+                            </div>
+                            <pre><code class="language-powershell"># 设置豆包的 API Key
+$env:ANTHROPIC_API_KEY="豆包的API-Key"
+
+# 设置 API 端点（豆包专用）
+$env:ANTHROPIC_BASE_URL="https://ark.cn-beijing.volces.com/api/v3"</code></pre>
+                        </div>
+                    </div>
+
+                    <div data-os="mac">
+                    <div class="code-block-wrapper">
+                        <div class="code-header">
+                            <span class="code-lang">bash</span>
+                            <button class="code-copy">复制代码</button>
+                        </div>
+                        <pre><code class="language-bash"># 设置豆包的 API Key
+export ANTHROPIC_API_KEY="豆包的API-Key"
+
+# 设置 API 端点（豆包专用）
+export ANTHROPIC_BASE_URL="https://ark.cn-beijing.volces.com/api/v3"</code></pre>
+                    </div>
+                    </div>
+
+                    <h2 id="first-run">第4步：第一次对话（5分钟）</h2>
+
+                    <!-- 配图：Claude Code规划界面 -->
+                    <div class="section-image">
+                        <img src="../images/external/img_62d972907ea4ff88.png" alt="Claude Code规划界面" loading="lazy">
+                        <div class="section-image-caption">Claude Code 会先展示计划，等待你确认后再执行</div>
+                    </div>
+
+                    <div class="alert alert-warning">
+                        <div class="alert-title">强烈建议：先进入“练习文件夹”再启动</div>
+                        <p>不要在系统目录（比如 <code>C:\\Windows</code>）里运行，避免误操作。</p>
+                    </div>
+
+                    <div data-os="windows">
+                        <div class="code-block-wrapper">
+                            <div class="code-header">
+                                <span class="code-lang">PowerShell（推荐）</span>
+                                <button class="code-copy">复制代码</button>
+                            </div>
+                            <pre><code class="language-powershell">mkdir "$env:USERPROFILE\\claude-practice" -ErrorAction SilentlyContinue
+cd "$env:USERPROFILE\\claude-practice"</code></pre>
+                        </div>
+
+                        <div class="code-block-wrapper">
+                            <div class="code-header">
+                                <span class="code-lang">CMD（命令提示符）</span>
+                                <button class="code-copy">复制代码</button>
+                            </div>
+                            <pre><code class="language-bash">mkdir "%USERPROFILE%\\claude-practice" 2&gt;nul
+cd /d "%USERPROFILE%\\claude-practice"</code></pre>
+                        </div>
+                    </div>
+
+                    <div data-os="mac">
+                        <div class="code-block-wrapper">
+                            <div class="code-header">
+                                <span class="code-lang">Mac Terminal</span>
+                                <button class="code-copy">复制代码</button>
+                            </div>
+                            <pre><code class="language-bash">mkdir -p ~/claude-practice
+cd ~/claude-practice</code></pre>
+                        </div>
+                    </div>
+
+                    <h3>打开 Claude Code</h3>
+
+                    <div data-os="windows">
+                        <div class="code-block-wrapper">
+                            <div class="code-header">
+                                <span class="code-lang">powershell</span>
+                                <button class="code-copy">复制代码</button>
+                            </div>
+                            <pre><code class="language-powershell">claude</code></pre>
+                        </div>
+                    </div>
+
+                    <div data-os="mac">
+                        <div class="code-block-wrapper">
+                            <div class="code-header">
+                                <span class="code-lang">bash</span>
+                                <button class="code-copy">复制代码</button>
+                            </div>
+                            <pre><code class="language-bash">claude</code></pre>
+                        </div>
+                    </div>
+
+                    <p>你会看到类似这样的欢迎界面：</p>
+
+                    <div class="section-image">
+                        <img src="../images/screenshots/claude_connected_glm.svg" alt="Claude Code：成功连接智谱（GLM）示意" loading="lazy">
+                        <div class="section-image-caption">成功标志：出现 Connected to GLM（智谱）并能收到 OK（示意图）</div>
+                    </div>
+
+                    <div style="background: var(--bg-code); padding: 20px; border-radius: var(--radius-md); margin: 16px 0; font-family: monospace; font-size: 14px;">
+                        Claude Code v2.1.15<br>
+                        Connected to GLM (智谱 AI)<br>
+                        <br>
+                        Type your message and press Enter to send.<br>
+                        Type /exit to quit.<br>
+                        <br>
+                        ────────────────────────────────────<br>
+                        You are in a workspace: /Users/xxx/project<br>
+                        ────────────────────────────────────<br>
+                        <br>
+                        &gt;
+                    </div>
+
+                    <h3>试一试</h3>
+                    <p>输入第一条消息：</p>
+
+                    <div style="background: var(--bg-card); padding: 16px; border-radius: var(--radius-md); border: 1px solid var(--border-color); margin: 16px 0;">
+                        <code>你好！请回复 "配置成功"</code>
+                    </div>
+
+                    <p>如果看到 Claude 回复 "配置成功"，说明配置成功。</p>
+
+                    <h3>实战小任务</h3>
+                    <p>试试让 Claude 帮你做点事情：</p>
+
+                    <div style="background: var(--bg-card); padding: 16px; border-radius: var(--radius-md); border: 1px solid var(--border-color); margin: 16px 0;">
+                        <code>请帮我创建一个文件夹叫 test，在里面创建一个 hello.txt 文件，写入 "Hello World"</code>
+                    </div>
+
+                    <h4>验证结果</h4>
+
+                    <div data-os="windows">
+                        <ol>
+                            <li>打开你运行 <code>claude</code> 的项目文件夹（Claude Code 欢迎界面会显示 workspace 路径）</li>
+                            <li>找到并双击 <code>test</code> 文件夹</li>
+                            <li>双击打开 <code>hello.txt</code>，确认里面写着 <code>Hello World</code></li>
+                        </ol>
+                    </div>
+
+                    <div data-os="mac">
+                        <ol>
+                            <li>打开你运行 <code>claude</code> 的项目文件夹（Claude Code 欢迎界面会显示 workspace 路径）</li>
+                            <li>找到并打开 <code>test</code> 文件夹</li>
+                            <li>双击打开 <code>hello.txt</code>，确认里面写着 <code>Hello World</code></li>
+                        </ol>
+                    </div>
+
+                    <p>你应该能看到文件被创建，内容是 "Hello World"！</p>
+
+                    <div class="alert alert-success">
+                        <div class="alert-title">
+                            <svg class="icon icon-xs" aria-hidden="true"><use href="../images/icons.svg#icon-check"></use></svg>
+                            恭喜完成第一章！
+                        </div>
+                        <p>你已经成功安装了所有必要的软件，并完成了第一次 Claude Code 对话！</p>
+                    </div>
+
+                    <h2 id="troubleshooting">常见问题</h2>
+
+                    <div class="alert alert-danger">
+                        <div class="alert-title">Q1: npm 命令找不到？</div>
+                        <p><strong>原因</strong>：Node.js 没有安装好，或者 PATH 没有配置</p>
+                        <p><strong>解决方案</strong>：</p>
+                        <ol>
+                            <li>重新安装 Node.js</li>
+                            <li>Windows 用户确保勾选了 "Add to PATH"</li>
+                            <li>安装后重启命令行窗口</li>
+                        </ol>
+                    </div>
+
+                    <div class="alert alert-danger">
+                        <div class="alert-title">Q2: Python 命令找不到？</div>
+                        <p><strong>原因</strong>：Python 安装时没有勾选 "Add Python to PATH"</p>
+                        <p><strong>解决方案</strong>：</p>
+                        <ol>
+                            <li>卸载 Python</li>
+                            <li>重新安装，务必勾选 "Add Python to PATH"</li>
+                            <li>重启命令行窗口</li>
+                        </ol>
+                    </div>
+
+                    <div class="alert alert-danger">
+                        <div class="alert-title">Q3: API Key 配置失败？</div>
+                        <p><strong>原因</strong>：可能是 Key 复制错误，或者网络问题</p>
+                        <p><strong>解决方案</strong>：</p>
+                        <ol>
+                            <li>检查 Key 是否完整复制（不要有空格）</li>
+                            <li>确认 Key 没有过期</li>
+                            <li>尝试重新配置</li>
+                        </ol>
+                    </div>
+
+                    <div class="alert alert-danger">
+                        <div class="alert-title">Q4: claude 命令报错？</div>
+                        <p><strong>原因</strong>：可能是 npm 全局安装路径问题</p>
+                        <p><strong>解决方案</strong>：</p>
+                        <div data-os="windows">
+                            <div class="code-block-wrapper">
+                                <div class="code-header">
+                                    <span class="code-lang">powershell</span>
+                                    <button class="code-copy">复制代码</button>
+                                </div>
+                                <pre><code class="language-powershell"># 检查 npm 全局路径
+npm config get prefix
+
+# 如果路径有问题，重新设置（示例）
+npm config set prefix "C:\Users\你的用户名\AppData\Roaming\npm"</code></pre>
+                            </div>
+                        </div>
+
+                        <div data-os="mac">
+                            <div class="code-block-wrapper">
+                                <div class="code-header">
+                                    <span class="code-lang">bash</span>
+                                    <button class="code-copy">复制代码</button>
+                                </div>
+                                <pre><code class="language-bash"># 检查 npm 全局路径
+npm config get prefix</code></pre>
+                            </div>
+                            <p>一般重开一个终端窗口就能生效；如果你改过 npm prefix，确保它在 PATH 里。</p>
+                        </div>
+                    </div>
+
+                    <div class="alert alert-danger">
+                        <div class="alert-title">Q5: Mac 提示权限不足？</div>
+                        <p><strong>解决方案</strong>：</p>
+                        <div class="code-block-wrapper">
+                            <div class="code-header">
+                                <span class="code-lang">bash</span>
+                                <button class="code-copy">复制代码</button>
+                            </div>
+                            <pre><code class="language-bash"># 使用 sudo 安装
+sudo npm install -g @anthropic-ai/claude-code</code></pre>
+                        </div>
+                    </div>
+
+                    <h2 id="completion">完成标准</h2>
+
+                    <p>完成本章学习后，你应该能够：</p>
+
+                    <div class="checklist" data-id="chapter-01-complete">
+                        <div class="checklist-item">
+                            <input type="checkbox" id="complete-1">
+                            <label for="complete-1">在命令行输入 <code>python --version</code> 并看到版本号</label>
+                        </div>
+                        <div class="checklist-item">
+                            <input type="checkbox" id="complete-2">
+                            <label for="complete-2">在命令行输入 <code>node --version</code> 和 <code>npm --version</code> 并看到版本号</label>
+                        </div>
+                        <div class="checklist-item">
+                            <input type="checkbox" id="complete-3">
+                            <label for="complete-3">在命令行输入 <code>claude --version</code> 并看到版本号</label>
+                        </div>
+                        <div class="checklist-item">
+                            <input type="checkbox" id="complete-4">
+                            <label for="complete-4">能够进入 <code>claude</code> 对话界面</label>
+                        </div>
+                        <div class="checklist-item">
+                            <input type="checkbox" id="complete-5">
+                            <label for="complete-5">第一次对话成功得到回复</label>
+                        </div>
+                        <div class="checklist-item">
+                            <input type="checkbox" id="complete-6">
+                            <label for="complete-6">成功让 Claude 创建文件</label>
+                        </div>
+                    </div>
+
+                    <section class="quiz" id="quiz">
+                        <div class="quiz-title">本章自检（3分钟）</div>
+                        <div class="quiz-hint">点开问题查看答案，能讲清楚就算掌握。</div>
+                        <details>
+                            <summary>为什么必须先安装 Node.js？</summary>
+                            <div class="quiz-answer">Claude Code CLI 依赖 Node.js 运行；没有 Node.js（或没加到 PATH），<code>npm</code>/<code>claude</code> 就会找不到。</div>
+                        </details>
+                        <details>
+                            <summary>怎么验证 Python/Node.js/Claude Code 都装好了？</summary>
+                            <div class="quiz-answer">分别运行版本命令：<code>python --version</code>（或 <code>python3 --version</code>）、<code>node -v</code>、<code>npm -v</code>、<code>claude --version</code>。</div>
+                        </details>
+                        <details>
+                            <summary>如果提示“claude 找不到命令”，最常见的两种原因是什么？</summary>
+                            <div class="quiz-answer">常见原因：1) 没有成功安装 CLI；2) 环境变量 PATH 未生效（需要重启终端/电脑，或 Node.js 安装时未勾选 Add to PATH）。</div>
+                        </details>
+                        <details>
+                            <summary>第一次对话测试的“成功标志”是什么？</summary>
+                            <div class="quiz-answer">能收到明确可读的回复，并且没有鉴权/网络/连接失败；同时本地命令可正常运行。</div>
+                        </details>
+                    </section>
+
+                    <button class="btn btn-secondary mark-complete-btn" style="margin: 32px 0 24px;">
+                        <svg class="icon icon-sm" aria-hidden="true"><use href="../images/icons.svg#icon-circle"></use></svg>
+                        标记为已完成（保存进度）
+                    </button>
+
+                    <!-- 下一章导航 -->
+                    <nav class="chapter-nav">
+                        <a href="concepts.html" class="chapter-nav-card">
+                            <svg class="icon" aria-hidden="true"><use href="../images/icons.svg#icon-arrow-left"></use></svg>
+                            <div class="content">
+                                <div class="label">上一页</div>
+                                <div class="title">概念扫盲（必看）</div>
+                            </div>
+                        </a>
+                        <a href="chapter-02.html" class="chapter-nav-card next">
+                            <svg class="icon" aria-hidden="true"><use href="../images/icons.svg#icon-arrow-right"></use></svg>
+                            <div class="content">
+                                <div class="label">下一章</div>
+                                <div class="title">第02章：Claude Code 命令详解</div>
+                            </div>
+                        </a>
+                    </nav>
+                </article>
+            </div>
+
+            <!-- 页脚 -->
+            <footer class="footer">
+                <div class="footer-links">
+                    <a href="appendix.html">速查手册</a>
+                </div>
+                <div class="footer-copyright">
+                    &copy; 2025 Claude Code 教程网站
+                </div>
+            </footer>
+        </main>
+
+        <!-- 遮罩层 -->
+        <div class="overlay" id="overlay"></div>
+    </div>
+
+    <script src="../js/main.js"></script>
+</body>
+</html>

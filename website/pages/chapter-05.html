@@ -1,0 +1,492 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>第05章：高质量提问与提示词模板 - Claude Code 教程</title>
+    <link rel="stylesheet" href="../css/style.css">
+</head>
+<body>
+    <div class="app-container">
+        <aside class="sidebar" id="sidebar">
+            <div class="sidebar-header">
+                <a href="../index.html" style="display: flex; align-items: center; gap: 12px; text-decoration: none;">
+                    <div class="logo">C</div>
+                    <span class="logo-text">Claude Code 教程</span>
+                </a>
+            </div>
+            <div class="sidebar-search">
+                <div class="search-box">
+                    <span class="search-icon" aria-hidden="true">
+                        <svg class="icon icon-xs"><use href="../images/icons.svg#icon-search"></use></svg>
+                    </span>
+                    <input type="text" placeholder="搜索章节...">
+                </div>
+            </div>
+            <nav class="sidebar-nav" id="sidebarNav"></nav>
+        </aside>
+
+        <main class="main-content">
+            <header class="top-nav">
+                <div class="top-nav-left">
+                    <button class="menu-toggle" id="menuToggle" aria-label="打开目录">
+                        <svg class="icon icon-sm" aria-hidden="true"><use href="../images/icons.svg#icon-menu"></use></svg>
+                    </button>
+                    <nav class="breadcrumb">
+                        <a href="../index.html">首页</a>
+                        <span class="separator">/</span>
+                        <span class="current">第05章</span>
+                    </nav>
+                </div>
+                <div class="top-nav-right">
+                    <div class="progress-indicator">
+                        <span>学习进度</span>
+                        <div class="progress-bar">
+                            <div class="progress-fill" id="progressFill" style="width: 0%"></div>
+                        </div>
+                        <span class="progress-text" id="progressText">0%</span>
+                    </div>
+                </div>
+            </header>
+
+            <div class="content-wrapper">
+                <header class="article-header">
+                    <div class="article-breadcrumb">
+                        <a href="../index.html">首页</a> / <span>第05章：高质量提问与提示词模板</span>
+                    </div>
+                    <h1 class="article-title">第05章：高质量提问与提示词模板</h1>
+                    <div class="article-meta">
+                        <span class="article-meta-item">
+                            <svg class="icon icon-xs" aria-hidden="true"><use href="../images/icons.svg#icon-clock"></use></svg>
+                            预计时间：35分钟
+                        </span>
+                        <span class="article-meta-item">
+                            <svg class="icon icon-xs" aria-hidden="true"><use href="../images/icons.svg#icon-signal"></use></svg>
+                            难度：中等
+                        </span>
+                        <span class="article-meta-item">
+                            <svg class="icon icon-xs" aria-hidden="true"><use href="../images/icons.svg#icon-tag"></use></svg>
+                            类别：必修
+                        </span>
+                    </div>
+                </header>
+
+                <article class="article-content">
+                    <!-- 配图：Claude Code对话界面 -->
+                    <div class="section-image">
+                        <img src="../images/external/img_62d972907ea4ff88.png" alt="Claude Code对话界面" loading="lazy">
+                        <div class="section-image-caption">学会提问，让 Claude 精确理解你的需求</div>
+                    </div>
+
+                    <div class="alert alert-info">
+                        <div class="alert-title">📌 章节说明</div>
+                        <p><strong>前置知识：</strong>已完成第04章实战场景，有实际使用经验。</p>
+                        <p><strong>本章价值：</strong>同样的 Claude Code，<strong>会不会提问效果差 10 倍</strong>。好的提示词能让 Claude 精确理解你的需求。</p>
+                    </div>
+
+                    <h2 id="why">为什么要学习提示词？</h2>
+
+                    <table style="margin: 24px 0;">
+                        <thead>
+                            <tr>
+                                <th>糟糕的提问 ❌</th>
+                                <th>好的提问 ✅</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>"帮我看看这个文件"</td>
+                                <td>"帮我看看 app.js 这个文件，找出可能导致内存泄漏的代码段"</td>
+                            </tr>
+                            <tr>
+                                <td>"帮我优化代码"</td>
+                                <td>"帮我优化这个查询语句的性能，当前运行时间约 5 秒"</td>
+                            </tr>
+                            <tr>
+                                <td>"处理数据"</td>
+                                <td>"处理 sales.xlsx：去除重复行、统一日期格式、生成报告"</td>
+                            </tr>
+                        </tbody>
+                    </table>
+
+                    <h2 id="three-elements">好提示词的三个要素</h2>
+
+                    <table style="margin: 24px 0;">
+                        <thead>
+                            <tr>
+                                <th>要素</th>
+                                <th>说明</th>
+                                <th>示例</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td><strong>目标</strong></td>
+                                <td>你想达成什么</td>
+                                <td>"找出内存泄漏的代码"</td>
+                            </tr>
+                            <tr>
+                                <td><strong>约束</strong></td>
+                                <td>不要做什么</td>
+                                <td>"不要改动配置文件"</td>
+                            </tr>
+                            <tr>
+                                <td><strong>格式</strong></td>
+                                <td>输出格式要求</td>
+                                <td>"用表格形式列出结果"</td>
+                            </tr>
+                        </tbody>
+                    </table>
+
+                    <h2 id="templates">六个万能提示词模板</h2>
+
+                    <div class="alert alert-success">
+                        <div class="alert-title">🎯 覆盖 90% 的日常场景</div>
+                        <p>这些模板可以满足大部分使用需求，直接复制修改即可使用。</p>
+                    </div>
+
+                    <h3>模板1：理解代码/项目</h3>
+
+                    <div style="background: var(--bg-card); padding: 16px; border-radius: var(--radius-md); border: 1px solid var(--primary-color); margin: 16px 0;">
+                        <div class="alert-title">📋 模板</div>
+                        <div class="code-block-wrapper">
+                            <div class="code-header">
+                                <span class="code-lang">提示词</span>
+                                <button class="code-copy">复制代码</button>
+                            </div>
+                            <pre><code class="language-bash">请帮我理解 [文件名/项目]：
+1. 这个东西是做什么的？
+2. 主要结构是什么？
+3. 怎么运行的？</code></pre>
+                        </div>
+                    </div>
+
+                    <h3>模板2：修改文件</h3>
+
+                    <div style="background: var(--bg-card); padding: 16px; border-radius: var(--radius-md); border: 1px solid var(--primary-color); margin: 16px 0;">
+                        <div class="alert-title">📋 模板</div>
+                        <div class="code-block-wrapper">
+                            <div class="code-header">
+                                <span class="code-lang">提示词</span>
+                                <button class="code-copy">复制代码</button>
+                            </div>
+                            <pre><code class="language-bash">请修改 [文件名]：
+目标：[你想达成什么]
+约束：[不要改什么/注意事项]
+请只告诉我改了什么</code></pre>
+                        </div>
+                    </div>
+
+                    <h3>模板3：处理数据</h3>
+
+                    <div style="background: var(--bg-card); padding: 16px; border-radius: var(--radius-md); border: 1px solid var(--primary-color); margin: 16px 0;">
+                        <div class="alert-title">📋 模板</div>
+                        <div class="code-block-wrapper">
+                            <div class="code-header">
+                                <span class="code-lang">提示词</span>
+                                <button class="code-copy">复制代码</button>
+                            </div>
+                            <pre><code class="language-bash">请处理这个 [文件]：
+1. 清洗数据（去重/格式统一）
+2. 分析统计
+3. 生成报告</code></pre>
+                        </div>
+                    </div>
+
+                    <h3>模板4：整理文件</h3>
+
+                    <div style="background: var(--bg-card); padding: 16px; border-radius: var(--radius-md); border: 1px solid var(--primary-color); margin: 16px 0;">
+                        <div class="alert-title">📋 模板</div>
+                        <div class="code-block-wrapper">
+                            <div class="code-header">
+                                <span class="code-lang">提示词</span>
+                                <button class="code-copy">复制代码</button>
+                            </div>
+                            <pre><code class="language-bash">请整理 [文件夹]：
+按 [类型/日期/名称] 分类
+移动到对应文件夹
+生成整理清单</code></pre>
+                        </div>
+                    </div>
+
+                    <h3>模板5：生成文档</h3>
+
+                    <div style="background: var(--bg-card); padding: 16px; border-radius: var(--radius-md); border: 1px solid var(--primary-color); margin: 16px 0;">
+                        <div class="alert-title">📋 模板</div>
+                        <div class="code-block-wrapper">
+                            <div class="code-header">
+                                <span class="code-lang">提示词</span>
+                                <button class="code-copy">复制代码</button>
+                            </div>
+                            <pre><code class="language-bash">请根据 [内容] 生成文档：
+类型：[周报/总结/说明/会议纪要]
+格式：[结构化输出]</code></pre>
+                        </div>
+                    </div>
+
+                    <h3>模板6：Git 存档</h3>
+
+                    <div style="background: var(--bg-card); padding: 16px; border-radius: var(--radius-md); border: 1px solid var(--primary-color); margin: 16px 0;">
+                        <div class="alert-title">📋 模板</div>
+                        <div class="code-block-wrapper">
+                            <div class="code-header">
+                                <span class="code-lang">提示词</span>
+                                <button class="code-copy">复制代码</button>
+                            </div>
+                            <pre><code class="language-bash">请 Git 存档当前状态：
+提交信息：[简短描述]</code></pre>
+                        </div>
+                    </div>
+
+                    <h3>模板7：调试代码</h3>
+
+                    <div style="background: var(--bg-card); padding: 16px; border-radius: var(--radius-md); border: 1px solid var(--primary-color); margin: 16px 0;">
+                        <div class="alert-title">📋 模板</div>
+                        <div class="code-block-wrapper">
+                            <div class="code-header">
+                                <span class="code-lang">提示词</span>
+                                <button class="code-copy">复制代码</button>
+                            </div>
+                            <pre><code class="language-bash">请帮我调试这段代码：
+
+【问题描述】
+[具体描述问题现象，比如："点击按钮后没有反应"]
+
+【代码】
+[粘贴相关代码]
+
+【期望行为】
+[描述你期望发生什么]</code></pre>
+                        </div>
+                    </div>
+
+                    <h3>模板8：代码重构</h3>
+
+                    <div style="background: var(--bg-card); padding: 16px; border-radius: var(--radius-md); border: 1px solid var(--primary-color); margin: 16px 0;">
+                        <div class="alert-title">📋 模板</div>
+                        <div class="code-block-wrapper">
+                            <div class="code-header">
+                                <span class="code-lang">提示词</span>
+                                <button class="code-copy">复制代码</button>
+                            </div>
+                            <pre><code class="language-bash">请帮我重构 [文件名/函数名]：
+
+目标：[说明重构目的，如提高可读性]
+约束：
+- 保持接口不变
+- 不改变功能逻辑
+- 添加必要的注释</code></pre>
+                        </div>
+                    </div>
+
+                    <h3>模板9：写测试用例</h3>
+
+                    <div style="background: var(--bg-card); padding: 16px; border-radius: var(--radius-md); border: 1px solid var(--primary-color); margin: 16px 0;">
+                        <div class="alert-title">📋 模板</div>
+                        <div class="code-block-wrapper">
+                            <div class="code-header">
+                                <span class="code-lang">提示词</span>
+                                <button class="code-copy">复制代码</button>
+                            </div>
+                            <pre><code class="language-bash">请为 [文件名/函数名] 编写测试用例：
+
+覆盖场景：
+1. 正常情况
+2. 边界条件
+3. 异常情况
+
+测试框架：[如 pytest/jest 等]</code></pre>
+                        </div>
+                    </div>
+
+                    <h3>模板10：代码解释（小白向）</h3>
+
+                    <div style="background: var(--bg-card); padding: 16px; border-radius: var(--radius-md); border: 1px solid var(--primary-color); margin: 16px 0;">
+                        <div class="alert-title">📋 模板</div>
+                        <div class="code-block-wrapper">
+                            <div class="code-header">
+                                <span class="code-lang">提示词</span>
+                                <button class="code-copy">复制代码</button>
+                            </div>
+                            <pre><code class="language-bash">请用最简单的语言解释这段代码：
+- 假设我是一个完全不懂编程的人
+- 用生活中的类比来解释
+- 分步骤说明代码的执行过程
+
+代码：
+[粘贴代码]</code></pre>
+                        </div>
+                    </div>
+
+                    <h2 id="advanced">进阶技巧</h2>
+
+                    <h3>技巧1：结构化你的提示词</h3>
+
+                    <div class="alert alert-success">
+                        <div class="alert-title">✅ 好的做法</div>
+                        <div style="background: var(--bg-code); padding: 16px; border-radius: var(--radius-md); margin: 12px 0; font-family: monospace;">
+                            请处理 sales.xlsx：<br><br>
+                            【数据清洗】<br>
+                            1. 去除重复行<br>
+                            2. 统一日期格式<br><br>
+                            【分析】<br>
+                            1. 统计总销售额<br>
+                            2. 找出 Top 5 产品<br><br>
+                            【输出】<br>
+                            生成 Markdown 报告
+                        </div>
+                    </div>
+
+                    <h3>技巧2：给示例</h3>
+
+                    <div style="background: var(--bg-card); padding: 16px; border-radius: var(--radius-md); border: 1px solid var(--border-color); margin: 16px 0;">
+                        <code>请把以下代码中的变量名改成驼峰命名法。<br><br>
+                        示例：<br>
+                        user_name → userName<br>
+                        first_name → firstName<br><br>
+                        要改的代码：<br>
+                        [粘贴代码]</code>
+                    </div>
+
+                    <h3>技巧3：分步骤</h3>
+
+                    <div style="background: var(--bg-card); padding: 16px; border-radius: var(--radius-md); border: 1px solid var(--border-color); margin: 16px 0;">
+                        <code>请按以下步骤帮我重构代码：<br><br>
+                        第一步：分析当前代码结构<br>
+                        第二步：指出可以改进的地方<br>
+                        第三步：给出重构方案<br>
+                        第四步：等待我确认后再执行</code>
+                    </div>
+
+                    <h3>技巧4：设定角色</h3>
+
+                    <div style="background: var(--bg-card); padding: 16px; border-radius: var(--radius-md); border: 1px solid var(--border-color); margin: 16px 0;">
+                        <code>你是一位资深代码审查员，请帮我审查以下代码，重点关注：<br>
+                        1. 安全问题<br>
+                        2. 性能问题<br>
+                        3. 代码规范<br><br>
+                        代码：<br>
+                        [粘贴代码]</code>
+                    </div>
+
+                    <h2 id="mistakes">避免这些常见错误</h2>
+
+                    <table style="margin: 24px 0;">
+                        <thead>
+                            <tr>
+                                <th>错误类型</th>
+                                <th>错误示例 ❌</th>
+                                <th>正确示例 ✅</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>太模糊</td>
+                                <td>"帮我优化这个代码"</td>
+                                <td>"帮我优化这个查询语句的性能"</td>
+                            </tr>
+                            <tr>
+                                <td>没有约束</td>
+                                <td>"重构这个函数"</td>
+                                <td>"重构这个函数，保持接口不变，只改内部实现"</td>
+                            </tr>
+                            <tr>
+                                <td>一次要求太多</td>
+                                <td>"帮我分析项目、重构代码、写文档、写测试"</td>
+                                <td>分开做，每次专注一个任务</td>
+                            </tr>
+                            <tr>
+                                <td>没有上下文</td>
+                                <td>"这里有个 bug"</td>
+                                <td>"在用户登录的场景下，输入密码后一直显示加载中"</td>
+                            </tr>
+                        </tbody>
+                    </table>
+
+                    <h2 id="checklist">提示词自检清单</h2>
+
+                    <div class="checklist" data-id="prompt-checklist">
+                        <div class="checklist-title">🎯 发送提示词前，检查这些项</div>
+                        <div class="checklist-item">
+                            <input type="checkbox" id="check-1">
+                            <label for="check-1">我的目标清晰吗？</label>
+                        </div>
+                        <div class="checklist-item">
+                            <input type="checkbox" id="check-2">
+                            <label for="check-2">我提供了足够的上下文吗？</label>
+                        </div>
+                        <div class="checklist-item">
+                            <input type="checkbox" id="check-3">
+                            <label for="check-3">我说明了约束条件吗？</label>
+                        </div>
+                        <div class="checklist-item">
+                            <input type="checkbox" id="check-4">
+                            <label for="check-4">我指定了输出格式吗？</label>
+                        </div>
+                        <div class="checklist-item">
+                            <input type="checkbox" id="check-5">
+                            <label for="check-5">我给了示例吗（如果复杂的话）？</label>
+                        </div>
+                    </div>
+
+                    <div class="alert alert-success">
+                        <div class="alert-title">🎊 恭喜完成所有必修课程！</div>
+                        <p>你已经掌握了 Claude Code 的核心使用方法。接下来可以选修进阶课程，或者直接查看速查手册。</p>
+                    </div>
+
+                    <section class="quiz" id="quiz">
+                        <div class="quiz-title">本章自检（3分钟）</div>
+                        <div class="quiz-hint">点开问题查看答案，能讲清楚就算掌握。</div>
+                        <details>
+                            <summary>好提示词最重要的三个要素是什么？</summary>
+                            <div class="quiz-answer">目标（要做什么）、上下文（给它什么信息）、约束（不要改什么/输出格式/注意事项）。</div>
+                        </details>
+                        <details>
+                            <summary>“帮我优化代码”为什么是坏提问？怎么改成好提问？</summary>
+                            <div class="quiz-answer">因为目标不清、没有范围/约束；应改成“优化哪个文件/函数/指标（性能/可读性）/不能改什么/期望输出”。</div>
+                        </details>
+                        <details>
+                            <summary>什么时候要先让 Claude 反问你问题？</summary>
+                            <div class="quiz-answer">当需求模糊或会产生多种解法时，让它先问 3 个关键问题，确认后再动手，省钱也省返工。</div>
+                        </details>
+                        <details>
+                            <summary>你最常用的一句“约束”是什么？</summary>
+                            <div class="quiz-answer">例如：“不要改无关内容”“如果需要新增/删除文件，先征求我确认”“只输出改了什么”。</div>
+                        </details>
+                    </section>
+
+                    <button class="btn btn-secondary mark-complete-btn" style="margin: 32px 0 24px;">
+                        <svg class="icon icon-sm" aria-hidden="true"><use href="../images/icons.svg#icon-circle"></use></svg>
+                        标记为已完成（保存进度）
+                    </button>
+
+                    <nav class="chapter-nav">
+                        <a href="chapter-04.html" class="chapter-nav-card">
+                            <svg class="icon" aria-hidden="true"><use href="../images/icons.svg#icon-arrow-left"></use></svg>
+                            <div class="content">
+                                <div class="label">上一章</div>
+                                <div class="title">第04章：实战场景</div>
+                            </div>
+                        </a>
+                        <a href="chapter-06.html" class="chapter-nav-card next">
+                            <svg class="icon" aria-hidden="true"><use href="../images/icons.svg#icon-arrow-right"></use></svg>
+                            <div class="content">
+                                <div class="label">下一章</div>
+                                <div class="title">第06章：MCP 扩展</div>
+                            </div>
+                        </a>
+                    </nav>
+                </article>
+            </div>
+
+            <footer class="footer">
+                <div class="footer-copyright">&copy; 2025 Claude Code 教程网站</div>
+            </footer>
+        </main>
+
+        <div class="overlay" id="overlay"></div>
+    </div>
+
+    <script src="../js/main.js"></script>
+</body>
+</html>

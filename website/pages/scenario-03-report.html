@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>S3：日报/周报生成（模板化） - Claude Code 教程</title>
+    <link rel="stylesheet" href="../css/style.css">
+</head>
+<body data-page-id="scenario-03-report">
+    <div class="app-container">
+        <aside class="sidebar" id="sidebar">
+            <div class="sidebar-header">
+                <a href="../index.html" style="display: flex; align-items: center; gap: 12px; text-decoration: none;">
+                    <div class="logo">C</div>
+                    <span class="logo-text">Claude Code 教程</span>
+                </a>
+            </div>
+            <div class="sidebar-search">
+                <div class="search-box">
+                    <span class="search-icon" aria-hidden="true">
+                        <svg class="icon icon-xs"><use href="../images/icons.svg#icon-search"></use></svg>
+                    </span>
+                    <input type="text" placeholder="搜索章节...">
+                </div>
+            </div>
+            <nav class="sidebar-nav" id="sidebarNav"></nav>
+        </aside>
+
+        <main class="main-content">
+            <header class="top-nav">
+                <div class="top-nav-left">
+                    <button class="menu-toggle" id="menuToggle" aria-label="打开目录">
+                        <svg class="icon icon-sm" aria-hidden="true"><use href="../images/icons.svg#icon-menu"></use></svg>
+                    </button>
+                    <nav class="breadcrumb">
+                        <a href="../index.html">首页</a>
+                        <span class="separator">/</span>
+                        <a href="scenario-pack.html">场景包</a>
+                        <span class="separator">/</span>
+                        <span class="current">S3</span>
+                    </nav>
+                </div>
+                <div class="top-nav-right">
+                    <div class="progress-indicator">
+                        <span>学习进度</span>
+                        <div class="progress-bar">
+                            <div class="progress-fill" id="progressFill" style="width: 0%"></div>
+                        </div>
+                        <span class="progress-text" id="progressText">0%</span>
+                    </div>
+                </div>
+            </header>
+
+            <div class="content-wrapper">
+                <header class="article-header">
+                    <div class="article-breadcrumb">
+                        <a href="../index.html">首页</a> / <a href="scenario-pack.html">场景包</a> / <span>S3：日报/周报生成（模板化）</span>
+                    </div>
+                    <h1 class="article-title">S3：日报/周报生成（模板化）</h1>
+                    <div class="article-meta">
+                        <span class="article-meta-item">
+                            <svg class="icon icon-xs" aria-hidden="true"><use href="../images/icons.svg#icon-clock"></use></svg>
+                            预计时间：15分钟
+                        </span>
+                        <span class="article-meta-item">
+                            <svg class="icon icon-xs" aria-hidden="true"><use href="../images/icons.svg#icon-signal"></use></svg>
+                            难度：简单
+                        </span>
+                        <span class="article-meta-item">
+                            <svg class="icon icon-xs" aria-hidden="true"><use href="../images/icons.svg#icon-tag"></use></svg>
+                            类型：练习场景
+                        </span>
+                    </div>
+                </header>
+
+                <article class="article-content">
+                    <!-- 配图：报告生成 -->
+                    <div class="section-image">
+                        <img src="../images/external/img_62d972907ea4ff88.png" alt="Claude Code规划输出" loading="lazy">
+                        <div class="section-image-caption">Claude Code 帮你自动生成日报周报</div>
+                    </div>
+
+                    <h2 id="materials">练习素材</h2>
+                    <p>下载并放到你自己的练习文件夹中：</p>
+                    <p><a href="../assets/scenarios/s3_日报周报_练习.txt" download>下载：s3_日报周报_练习.txt</a></p>
+
+                    <h2 id="prompt">一键提示词（直接复制）</h2>
+                    <div class="code-block-wrapper">
+                        <div class="code-header">
+                            <span class="code-lang">提示词</span>
+                            <button class="code-copy">复制代码</button>
+                        </div>
+                        <pre><code class="language-bash">请把文件 s3_日报周报_练习.txt 里的零散记录整理成：
+
+1) 每日“日报”（按日期分段）
+2) 一份“周报”（包含：本周完成、风险问题、下周计划、需要协调的事项）
+
+输出要求：
+1) 生成 report_daily.md
+2) 生成 report_weekly.md
+
+风格要求：
+1) 语言简洁、偏工程现场口吻
+2) 重点突出风险/问题与行动项（用列表）
+
+执行前请先给出你准备采用的周报结构，我确认后再输出文件。</code></pre>
+                    </div>
+
+                    <h2 id="check">验收标准</h2>
+                    <div class="checklist" data-id="scenario-s3-checks">
+                        <div class="checklist-title">完成即合格</div>
+                        <div class="checklist-item">
+                            <input type="checkbox" id="s3c-1">
+                            <label for="s3c-1">生成了 <code>report_daily.md</code>（按日期分段）</label>
+                        </div>
+                        <div class="checklist-item">
+                            <input type="checkbox" id="s3c-2">
+                            <label for="s3c-2">生成了 <code>report_weekly.md</code>（有风险/下周计划/需协调事项）</label>
+                        </div>
+                    </div>
+
+                    <nav class="chapter-nav">
+                        <a href="scenario-02-file-organize.html" class="chapter-nav-card">
+                            <svg class="icon" aria-hidden="true"><use href="../images/icons.svg#icon-arrow-left"></use></svg>
+                            <div class="content">
+                                <div class="label">上一页</div>
+                                <div class="title">S2：资料归档（文件整理）</div>
+                            </div>
+                        </a>
+                        <a href="scenario-pack.html" class="chapter-nav-card next">
+                            <svg class="icon" aria-hidden="true"><use href="../images/icons.svg#icon-arrow-right"></use></svg>
+                            <div class="content">
+                                <div class="label">返回</div>
+                                <div class="title">场景包目录</div>
+                            </div>
+                        </a>
+                    </nav>
+                </article>
+            </div>
+
+            <footer class="footer">
+                <div class="footer-copyright">&copy; 2025 Claude Code 教程网站</div>
+            </footer>
+        </main>
+
+        <div class="overlay" id="overlay"></div>
+    </div>
+
+    <script src="../js/main.js"></script>
+</body>
+</html>

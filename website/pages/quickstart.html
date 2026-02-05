@@ -1,0 +1,491 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>00：10分钟跑通第一次成功 - Claude Code 教程</title>
+    <link rel="stylesheet" href="../css/style.css">
+</head>
+<body data-page-id="quickstart">
+    <div class="app-container">
+        <aside class="sidebar" id="sidebar">
+            <div class="sidebar-header">
+                <a href="../index.html" style="display: flex; align-items: center; gap: 12px; text-decoration: none;">
+                    <div class="logo">C</div>
+                    <span class="logo-text">Claude Code 教程</span>
+                </a>
+            </div>
+            <div class="sidebar-search">
+                <div class="search-box">
+                    <span class="search-icon" aria-hidden="true">
+                        <svg class="icon icon-xs"><use href="../images/icons.svg#icon-search"></use></svg>
+                    </span>
+                    <input type="text" placeholder="搜索章节...">
+                </div>
+            </div>
+            <nav class="sidebar-nav" id="sidebarNav"></nav>
+        </aside>
+
+        <main class="main-content">
+            <header class="top-nav">
+                <div class="top-nav-left">
+                    <button class="menu-toggle" id="menuToggle" aria-label="打开目录">
+                        <svg class="icon icon-sm" aria-hidden="true"><use href="../images/icons.svg#icon-menu"></use></svg>
+                    </button>
+                    <nav class="breadcrumb">
+                        <a href="../index.html">首页</a>
+                        <span class="separator">/</span>
+                        <span class="current">10分钟跑通</span>
+                    </nav>
+                </div>
+                <div class="top-nav-right">
+                    <div class="progress-indicator">
+                        <span>学习进度</span>
+                        <div class="progress-bar">
+                            <div class="progress-fill" id="progressFill" style="width: 0%"></div>
+                        </div>
+                        <span class="progress-text" id="progressText">0%</span>
+                    </div>
+                </div>
+            </header>
+
+            <div class="content-wrapper">
+                <header class="article-header">
+                    <div class="article-breadcrumb">
+                        <a href="../index.html">首页</a> / <span>00：10分钟跑通第一次成功</span>
+                    </div>
+                    <h1 class="article-title">00：10分钟跑通第一次成功</h1>
+                    <div class="article-meta">
+                        <span class="article-meta-item">
+                            <svg class="icon icon-xs" aria-hidden="true"><use href="../images/icons.svg#icon-clock"></use></svg>
+                            预计时间：10分钟
+                        </span>
+                        <span class="article-meta-item">
+                            <svg class="icon icon-xs" aria-hidden="true"><use href="../images/icons.svg#icon-signal"></use></svg>
+                            难度：超简单
+                        </span>
+                        <span class="article-meta-item">
+                            <svg class="icon icon-xs" aria-hidden="true"><use href="../images/icons.svg#icon-tag"></use></svg>
+                            类别：必修
+                        </span>
+                    </div>
+                </header>
+
+                <article class="article-content">
+                    <!-- 配图：Claude Code快速入门 -->
+                    <div class="section-image">
+                        <img src="../images/external/img_355a9470404eab38.png" alt="Claude Code CLI启动界面" loading="lazy">
+                        <div class="section-image-caption">10分钟快速上手 Claude Code CLI</div>
+                    </div>
+
+                    <div class="alert alert-info">
+                        <div class="alert-title">本页目标</div>
+                        <p><strong>只做三件事：</strong>装好 CLI → 配好 Key → 在命令行看到一次“成功回复”。</p>
+                        <p><strong>你不需要懂编程。</strong>跟着复制命令就行。</p>
+                    </div>
+
+                    <div class="os-switcher" data-os-switcher>
+                        <div class="os-switcher-title">
+                            <svg class="icon icon-xs" aria-hidden="true"><use href="../images/icons.svg#icon-list"></use></svg>
+                            我用的系统（用于自动隐藏另一套步骤）
+                        </div>
+                        <div class="os-switcher-actions">
+                            <button type="button" class="os-btn" data-os-value="windows">Windows</button>
+                            <button type="button" class="os-btn" data-os-value="mac">Mac</button>
+                            <button type="button" class="os-btn" data-os-value="all">都显示</button>
+                        </div>
+                    </div>
+
+                    <div class="checklist" data-id="quickstart-goals">
+                        <div class="checklist-title">完成检查清单（建议勾完再走）</div>
+                        <div class="checklist-item">
+                            <input type="checkbox" id="qs-1">
+                            <label for="qs-1">我能在命令行运行 <code>claude --version</code> 并看到版本号</label>
+                        </div>
+                        <div class="checklist-item">
+                            <input type="checkbox" id="qs-2">
+                            <label for="qs-2">我已经把 API Key 配置好（能正常连接模型）</label>
+                        </div>
+                        <div class="checklist-item">
+                            <input type="checkbox" id="qs-3">
+                            <label for="qs-3">我已经完成一次对话测试，并收到明确回复</label>
+                        </div>
+                    </div>
+
+                    <h2 id="step1">第1步：安装 Claude Code CLI（2分钟）</h2>
+
+                    <!-- 演示：如何打开命令行 -->
+                    <div class="demo-container">
+                        <div class="demo-header">
+                            <div class="demo-title">
+                                <svg class="icon icon-xs" aria-hidden="true"><use href="../images/icons.svg#icon-spark"></use></svg>
+                                演示：如何打开命令行
+                                <span class="demo-badge">新手必看</span>
+                            </div>
+                            <div class="demo-duration">
+                                <svg class="icon icon-xs" aria-hidden="true"><use href="../images/icons.svg#icon-clock"></use></svg>
+                                30秒
+                            </div>
+                        </div>
+                        <div class="demo-content">
+                            <div class="demo-placeholder">
+                                <div class="demo-placeholder-icon">
+                                    <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 15l-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z"/></svg>
+                                </div>
+                                <div class="demo-placeholder-text">演示视频占位</div>
+                                <div class="demo-placeholder-hint">教程升级中，敬请期待视频版</div>
+                            </div>
+                        </div>
+                        <div class="demo-caption">
+                            <strong>Windows：</strong>按 Win 键，输入 "PowerShell"，回车<br>
+                            <strong>Mac：</strong>打开"启动台" → 点击"终端"（或按 Command+空格，输入"Terminal"）
+                        </div>
+                    </div>
+
+                    <p>打开命令行后，复制下面命令：</p>
+
+                    <div data-os="windows">
+                        <div class="code-block-wrapper">
+                            <div class="code-header">
+                                <span class="code-lang">powershell</span>
+                                <button class="code-copy">复制代码</button>
+                            </div>
+                            <pre><code class="language-powershell">npm install -g @anthropic-ai/claude-code
+
+# 验证安装
+claude --version</code></pre>
+                        </div>
+                    </div>
+
+                    <div data-os="mac">
+                        <div class="code-block-wrapper">
+                            <div class="code-header">
+                                <span class="code-lang">bash</span>
+                                <button class="code-copy">复制代码</button>
+                            </div>
+                            <pre><code class="language-bash">npm install -g @anthropic-ai/claude-code
+
+# 验证安装
+claude --version</code></pre>
+                        </div>
+                    </div>
+
+                    <div class="alert alert-success">
+                        <div class="alert-title">成功标志长什么样？</div>
+                        <p>你会看到类似：<code>claude-code version x.y.z</code>（目前常见是 <code>2.1.15</code>，显示别的也正常，以你实际输出为准）。</p>
+                        <div style="background: var(--bg-code); padding: 16px; border-radius: var(--radius-sm); margin-top: 12px; font-family: var(--font-mono); font-size: 13px;">
+                            PS C:\Users\YourName> <span style="color: #10b981;">claude --version</span><br>
+                            <span style="color: #a78bfa;">claude-code version 2.1.15</span><br>
+                            PS C:\Users\YourName> <span style="color: #64748b;">_</span>
+                        </div>
+                    </div>
+
+                    <div data-os="windows">
+                        <div class="section-image">
+                            <img src="../images/screenshots/win_powershell_versions.svg" alt="Windows PowerShell：版本验证成功示意" loading="lazy">
+                            <div class="section-image-caption">成功标志：能看到版本号（示意图，你的版本号可能不同）</div>
+                        </div>
+                    </div>
+
+                    <div data-os="mac">
+                        <div class="section-image">
+                            <img src="../images/screenshots/mac_terminal_versions.svg" alt="Mac Terminal：版本验证成功示意" loading="lazy">
+                            <div class="section-image-caption">成功标志：能看到版本号（示意图，你的版本号可能不同）</div>
+                        </div>
+                    </div>
+
+                    <div class="alert alert-warning">
+                        <div class="alert-title">如果你看到 “npm 找不到 / 不是内部命令”</div>
+                        <p>说明 Node.js 没装好或没加到 PATH。直接去第01章按步骤安装：<a href="chapter-01.html">第01章：环境安装</a>。</p>
+                    </div>
+
+                    <h2 id="step2">第2步：配置 API Key（5分钟）</h2>
+                    <p>Claude Code 本身是工具，真正"回答你"的是模型服务，所以需要 Key。</p>
+
+                    <div class="alert alert-danger">
+                        <div class="alert-title">重要：API Key 安全警告</div>
+                        <p><strong>API Key 就像你的银行卡密码，泄露可能导致：</strong></p>
+                        <ul style="margin-top: 12px;">
+                            <li>额度被盗用：别人可以用你的额度调用 AI 服务</li>
+                            <li>产生费用：如果是按量付费，可能产生高额账单</li>
+                            <li>账户风险：异常使用可能导致账户被封禁</li>
+                        </ul>
+                        <p style="margin-top: 12px; margin-bottom: 0;"><strong>请务必：</strong></p>
+                        <ul style="margin-bottom: 0;">
+                            <li>不要发给任何人，包括自称官方客服的人</li>
+                            <li>不要截图发群、发朋友圈</li>
+                            <li>不要上传到 GitHub 等公开平台</li>
+                            <li>发现泄露后立即到平台注销并重新生成</li>
+                        </ul>
+                    </div>
+
+                    <div class="alert alert-info">
+                        <div class="alert-title">本教程默认主线：智谱 AI（新手更稳）</div>
+                        <p>你只要完成两件事：<strong>拿到 Key</strong> → <strong>让终端认识这个 Key</strong>。</p>
+                        <p>如果你还不理解这些名词：先看 <a href="concepts.html">概念扫盲（必看）</a>，会更踏实。</p>
+                    </div>
+
+                    <h3>推荐：用“一键配置助手”（最省心）</h3>
+                    <ol>
+                        <li>去智谱开放平台注册并创建 Key：<a href="https://open.bigmodel.cn/" target="_blank" rel="noopener">https://open.bigmodel.cn/</a></li>
+                        <li>回到你的命令行，复制执行下面命令（按提示粘贴你的 Key）：</li>
+                    </ol>
+
+                    <div class="code-block-wrapper">
+                        <div class="code-header">
+                            <span class="code-lang">powershell / bash</span>
+                            <button class="code-copy">复制代码</button>
+                        </div>
+                        <pre><code class="language-bash">npx @z_ai/coding-helper</code></pre>
+                    </div>
+
+                    <div class="alert alert-warning">
+                        <div class="alert-title">如果你看到 npx/npm 报错（最常见）</div>
+                        <ul>
+                            <li><strong>提示 npm 找不到：</strong>Node.js 没装好或 PATH 没生效 → 去 <a href="chapter-01.html">第01章</a> 按步骤安装</li>
+                            <li><strong>卡住很久/网络失败：</strong>先换网络（手机热点也行）→ 再试</li>
+                            <li><strong>权限错误（EACCES/Access denied）：</strong>尽量在你自己的文件夹里操作；必要时用管理员权限打开终端</li>
+                        </ul>
+                        <p>更多症状见：<a href="troubleshooting.html">A1：故障排查（按症状）</a></p>
+                    </div>
+
+                    <h3>备选：手动临时配置（只用于“先跑通”）</h3>
+                    <p>下面方式<strong>只在当前终端窗口有效</strong>，关掉窗口可能就失效。想长期生效请看 <a href="chapter-01.html">第01章</a> 的“配置 Key”部分。</p>
+
+                    <div data-os="windows">
+                        <div class="code-block-wrapper">
+                            <div class="code-header">
+                                <span class="code-lang">PowerShell（推荐）</span>
+                                <button class="code-copy">复制代码</button>
+                            </div>
+                            <pre><code class="language-powershell"># 替换为你的智谱 Key（只在本窗口生效）
+$env:ANTHROPIC_AUTH_TOKEN="你的智谱API-Key"
+$env:ANTHROPIC_BASE_URL="https://open.bigmodel.cn/api/anthropic"</code></pre>
+                        </div>
+
+                        <div class="code-block-wrapper">
+                            <div class="code-header">
+                                <span class="code-lang">CMD（如果你打开的是“命令提示符”）</span>
+                                <button class="code-copy">复制代码</button>
+                            </div>
+                            <pre><code class="language-bash">REM 替换为你的智谱 Key（只在本窗口生效）
+set ANTHROPIC_AUTH_TOKEN=你的智谱API-Key
+set ANTHROPIC_BASE_URL=https://open.bigmodel.cn/api/anthropic</code></pre>
+                        </div>
+                    </div>
+
+                    <div data-os="mac">
+                        <div class="code-block-wrapper">
+                            <div class="code-header">
+                                <span class="code-lang">Mac Terminal</span>
+                                <button class="code-copy">复制代码</button>
+                            </div>
+                            <pre><code class="language-bash"># 替换为你的智谱 Key（只在当前终端会话生效）
+export ANTHROPIC_AUTH_TOKEN="你的智谱API-Key"
+export ANTHROPIC_BASE_URL="https://open.bigmodel.cn/api/anthropic"</code></pre>
+                        </div>
+                    </div>
+
+                    <div class="alert alert-info">
+                        <div class="alert-title">可选：我想用 DeepSeek</div>
+                        <p>DeepSeek 的接入方式可能随平台/网关不同而不同。建议先按智谱主线跑通，再看 <a href="chapter-01.html#deepseek">第01章 DeepSeek 配置</a>。</p>
+                    </div>
+
+                    <h2 id="step3">第3步：第一次成功对话（3分钟）</h2>
+
+                    <div class="alert alert-info">
+                        <div class="alert-title">什么是"工作目录"？</div>
+                        <p>工作目录就是<strong>你让 Claude Code 在哪个文件夹里干活</strong>。</p>
+                        <p>建议用你自己的文件夹（比如：桌面/文档/用户目录）新建一个空文件夹专门练习，不要在系统目录里折腾。</p>
+                    </div>
+
+                    <h3>Windows 用户：复制下面命令执行</h3>
+                    <p>这会在你的用户目录创建一个 <code>claude-practice</code> 文件夹并进入它（不需要 D 盘）。</p>
+
+                    <div data-os="windows">
+                        <div class="code-block-wrapper">
+                            <div class="code-header">
+                                <span class="code-lang">PowerShell（推荐）</span>
+                                <button class="code-copy">复制代码</button>
+                            </div>
+                            <pre><code class="language-powershell"># 创建练习文件夹（如果已存在会跳过）
+mkdir "$env:USERPROFILE\\claude-practice" -ErrorAction SilentlyContinue
+
+# 进入文件夹
+cd "$env:USERPROFILE\\claude-practice"
+
+# 启动 Claude Code
+claude</code></pre>
+                        </div>
+
+                        <div class="code-block-wrapper">
+                            <div class="code-header">
+                                <span class="code-lang">CMD（如果你打开的是“命令提示符”）</span>
+                                <button class="code-copy">复制代码</button>
+                            </div>
+                            <pre><code class="language-bash">mkdir "%USERPROFILE%\\claude-practice" 2&gt;nul
+cd /d "%USERPROFILE%\\claude-practice"
+claude</code></pre>
+                        </div>
+                    </div>
+
+                    <h3>Mac 用户：复制下面全部命令一起执行</h3>
+                    <p>这会帮你在你的用户目录下创建一个"claude-practice"文件夹：</p>
+
+                    <div data-os="mac">
+                        <div class="code-block-wrapper">
+                            <div class="code-header">
+                                <span class="code-lang">bash</span>
+                                <button class="code-copy">复制代码</button>
+                            </div>
+                            <pre><code class="language-bash"># 创建练习文件夹（如果已存在会跳过）
+mkdir -p ~/claude-practice
+
+# 进入这个文件夹
+cd ~/claude-practice
+
+# 确认当前位置
+pwd
+
+# 启动 Claude Code
+claude</code></pre>
+                        </div>
+                    </div>
+
+                    <div class="alert alert-warning">
+                        <div class="alert-title">第一次用命令行？</div>
+                        <p><strong>怎么复制粘贴：</strong></p>
+                        <ul>
+                            <li><strong>Windows PowerShell：</strong>复制代码后，在窗口里<strong>右键点击</strong>就会自动粘贴</li>
+                            <li><strong>Mac Terminal：</strong>复制代码后，按 <code>Command + V</code> 粘贴</li>
+                        </ul>
+                        <p>粘贴后按 <strong>回车键（Enter）</strong> 执行命令。</p>
+                    </div>
+
+                    <p>然后在 Claude 里发一句话测试：</p>
+                    <div style="background: var(--bg-card); padding: 12px 14px; border-radius: var(--radius-md); border: 1px solid var(--border-color); margin: 12px 0;">
+                        <code>你好，回复“已成功连接”</code>
+                    </div>
+
+                    <div class="section-image">
+                        <img src="../images/screenshots/claude_connected_glm.svg" alt="Claude Code：成功连接智谱（GLM）示意" loading="lazy">
+                        <div class="section-image-caption">成功标志：能连接到 GLM，并收到明确回复（示意图）</div>
+                    </div>
+
+                    <div class="alert alert-success">
+                        <div class="alert-title">成功标志</div>
+                        <p>你能收到明确、可读的回复，并且不会出现“无法连接/鉴权失败”。</p>
+                    </div>
+
+                    <div class="alert alert-warning">
+                        <div class="alert-title">如果失败：你只需要做一件事</div>
+                        <p>打开 <a href="troubleshooting.html">故障排查（按症状）</a>，用“我看到什么报错”来查。</p>
+                    </div>
+
+                    <button class="btn btn-secondary mark-complete-btn" style="margin: 32px 0 24px;">
+                        <svg class="icon icon-sm" aria-hidden="true"><use href="../images/icons.svg#icon-circle"></use></svg>
+                        标记为已完成（保存进度）
+                    </button>
+
+                    <!-- 自测题 -->
+                    <div class="self-quiz">
+                        <div class="self-quiz-header">
+                            <svg class="icon icon-sm" aria-hidden="true"><use href="../images/icons.svg#icon-spark"></use></svg>
+                            <span class="self-quiz-title">本章小测</span>
+                            <span class="self-quiz-hint">检验一下你学会了没</span>
+                        </div>
+
+                        <div class="self-quiz-question" data-correct="0">
+                            <div class="self-quiz-question-text">1. Claude Code CLI 是必须安装的吗？</div>
+                            <div class="self-quiz-options">
+                                <div class="self-quiz-option" data-correct="true" data-feedback="正确！Claude Code CLI 是必须安装的核心工具。">
+                                    <span class="self-quiz-option-letter">A</span>
+                                    <span>是的，没有它就无法使用 Claude Code</span>
+                                </div>
+                                <div class="self-quiz-option" data-correct="false" data-feedback="错误。Claude Code CLI 是必须安装的。">
+                                    <span class="self-quiz-option-letter">B</span>
+                                    <span>不是，它是可选的</span>
+                                </div>
+                            </div>
+                            <div class="self-quiz-feedback"></div>
+                        </div>
+
+                        <div class="self-quiz-question" data-correct="1">
+                            <div class="self-quiz-question-text">2. API Key 泄露会有什么后果？</div>
+                            <div class="self-quiz-options">
+                                <div class="self-quiz-option" data-correct="false" data-feedback="不完全正确。泄露的后果可能更严重。">
+                                    <span class="self-quiz-option-letter">A</span>
+                                    <span>只是会有别人用我的额度</span>
+                                </div>
+                                <div class="self-quiz-option" data-correct="true" data-feedback="正确！API Key泄露可能导致额度被盗用、产生高额费用、账户被封禁等严重后果。">
+                                    <span class="self-quiz-option-letter">B</span>
+                                    <span>额度被盗用、产生费用、账户被封禁等</span>
+                                </div>
+                            </div>
+                            <div class="self-quiz-feedback"></div>
+                        </div>
+
+                        <div class="self-quiz-question" data-correct="0">
+                            <div class="self-quiz-question-text">3. 配置 API Key 后，如何测试是否成功？</div>
+                            <div class="self-quiz-options">
+                                <div class="self-quiz-option" data-correct="true" data-feedback="正确！发送一条简单消息测试是否能收到回复。">
+                                    <span class="self-quiz-option-letter">A</span>
+                                    <span>在 Claude Code 里发送一条消息，看能否收到回复</span>
+                                </div>
+                                <div class="self-quiz-option" data-correct="false" data-feedback="不够。需要实际发送消息测试。">
+                                    <span class="self-quiz-option-letter">B</span>
+                                    <span>只要配置好就肯定成功了</span>
+                                </div>
+                            </div>
+                            <div class="self-quiz-feedback"></div>
+                        </div>
+
+                        <div class="self-quiz-result">
+                            <div class="self-quiz-result-score">0/3</div>
+                            <div class="self-quiz-result-text">点击选项开始答题</div>
+                        </div>
+                    </div>
+
+                    <nav class="chapter-nav">
+                        <a href="../index.html" class="chapter-nav-card">
+                            <svg class="icon" aria-hidden="true"><use href="../images/icons.svg#icon-home"></use></svg>
+                            <div class="content">
+                                <div class="label">返回</div>
+                                <div class="title">课程首页</div>
+                            </div>
+                        </a>
+                        <a href="chapter-01.html" class="chapter-nav-card next">
+                            <svg class="icon" aria-hidden="true"><use href="../images/icons.svg#icon-arrow-right"></use></svg>
+                            <div class="content">
+                                <div class="label">下一步</div>
+                                <div class="title">第01章：环境安装与第一次成功</div>
+                            </div>
+                        </a>
+                    </nav>
+                </article>
+            </div>
+
+            <footer class="footer">
+                <div class="footer-copyright">&copy; 2025 Claude Code 教程网站</div>
+            </footer>
+        </main>
+
+        <div class="overlay" id="overlay"></div>
+
+        <!-- 浮动帮助按钮 -->
+        <a href="troubleshooting.html" class="floating-help-btn" id="floatingHelpBtn" title="遇到问题？点击查看故障排查">
+            <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 17h-2v-2h2v2zm2.07-7.75l-.9.92C13.45 12.9 13 13.5 13 15h-2v-.5c0-1.1.45-2.1 1.17-2.83l1.24-1.26c.37-.36.59-.86.59-1.41 0-1.1-.9-2-2-2s-2 .9-2 2H8c0-2.21 1.79-4 4-4s4 1.79 4 4c0 .88-.36 1.68-.93 2.25z"/></svg>
+            <span class="help-tooltip">遇到问题？点这里</span>
+        </a>
+
+        <!-- 字体大小调节 -->
+        <div class="font-size-controls">
+            <button id="fontDecrease" title="减小字体">A-</button>
+            <span class="font-size-display" id="fontSizeDisplay">100%</span>
+            <button id="fontIncrease" title="增大字体">A+</button>
+        </div>
+    </div>
+
+    <script src="../js/main.js"></script>
+</body>
+</html>

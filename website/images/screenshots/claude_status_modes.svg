@@ -1,0 +1,21 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="560" viewBox="0 0 1200 560">
+  <defs>
+    <linearGradient id="bg" x1="0" x2="1" y1="0" y2="1">
+      <stop offset="0" stop-color="#0b1220"/>
+      <stop offset="1" stop-color="#111827"/>
+    </linearGradient>
+  </defs>
+  <rect x="0" y="0" width="1200" height="560" rx="18" fill="url(#bg)"/>
+  <rect x="22" y="22" width="1156" height="516" rx="14" fill="#0f172a" stroke="#334155"/>
+  <g font-family="Consolas, Monaco, 'Courier New', monospace" font-size="22" fill="#e2e8f0">
+    <text x="48" y="72" fill="#94a3b8">在 Claude Code 里输入 /status（示意）</text>
+    <text x="48" y="120"><tspan fill="#60a5fa">&gt;</tspan> /status</text>
+    <text x="48" y="168"><tspan fill="#93c5fd">Mode</tspan>: <tspan fill="#a7f3d0">read-only</tspan>    <tspan fill="#93c5fd">Workspace</tspan>: C:\Users\你的用户名\claude-practice</text>
+    <text x="48" y="204" fill="#94a3b8">提示：只读模式适合理解项目/查看结构，不会改你的文件。</text>
+    <text x="48" y="256" fill="#94a3b8">切换编辑（示意）：</text>
+    <text x="48" y="304"><tspan fill="#60a5fa">&gt;</tspan> /edit</text>
+    <text x="48" y="352"><tspan fill="#93c5fd">Mode</tspan>: <tspan fill="#a7f3d0">edit</tspan>        <tspan fill="#93c5fd">Safety</tspan>: confirm-before-write</text>
+    <text x="48" y="404" fill="#fbbf24">危险模式（dangerous）会有更高风险：只在你完全理解后再用。</text>
+    <text x="48" y="452" fill="#94a3b8">如果你不确定当前模式：永远先 /status。</text>
+  </g>
+</svg>
