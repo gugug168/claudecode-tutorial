@@ -129,7 +129,6 @@
                             <tr><td>启动（指定目录）</td><td><code>claude /path/to/dir</code></td></tr>
                             <tr><td>只读模式</td><td><code>claude --read-only</code></td></tr>
                             <tr><td>危险模式</td><td><code>claude --dangerous</code></td></tr>
-                            <tr><td>Codex 模式</td><td><code>claude --codex</code></td></tr>
                             <tr><td>系统级权限</td><td><code>claude --allow-system-wide</code></td></tr>
                         </tbody>
                     </table>
@@ -150,12 +149,12 @@
                             <tr><td>对话</td><td><code>/history</code></td><td>查看历史记录</td></tr>
                             <tr><td>对话</td><td><code>/exit</code></td><td>退出 Claude Code</td></tr>
                             <tr><td>模式</td><td><code>/plan</code></td><td>进入 Plan 模式</td></tr>
-                            <tr><td>模式</td><td><code>/edit</code></td><td>进入编辑模式</td></tr>
-                            <tr><td>模式</td><td><code>/read-only</code></td><td>切换只读模式</td></tr>
-                            <tr><td>模式</td><td><code>/dangerous</code></td><td>切换危险模式</td></tr>
+                            <tr><td>模式</td><td><code>Shift+Tab</code></td><td>切换权限模式（快捷键）</td></tr>
                             <tr><td>帮助</td><td><code>/help</code></td><td>显示帮助信息</td></tr>
                             <tr><td>帮助</td><td><code>/status</code></td><td>查看当前状态</td></tr>
                             <tr><td>帮助</td><td><code>/config</code></td><td>查看配置信息</td></tr>
+                            <tr><td>帮助</td><td><code>/permissions</code></td><td>查看/更新权限设置</td></tr>
+                            <tr><td>帮助</td><td><code>/doctor</code></td><td>检查安装健康状态</td></tr>
                         </tbody>
                     </table>
 
@@ -314,7 +313,7 @@
                             </tr>
                             <tr>
                                 <td>不能修改文件</td>
-                                <td>检查是否在只读模式，使用 <code>/edit</code> 退出</td>
+                                <td>检查是否在只读模式，重新启动时不要使用 <code>--read-only</code> 参数</td>
                             </tr>
                             <tr>
                                 <td>不知道当前模式</td>

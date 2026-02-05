@@ -173,16 +173,17 @@ claude ~/projects/my-project</code></pre>
                                 <td><code>--dangerous</code></td>
                                 <td>危险模式启动</td>
                             </tr>
-                            <tr>
-                                <td><code>--codex</code></td>
-                                <td>Codex 模式启动（进阶）</td>
-                            </tr>
                         </tbody>
                     </table>
 
                     <h2 id="modes">二、三种工作模式</h2>
 
                     <p>Claude Code 有三种工作模式，了解它们的区别非常重要：</p>
+
+                    <div class="alert alert-info">
+                        <div class="alert-title">💡 新手注意</div>
+                        <p>三种模式实际上是指<strong>权限确认模式</strong>，它们决定了 Claude 执行操作时是否需要你的确认。</p>
+                    </div>
 
                     <h3>2.1 普通模式（默认）</h3>
 
@@ -265,11 +266,409 @@ claude ~/projects/my-project</code></pre>
                         <p>危险模式下，Claude 可以直接删除文件，请务必谨慎！</p>
                     </div>
 
-                    <h2 id="permissions">三、权限控制</h2>
+                    <h2 id="permission-modes">三、权限模式选择指南</h2>
+
+                    <p>除了上面的三种工作模式，Claude Code 还有三种<strong>权限确认模式</strong>，它们决定了 Claude 执行操作时是否需要你确认：</p>
+
+                    <table style="margin: 24px 0;">
+                        <thead>
+                            <tr>
+                                <th>模式</th>
+                                <th>读操作</th>
+                                <th>写操作</th>
+                                <th>适用场景</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td><strong>Normal</strong></td>
+                                <td>需确认</td>
+                                <td>需确认</td>
+                                <td>新手、不熟悉代码时</td>
+                            </tr>
+                            <tr>
+                                <td><strong>Auto-accept</strong></td>
+                                <td>自动</td>
+                                <td>需确认</td>
+                                <td>日常开发、平衡选择</td>
+                            </tr>
+                            <tr>
+                                <td><strong>Dangerous</strong></td>
+                                <td>自动</td>
+                                <td>自动</td>
+                                <td>信任的场景、批量操作</td>
+                            </tr>
+                        </tbody>
+                    </table>
+
+                    <h3>3.1 Normal 模式（推荐新手）</h3>
+
+                    <p>这是默认模式，所有操作都需要你确认后才会执行。</p>
+
+                    <div class="code-block-wrapper">
+                        <div class="code-header">
+                            <span class="code-lang">bash</span>
+                            <button class="code-copy">复制代码</button>
+                        </div>
+                        <pre><code class="language-bash"># 默认就是 Normal 模式
+claude
+
+# 或者显式指定
+claude --permission-mode normal</code></pre>
+                    </div>
+
+                    <div class="alert alert-success">
+                        <p><strong>✓ 优点：</strong>最安全，每一步都能看到 Claude 要做什么</p>
+                        <p><strong>✗ 缺点：</strong>需要频繁确认，操作较多时比较繁琐</p>
+                        <p><strong>适用：</strong>新手阶段、不熟悉的代码库、重要项目</p>
+                    </div>
+
+                    <h3>3.2 Auto-accept 模式（推荐日常）</h3>
+
+                    <p>读操作自动通过，写操作仍需确认。这是日常开发的平衡选择。</p>
+
+                    <div class="code-block-wrapper">
+                        <div class="code-header">
+                            <span class="code-lang">bash</span>
+                            <button class="code-copy">复制代码</button>
+                        </div>
+                        <pre><code class="language-bash">claude --permission-mode auto-accept</code></pre>
+                    </div>
+
+                    <div class="alert alert-info">
+                        <p><strong>✓ 优点：</strong>减少确认次数，同时保护写操作安全</p>
+                        <p><strong>✗ 缺点：</strong>可能错过一些读操作的细节</p>
+                        <p><strong>适用：</strong>日常开发、熟悉的项目</p>
+                    </div>
+
+                    <h3>3.3 Dangerous 模式（谨慎使用）</h3>
+
+                    <p>所有操作自动执行，无需确认。与 <code>--dangerous</code> 参数配合使用。</p>
+
+                    <div class="code-block-wrapper">
+                        <div class="code-header">
+                            <span class="code-lang">bash</span>
+                            <button class="code-copy">复制代码</button>
+                        </div>
+                        <pre><code class="language-bash">claude --dangerous --permission-mode dangerous</code></pre>
+                    </div>
+
+                    <div class="alert alert-warning">
+                        <p><strong>✓ 优点：</strong>最高效，适合批量操作</p>
+                        <p><strong>✗ 缺点：</strong>无保护，误操作风险高</p>
+                        <p><strong>适用：</strong>有 Git 备份、批量重命名、大规模重构</p>
+                    </div>
+
+                    <h3>3.4 配置文件设置</h3>
+
+                    <p>你可以在配置文件中设置默认的权限模式：</p>
+
+                    <div class="code-block-wrapper">
+                        <div class="code-header">
+                            <span class="code-lang">json</span>
+                            <button class="code-copy">复制代码</button>
+                        </div>
+                        <pre><code class="language-json">// ~/.claude/settings.json 或项目的 .claude/settings.json
+{
+  "permissionMode": "auto-accept"
+}</code></pre>
+                    </div>
+
+                    <div class="alert alert-info">
+                        <div class="alert-title">📌 场景选择建议</div>
+                        <p><strong>刚接触 Claude Code：</strong>使用 Normal 模式，熟悉每个操作</p>
+                        <p><strong>日常开发工作：</strong>使用 Auto-accept 模式，提高效率</p>
+                        <p><strong>批量操作时：</strong>先用 Git 提交，再用 Dangerous 模式</p>
+                    </div>
+
+                    <h2 id="plan-mode">四、Plan 模式与安全开发</h2>
+
+                    <div class="alert alert-success">
+                        <div class="alert-title">🛡️ Plan 模式是 Claude Code 的核心安全功能</div>
+                        <p>它让你在 Claude 执行任何操作之前，先看到完整的计划，避免误操作带来的损失。</p>
+                    </div>
+
+                    <h3>4.1 什么是 Plan 模式？</h3>
+
+                    <p>Plan 模式是 Claude Code 的一种特殊工作状态。在这种模式下：</p>
+
+                    <ul>
+                        <li><strong>Claude 只分析，不执行</strong> —— 它会阅读代码、理解问题、制定方案</li>
+                        <li><strong>展示完整计划</strong> —— 告诉你将要修改哪些文件、做什么改动</li>
+                        <li><strong>等待你的确认</strong> —— 只有你同意后，才会退出 Plan 模式开始执行</li>
+                    </ul>
+
+                    <div style="background: var(--bg-card); padding: 20px; border-radius: var(--radius-md); border: 1px solid var(--border-color); margin: 20px 0;">
+                        <p><strong>类比：</strong>就像装修房子前，设计师先给你出设计图，你满意了才开工，而不是直接动工拆墙。</p>
+                    </div>
+
+                    <h3>4.2 如何进入 Plan 模式？</h3>
+
+                    <p>有两种方式进入 Plan 模式：</p>
+
+                    <h4>方式1：启动时指定</h4>
+
+                    <div class="code-block-wrapper">
+                        <div class="code-header">
+                            <span class="code-lang">bash</span>
+                            <button class="code-copy">复制代码</button>
+                        </div>
+                        <pre><code class="language-bash"># 启动时直接进入 Plan 模式
+claude --permission-mode plan</code></pre>
+                    </div>
+
+                    <h4>方式2：会话中切换</h4>
+
+                    <div class="code-block-wrapper">
+                        <div class="code-header">
+                            <span class="code-lang">bash</span>
+                            <button class="code-copy">复制代码</button>
+                        </div>
+                        <pre><code class="language-bash"># 在 Claude Code 会话中
+/plan</code></pre>
+                    </div>
+
+                    <h4>方式3：快捷键切换（最方便）</h4>
+
+                    <div class="code-block-wrapper">
+                        <div class="code-header">
+                            <span class="code-lang">快捷键</span>
+                            <button class="code-copy">复制代码</button>
+                        </div>
+                        <pre><code class="language-bash"># 在 Claude Code 界面中
+Shift + Tab</code></pre>
+                    </div>
+
+                    <div class="alert alert-info">
+                        <p><strong>提示：</strong>按 <code>Shift + Tab</code> 可以快速在 Plan 模式和普通模式之间切换。</p>
+                    </div>
+
+                    <h3>4.3 Plan 模式工作流程</h3>
+
+                    <div style="background: var(--bg-card); padding: 24px; border-radius: var(--radius-md); border: 1px solid var(--border-color); margin: 24px 0; font-family: monospace; white-space: pre;">
+1. 进入 Plan 模式
+   输入 /plan 或按 Shift+Tab
+
+2. 描述你的需求
+   例如："帮我重构这个登录模块"
+
+3. Claude 分析并制定计划
+   - 阅读相关文件
+   - 理解代码结构
+   - 制定改动方案
+
+4. 查看计划内容
+   - 会修改哪些文件
+   - 每个文件做什么改动
+   - 改动的理由
+
+5. 确认或调整
+   - 满意 → 确认执行
+   - 有疑问 → 提出来讨论
+   - 不满意 → 修改需求
+
+6. 退出 Plan 模式，开始执行
+                    </div>
+
+                    <h3>4.4 何时必须用 Plan 模式？</h3>
+
+                    <table style="margin: 24px 0;">
+                        <thead>
+                            <tr>
+                                <th>场景</th>
+                                <th>为什么用 Plan 模式</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td><strong>代码重构</strong></td>
+                                <td>涉及多个文件，需要看清整体改动</td>
+                            </tr>
+                            <tr>
+                                <td><strong>删除操作</strong></td>
+                                <td>避免误删重要文件</td>
+                            </tr>
+                            <tr>
+                                <td><strong>架构调整</strong></td>
+                                <td>需要理解影响范围</td>
+                            </tr>
+                            <tr>
+                                <td><strong>不熟悉的代码</strong></td>
+                                <td>先了解再动手，避免破坏</td>
+                            </tr>
+                            <tr>
+                                <td><strong>多人协作项目</strong></td>
+                                <td>确保改动符合预期</td>
+                            </tr>
+                        </tbody>
+                    </table>
+
+                    <h3>4.5 Plan 输出解读</h3>
+
+                    <p>当 Claude 在 Plan 模式下给出计划时，你会看到类似这样的输出：</p>
+
+                    <div style="background: var(--bg-card); padding: 16px; border-radius: var(--radius-md); border: 1px dashed var(--border-color); margin: 16px 0;">
+                        <p><strong>计划概述：</strong></p>
+                        <ul>
+                            <li>将要修改 <strong>3 个文件</strong></li>
+                            <li>主要改动：提取登录逻辑为独立模块</li>
+                        </ul>
+                        <p><strong>文件清单：</strong></p>
+                        <ol>
+                            <li><code>src/auth/login.js</code> - 重构登录函数</li>
+                            <li><code>src/utils/auth.js</code> - 新建认证工具模块</li>
+                            <li><code>src/components/Login.js</code> - 更新调用方式</li>
+                        </ol>
+                    </div>
+
+                    <div class="alert alert-warning">
+                        <div class="alert-title">🔍 看计划时要检查</div>
+                        <ul>
+                            <li>文件数量对不对？（是否多改或少改）</li>
+                            <li>改动方向是否符合预期？</li>
+                            <li>有没有遗漏的文件？</li>
+                        </ul>
+                    </div>
+
+                    <h2 id="session-management">五、会话管理与上下文延续</h2>
+
+                    <div class="alert alert-info">
+                        <div class="alert-title">📌 新手常见问题</div>
+                        <p><strong>问题：</strong>关闭对话后，下次还要重新描述背景，很麻烦？</p>
+                        <p><strong>解决：</strong>Claude Code 有完整的会话管理功能，可以恢复之前的对话！</p>
+                    </div>
+
+                    <h3>5.1 问题：工作中断后如何继续？</h3>
+
+                    <p>想象这样一个场景：</p>
+
+                    <div style="background: var(--bg-card); padding: 16px; border-radius: var(--radius-md); border: 1px solid var(--border-color); margin: 16px 0;">
+                        <p>你正在让 Claude 帮你写一个功能，聊了半天，Claude 已经理解了你的项目结构和需求。</p>
+                        <p>突然：<strong>要开个会 / 吃个饭 / 电脑关机</strong></p>
+                        <p>问题：下次打开，难道要重新从头讲一遍？</p>
+                    </div>
+
+                    <p><strong>答案是：不需要！</strong></p>
+
+                    <h3>5.2 自动恢复上次会话</h3>
+
+                    <p>Claude Code 会自动保存你的会话，下次启动时可以恢复：</p>
+
+                    <div class="code-block-wrapper">
+                        <div class="code-header">
+                            <span class="code-lang">bash</span>
+                            <button class="code-copy">复制代码</button>
+                        </div>
+                        <pre><code class="language-bash"># 自动恢复上次的会话
+claude --continue</code></pre>
+                    </div>
+
+                    <div class="alert alert-success">
+                        <p>✅ <code>--continue</code> 会自动恢复<strong>最近一次</strong>的会话</p>
+                        <p>✅ 包括之前的对话历史和上下文</p>
+                        <p>✅ Claude 记得你们聊了什么</p>
+                    </div>
+
+                    <h3>5.3 选择历史会话恢复</h3>
+
+                    <p>如果你想恢复更早的会话：</p>
+
+                    <div class="code-block-wrapper">
+                        <div class="code-header">
+                            <span class="code-lang">bash</span>
+                            <button class="code-copy">复制代码</button>
+                        </div>
+                        <pre><code class="language-bash"># 查看并选择历史会话
+claude --resume</code></pre>
+                    </div>
+
+                    <p>执行后会显示会话列表，你可以选择要恢复哪一个：</p>
+
+                    <div style="background: var(--bg-card); padding: 16px; border-radius: var(--radius-md); border: 1px solid var(--border-color); margin: 16px 0;">
+                        <p><strong>历史会话：</strong></p>
+                        <ol>
+                            <li>[2小时前] 重构登录模块</li>
+                            <li>[昨天] 添加用户注册功能 ← 当前</li>
+                            <li>[3天前] 修复样式问题</li>
+                        </ol>
+                        <p>输入数字选择要恢复的会话...</p>
+                    </div>
+
+                    <h3>5.4 会话内使用 /resume 命令</h3>
+
+                    <p>在 Claude Code 会话中，你也可以使用斜杠命令：</p>
+
+                    <div class="code-block-wrapper">
+                        <div class="code-header">
+                            <span class="code-lang">bash</span>
+                            <button class="code-copy">复制代码</button>
+                        </div>
+                        <pre><code class="language-bash"># 在会话内恢复之前的对话
+/resume</code></pre>
+                    </div>
+
+                    <h3>5.5 实战示例：中断后继续工作</h3>
+
+                    <div class="alert alert-info">
+                        <div class="alert-title">场景演示</div>
+                        <p><strong>上午：</strong></p>
+                        <div class="code-block-wrapper">
+                            <div class="code-header">
+                                <span class="code-lang">bash</span>
+                            </div>
+                            <pre><code class="language-bash">claude
+> 帮我添加一个用户搜索功能，要支持按名字和邮箱搜索
+（Claude 理解需求，开始写代码...）
+> 等一下，我要去开个会</code></pre>
+                        </div>
+                        <p><strong>直接关闭终端，不用做任何操作</strong></p>
+
+                        <p><strong>下午回来：</strong></p>
+                        <div class="code-block-wrapper">
+                            <div class="code-header">
+                                <span class="code-lang">bash</span>
+                            </div>
+                            <pre><code class="language-bash">claude --continue
+（会话自动恢复！）
+> 好的，我们继续，刚才说到哪了？
+> 上午在写用户搜索功能，继续完成</code></pre>
+                        </div>
+                    </div>
+
+                    <h3>5.6 会话管理最佳实践</h3>
+
+                    <table style="margin: 24px 0;">
+                        <thead>
+                            <tr>
+                                <th>做法</th>
+                                <th>好处</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>重要节点先 Git 提交</td>
+                                <td>代码有版本保障，会话丢失也不怕</td>
+                            </tr>
+                            <tr>
+                                <td>每天用 <code>--continue</code> 继续</td>
+                                <td>保持工作连续性</td>
+                            </tr>
+                            <tr>
+                                <td>项目切换用 <code>--resume</code></td>
+                                <td>在不同项目间快速切换</td>
+                            </tr>
+                            <tr>
+                                <td>描述清晰的需求</td>
+                                <td>让 Claude 更好理解上下文</td>
+                            </tr>
+                        </tbody>
+                    </table>
+
+                    <h2 id="permissions">八、权限控制</h2>
 
                     <p>权限控制决定了 Claude Code 能访问哪些文件。</p>
 
-                    <h3>3.1 文件夹权限（默认/推荐）</h3>
+                    <h3>6.1 文件夹权限（默认/推荐）</h3>
 
                     <div class="code-block-wrapper">
                         <div class="code-header">
@@ -285,7 +684,7 @@ claude ~/projects/my-project</code></pre>
                         <p><strong>这是最安全的用法！推荐日常使用</strong></p>
                     </div>
 
-                    <h3>3.2 系统级权限（谨慎使用）</h3>
+                    <h3>6.2 系统级权限（谨慎使用）</h3>
 
                     <div class="code-block-wrapper">
                         <div class="code-header">
@@ -301,7 +700,7 @@ claude ~/projects/my-project</code></pre>
                         <p><strong>适用场景：</strong>跨项目操作、系统级文件整理</p>
                     </div>
 
-                    <h3>3.3 只读权限（安全学习）</h3>
+                    <h3>6.3 只读权限（安全学习）</h3>
 
                     <div class="code-block-wrapper">
                         <div class="code-header">
@@ -317,11 +716,58 @@ claude ~/projects/my-project</code></pre>
                         <p><strong>适用场景：</strong>学习理解代码、代码审查、查看项目结构</p>
                     </div>
 
-                    <h2 id="slash-commands">四、斜杠命令（/）</h2>
+                    <h2 id="keyboard-shortcuts">六、快捷键</h2>
+
+                    <p>Claude Code 支持多种快捷键，让你更高效地操作：</p>
+
+                    <table style="margin: 24px 0;">
+                        <thead>
+                            <tr>
+                                <th>快捷键</th>
+                                <th>功能</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td><code>Shift + Tab</code></td>
+                                <td>切换权限模式（Plan/普通）</td>
+                            </tr>
+                            <tr>
+                                <td><code>Ctrl + C</code></td>
+                                <td>退出 Claude Code</td>
+                            </tr>
+                            <tr>
+                                <td><code>Ctrl + D</code></td>
+                                <td>退出 Claude Code</td>
+                            </tr>
+                            <tr>
+                                <td><code>Ctrl + L</code></td>
+                                <td>清除屏幕</td>
+                            </tr>
+                            <tr>
+                                <td><code>Esc + Esc</code></td>
+                                <td>编辑上一条消息</td>
+                            </tr>
+                            <tr>
+                                <td><code>↑ / ↓</code></td>
+                                <td>浏览历史命令</td>
+                            </tr>
+                        </tbody>
+                    </table>
+
+                    <div class="alert alert-success">
+                        <div class="alert-title">💡 最常用快捷键</div>
+                        <ul>
+                            <li><strong>Shift + Tab</strong> - 快速进入 Plan 模式，查看执行计划</li>
+                            <li><strong>Ctrl + D</strong> - 快速退出（比 Ctrl+C 更常用）</li>
+                        </ul>
+                    </div>
+
+                    <h2 id="slash-commands">七、斜杠命令（/）</h2>
 
                     <p>斜杠命令是 Claude Code 的快捷命令，输入后按回车执行。</p>
 
-                    <h3>4.1 对话管理</h3>
+                    <h3>7.1 对话管理</h3>
 
                     <table style="margin: 24px 0;">
                         <thead>
@@ -355,7 +801,12 @@ claude ~/projects/my-project</code></pre>
                         </tbody>
                     </table>
 
-                    <h3>4.2 模式切换</h3>
+                    <h3>7.2 模式切换</h3>
+
+                    <div class="alert alert-warning">
+                        <div class="alert-title">⚠️ 注意</div>
+                        <p>模式切换主要通过<strong>启动参数</strong>或<strong>快捷键</strong>来实现，而不是斜杠命令。</p>
+                    </div>
 
                     <table style="margin: 24px 0;">
                         <thead>
@@ -372,24 +823,14 @@ claude ~/projects/my-project</code></pre>
                                 <td>只分析不执行</td>
                             </tr>
                             <tr>
-                                <td><code>/edit</code></td>
-                                <td>进入编辑模式</td>
-                                <td>可以修改文件</td>
-                            </tr>
-                            <tr>
-                                <td><code>/read-only</code></td>
-                                <td>切换只读模式</td>
-                                <td>不能修改文件</td>
-                            </tr>
-                            <tr>
-                                <td><code>/dangerous</code></td>
-                                <td>切换危险模式</td>
-                                <td>允许危险操作</td>
+                                <td><code>Shift + Tab</code></td>
+                                <td>切换权限模式</td>
+                                <td>在 Plan/普通模式间快速切换</td>
                             </tr>
                         </tbody>
                     </table>
 
-                    <h3>4.3 帮助与状态</h3>
+                    <h3>7.3 帮助与状态</h3>
 
                     <table style="margin: 24px 0;">
                         <thead>
@@ -411,10 +852,27 @@ claude ~/projects/my-project</code></pre>
                                 <td><code>/config</code></td>
                                 <td>查看配置信息</td>
                             </tr>
+                            <tr>
+                                <td><code>/permissions</code></td>
+                                <td>查看/更新权限设置</td>
+                            </tr>
+                            <tr>
+                                <td><code>/doctor</code></td>
+                                <td>检查安装健康状态</td>
+                            </tr>
                         </tbody>
                     </table>
 
-                    <h2 id="decision-tree">五、权限决策树</h2>
+                    <div class="alert alert-info">
+                        <div class="alert-title">💡 新手常用命令</div>
+                        <ul>
+                            <li><code>/status</code> - 不确定当前模式时使用</li>
+                            <li><code>/config</code> - 查看当前配置</li>
+                            <li><code>/doctor</code> - 遇到问题时检查安装状态</li>
+                        </ul>
+                    </div>
+
+ <h2 id="decision-tree">九、权限决策树</h2>
 
                     <div style="background: var(--bg-card); padding: 24px; border-radius: var(--radius-md); border: 1px solid var(--border-color); margin: 24px 0; font-family: monospace; white-space: pre;">
 你要做什么？
@@ -436,7 +894,7 @@ claude ~/projects/my-project</code></pre>
    权限很大，谨慎使用
                     </div>
 
-                    <h2 id="scenarios">六、实用场景</h2>
+                    <h2 id="scenarios">十、实用场景</h2>
 
                     <h3>场景1：安全查看项目</h3>
 
@@ -533,39 +991,11 @@ claude ~/projects/my-project</code></pre>
 
                     <h3>场景6：中途切换模式</h3>
 
-                    <p>你已经启动了 Claude，但想换模式：</p>
-
-                    <table style="margin: 16px 0;">
-                        <thead>
-                            <tr>
-                                <th>当前状态</th>
-                                <th>想切换到</th>
-                                <th>命令</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            <tr>
-                                <td>普通模式</td>
-                                <td>只读模式</td>
-                                <td><code>/read-only</code></td>
-                            </tr>
-                            <tr>
-                                <td>普通模式</td>
-                                <td>危险模式</td>
-                                <td><code>/dangerous</code></td>
-                            </tr>
-                            <tr>
-                                <td>只读/危险</td>
-                                <td>普通模式</td>
-                                <td><code>/edit</code></td>
-                            </tr>
-                            <tr>
-                                <td>任意模式</td>
-                                <td>Plan 模式</td>
-                                <td><code>/plan</code></td>
-                            </tr>
-                        </tbody>
-                    </table>
+                    <div class="alert alert-info">
+                        <div class="alert-title">💡 提示</div>
+                        <p>模式切换主要通过<strong>启动参数</strong>或<strong>快捷键 Shift+Tab</strong>来实现。</p>
+                        <p>如果需要切换权限模式，建议<strong>退出并重新启动</strong> Claude Code，使用相应的启动参数。</p>
+                    </div>
 
                     <h2 id="quick-reference">命令速查表</h2>
 
@@ -581,7 +1011,6 @@ claude ~/projects/my-project</code></pre>
                             <tr><td>启动（指定目录）</td><td><code>claude /path/to/dir</code></td></tr>
                             <tr><td>只读模式</td><td><code>claude --read-only</code></td></tr>
                             <tr><td>危险模式</td><td><code>claude --dangerous</code></td></tr>
-                            <tr><td>Codex 模式</td><td><code>claude --codex</code></td></tr>
                             <tr><td>新建对话</td><td><code>/new</code></td></tr>
                             <tr><td>Plan 模式</td><td><code>/plan</code></td></tr>
                             <tr><td>清空对话</td><td><code>/clear</code></td></tr>

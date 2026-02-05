@@ -77,9 +77,10 @@
                     <div class="alert alert-info">
                         <div class="alert-title">怎么用这页？（新手最快）</div>
                         <ol>
-                            <li>先找到你看到的“症状”（比如：找不到命令 / 权限不足 / Key 无效）。</li>
+                            <li>先找到你看到的"症状"（比如：找不到命令 / 权限不足 / Key 无效）。</li>
                             <li>照着做 2～3 个动作就能排除大部分问题。</li>
-                            <li>如果还不行，把“报错原文 + 你做了什么”复制给 Claude。</li>
+                            <li>如果还不行，把"报错原文 + 你做了什么"复制给 Claude。</li>
+                            <li><strong>快速诊断：</strong>在 Claude Code 中输入 <code>/doctor</code> 检查安装健康状态。</li>
                         </ol>
                     </div>
 
@@ -134,7 +135,7 @@
                     <h2 id="permission">症状5：不能改文件 / 权限不足</h2>
                     <ol>
                         <li>输入 <code>/status</code> 看看是不是只读模式。</li>
-                        <li>只读模式退出：<code>/edit</code>（或重新启动时别用 <code>--read-only</code>）。</li>
+                        <li>只读模式退出：关闭 Claude Code，重新启动时别用 <code>--read-only</code> 参数。</li>
                         <li>如果是系统权限：Windows 尽量在你自己的文件夹操作，不要动系统目录。</li>
                     </ol>
 

@@ -10,12 +10,12 @@
   <g font-family="Consolas, Monaco, 'Courier New', monospace" font-size="22" fill="#e2e8f0">
     <text x="48" y="72" fill="#94a3b8">在 Claude Code 里输入 /status（示意）</text>
     <text x="48" y="120"><tspan fill="#60a5fa">&gt;</tspan> /status</text>
-    <text x="48" y="168"><tspan fill="#93c5fd">Mode</tspan>: <tspan fill="#a7f3d0">read-only</tspan>    <tspan fill="#93c5fd">Workspace</tspan>: C:\Users\你的用户名\claude-practice</text>
-    <text x="48" y="204" fill="#94a3b8">提示：只读模式适合理解项目/查看结构，不会改你的文件。</text>
-    <text x="48" y="256" fill="#94a3b8">切换编辑（示意）：</text>
-    <text x="48" y="304"><tspan fill="#60a5fa">&gt;</tspan> /edit</text>
-    <text x="48" y="352"><tspan fill="#93c5fd">Mode</tspan>: <tspan fill="#a7f3d0">edit</tspan>        <tspan fill="#93c5fd">Safety</tspan>: confirm-before-write</text>
-    <text x="48" y="404" fill="#fbbf24">危险模式（dangerous）会有更高风险：只在你完全理解后再用。</text>
-    <text x="48" y="452" fill="#94a3b8">如果你不确定当前模式：永远先 /status。</text>
+    <text x="48" y="168"><tspan fill="#93c5fd">Mode</tspan>: <tspan fill="#a7f3d0">normal</tspan>    <tspan fill="#93c5fd">Workspace</tspan>: C:\Users\你的用户名\claude-practice</text>
+    <text x="48" y="204" fill="#94a3b8">提示：普通模式是最常用的模式，修改前会询问你。</text>
+    <text x="48" y="256" fill="#94a3b8">切换到 Plan 模式（示意）：</text>
+    <text x="48" y="304"><tspan fill="#60a5fa">&gt;</tspan> /plan</text>
+    <text x="48" y="352"><tspan fill="#93c5fd">Mode</tspan>: <tspan fill="#a7f3d0">plan</tspan>        <tspan fill="#93c5fd">Status</tspan>: 分析中，不执行任何操作</text>
+    <text x="48" y="404" fill="#fbbf24">Plan 模式让你先看方案再决定是否执行，安全又高效。</text>
+    <text x="48" y="452" fill="#94a3b8">快捷键：Shift+Tab 可在 Plan/普通模式间快速切换。</text>
   </g>
 </svg>
