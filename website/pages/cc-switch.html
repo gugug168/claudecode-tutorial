@@ -1,0 +1,417 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>A3：cc-switch 图形化配置工具 - Claude Code 教程</title>
+    <link rel="stylesheet" href="../css/style.css">
+</head>
+<body data-page-id="cc-switch">
+    <div class="app-container">
+        <aside class="sidebar" id="sidebar">
+            <div class="sidebar-header">
+                <a href="../index.html" style="display: flex; align-items: center; gap: 12px; text-decoration: none;">
+                    <div class="logo">C</div>
+                    <span class="logo-text">Claude Code 教程</span>
+                </a>
+            </div>
+            <div class="sidebar-search">
+                <div class="search-box">
+                    <span class="search-icon" aria-hidden="true">
+                        <svg class="icon icon-xs"><use href="../images/icons.svg#icon-search"></use></svg>
+                    </span>
+                    <input type="text" placeholder="搜索章节...">
+                </div>
+            </div>
+            <nav class="sidebar-nav" id="sidebarNav"></nav>
+        </aside>
+
+        <main class="main-content">
+            <header class="top-nav">
+                <div class="top-nav-left">
+                    <button class="menu-toggle" id="menuToggle" aria-label="打开目录">
+                        <svg class="icon icon-sm" aria-hidden="true"><use href="../images/icons.svg#icon-menu"></use></svg>
+                    </button>
+                    <nav class="breadcrumb">
+                        <a href="../index.html">首页</a>
+                        <span class="separator">/</span>
+                        <span class="current">cc-switch 工具</span>
+                    </nav>
+                </div>
+                <div class="top-nav-right">
+                    <div class="progress-indicator">
+                        <span>学习进度</span>
+                        <div class="progress-bar">
+                            <div class="progress-fill" id="progressFill" style="width: 0%"></div>
+                        </div>
+                        <span class="progress-text" id="progressText">0%</span>
+                    </div>
+                </div>
+            </header>
+
+            <div class="content-wrapper">
+                <header class="article-header">
+                    <div class="article-breadcrumb">
+                        <a href="../index.html">首页</a> / <span>A3：cc-switch 图形化配置工具</span>
+                    </div>
+                    <h1 class="article-title">A3：cc-switch 图形化配置工具</h1>
+                    <div class="article-meta">
+                        <span class="article-meta-item">
+                            <svg class="icon icon-xs" aria-hidden="true"><use href="../images/icons.svg#icon-clock"></use></svg>
+                            预计时间：15分钟
+                        </span>
+                        <span class="article-meta-item">
+                            <svg class="icon icon-xs" aria-hidden="true"><use href="../images/icons.svg#icon-tag"></use></svg>
+                            类别：附录
+                        </span>
+                    </div>
+                </header>
+
+                <article class="article-content">
+                    <!-- 配图：cc-switch界面 -->
+                    <div class="section-image">
+                        <img src="https://cdn.xf233.io/project/Packy-docs/CC-Switch/002.png" alt="cc-switch 主界面" loading="lazy">
+                        <div class="section-image-caption">cc-switch 图形化界面：一键切换 API 配置</div>
+                    </div>
+
+                    <div class="alert alert-success">
+                        <div class="alert-title">一句话介绍</div>
+                        <p><strong>cc-switch</strong> 是一个图形化配置工具，让你用"点击按钮"的方式切换 Claude Code/Codex/Gemini CLI 的 API 配置，<strong>不需要手动编辑任何配置文件</strong>。</p>
+                    </div>
+
+                    <h2 id="what-is">什么是 cc-switch？</h2>
+
+                    <p>如果你觉得手动编辑配置文件（JSON、环境变量）很麻烦，或者经常需要在不同的 API 提供商之间切换，那么 cc-switch 就是为你准备的。</p>
+
+                    <div class="alert alert-info">
+                        <div class="alert-title">核心功能</div>
+                        <ul>
+                            <li><strong>图形界面操作：</strong>不需要打开文本编辑器，不需要写 JSON</li>
+                            <li><strong>一键切换：</strong>从 5 分钟缩短到 5 秒</li>
+                            <li><strong>内置模板：</strong>PackyAPI 等常用服务预设</li>
+                            <li><strong>MCP 可视化：</strong>图形化界面管理 MCP 服务器</li>
+                            <li><strong>配置备份：</strong>导入/导出功能，支持跨设备迁移</li>
+                        </ul>
+                    </div>
+
+                    <h3>适用人群</h3>
+                    <ul>
+                        <li>觉得手动编辑配置文件麻烦的电脑小白</li>
+                        <li>需要在多个 API 提供商之间切换的用户</li>
+                        <li>想要可视化 MCP 服务器管理的用户</li>
+                    </ul>
+
+                    <h3>手动配置 vs cc-switch</h3>
+
+                    <table style="margin: 24px 0;">
+                        <thead>
+                            <tr>
+                                <th>特性</th>
+                                <th>手动配置</th>
+                                <th>cc-switch</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>难度</td>
+                                <td>需要编辑配置文件</td>
+                                <td>图形界面，点击即可</td>
+                            </tr>
+                            <tr>
+                                <td>切换 API</td>
+                                <td>手动修改文件</td>
+                                <td>一键切换</td>
+                            </tr>
+                            <tr>
+                                <td>MCP 管理</td>
+                                <td>需要编辑 JSON</td>
+                                <td>图形界面管理</td>
+                            </tr>
+                            <tr>
+                                <td>适用场景</td>
+                                <td>喜欢命令行的用户</td>
+                                <td>小白、频繁切换的用户</td>
+                            </tr>
+                        </tbody>
+                    </table>
+
+                    <h2 id="download">下载与安装</h2>
+
+                    <div class="os-switcher" data-os-switcher>
+                        <div class="os-switcher-title">
+                            <svg class="icon icon-xs" aria-hidden="true"><use href="../images/icons.svg#icon-list"></use></svg>
+                            选择你的系统
+                        </div>
+                        <div class="os-switcher-actions">
+                            <button type="button" class="os-btn" data-os-value="windows">Windows</button>
+                            <button type="button" class="os-btn" data-os-value="mac">Mac</button>
+                        </div>
+                    </div>
+
+                    <div data-os="windows">
+                        <h3>Windows 用户安装步骤</h3>
+                        <ol>
+                            <li>访问 <a href="https://github.com/farion1231/cc-switch/releases" target="_blank" rel="noopener">cc-switch GitHub Release 页面</a></li>
+                            <li>滚动到页面最下方，找到 <strong>Assets</strong> 区域</li>
+                            <li>下载 <code>.msi</code> 安装包（如 <code>cc-switch-3.x.x.msi</code>）</li>
+                            <li>双击安装包，按提示完成安装</li>
+                        </ol>
+
+                        <div class="section-image">
+                            <img src="https://cdn.xf233.io/project/Packy-docs/CC-Switch/001.png" alt="GitHub 下载页面" loading="lazy">
+                            <div class="section-image-caption">GitHub Release 页面：向下滚动找到 .msi 文件</div>
+                        </div>
+
+                        <div class="alert alert-success">
+                            <div class="alert-title">成功标志</div>
+                            <p>安装完成后，在开始菜单中能看到 "<strong>CC-Switch</strong>" 即表示安装成功。</p>
+                        </div>
+                    </div>
+
+                    <div data-os="mac">
+                        <h3>Mac 用户安装步骤</h3>
+
+                        <p>有两种安装方式，任选其一：</p>
+
+                        <h4>方式一：使用 Homebrew（推荐）</h4>
+                        <div class="code-block-wrapper">
+                            <div class="code-header">
+                                <span class="code-lang">bash</span>
+                                <button class="code-copy">复制代码</button>
+                            </div>
+                            <pre><code class="language-bash"># 添加 tap 源
+brew tap farion1231/ccswitch
+
+# 安装 CC-Switch
+brew install --cask cc-switch</code></pre>
+                        </div>
+
+                        <h4>方式二：下载 .dmg 文件</h4>
+                        <ol>
+                            <li>访问 <a href="https://github.com/farion1231/cc-switch/releases" target="_blank" rel="noopener">cc-switch GitHub Release 页面</a></li>
+                            <li>下载 <code>.dmg</code> 文件</li>
+                            <li>双击打开，将 cc-switch 拖入应用程序文件夹</li>
+                        </ol>
+
+                        <div class="alert alert-warning">
+                            <div class="alert-title">Mac 提示"无法验证开发者"？</div>
+                            <p>这是 Mac 的安全保护机制。解决方法：</p>
+                            <ol>
+                                <li>打开 <strong>系统设置 → 隐私与安全性</strong></li>
+                                <li>找到提示"cc-switch"被阻止的信息</li>
+                                <li>点击"<strong>仍要打开</strong>"按钮</li>
+                            </ol>
+                        </div>
+                    </div>
+
+                    <h2 id="packyapi">配置 PackyAPI（以 Claude Code 为例）</h2>
+
+                    <p>下面以配置 PackyAPI 为例，演示如何使用 cc-switch 配置 Claude Code。</p>
+
+                    <h3>步骤 1：打开 cc-switch</h3>
+                    <p>启动 cc-switch，你会看到主界面：</p>
+
+                    <div class="section-image">
+                        <img src="https://cdn.xf233.io/project/Packy-docs/CC-Switch/002.png" alt="cc-switch 主界面" loading="lazy">
+                        <div class="section-image-caption">cc-switch 主界面</div>
+                    </div>
+
+                    <h3>步骤 2：选择分组</h3>
+                    <p>在分组条中，点击选择 "<strong>Claude</strong>" 分组：</p>
+
+                    <div class="section-image">
+                        <img src="https://cdn.xf233.io/project/Packy-docs/CC-Switch/004.png" alt="选择 Claude 分组" loading="lazy">
+                        <div class="section-image-caption">选择 Claude 分组</div>
+                    </div>
+
+                    <h3>步骤 3：选择 PackyCode 预设</h3>
+                    <p>在供应商分组中，选择 "<strong>PackyCode</strong>" 预设：</p>
+
+                    <div class="section-image">
+                        <img src="https://cdn.xf233.io/project/Packy-docs/CC-Switch/005.png" alt="选择 PackyCode 模板" loading="lazy">
+                        <div class="section-image-caption">选择 PackyCode 预设模板</div>
+                    </div>
+
+                    <h3>步骤 4：填入 API Key</h3>
+                    <p>获取 PackyAPI 的 API Key，然后填入输入框：</p>
+
+                    <div class="alert alert-info">
+                        <div class="alert-title">如何获取 PackyAPI Key？</div>
+                        <p>访问 PackyAPI 官网注册账号并创建 API Key。具体步骤参考 <a href="https://docs.packyapi.com/" target="_blank" rel="noopener">PackyAPI 官方文档</a>。</p>
+                    </div>
+
+                    <div class="section-image">
+                        <img src="https://cdn.xf233.io/project/Packy-docs/CC-Switch/006.png" alt="填入 API Key" loading="lazy">
+                        <div class="section-image-caption">填入你的 PackyAPI Key</div>
+                    </div>
+
+                    <h3>步骤 5：添加并启用配置</h3>
+                    <ol>
+                        <li>点击"<strong>添加</strong>"按钮</li>
+                        <li>添加成功后，在主界面点击"<strong>启用</strong>"按钮</li>
+                        <li>确认显示"<strong>使用中</strong>"状态</li>
+                    </ol>
+
+                    <div class="section-image">
+                        <img src="https://cdn.xf233.io/project/Packy-docs/CC-Switch/007.png" alt="启用配置" loading="lazy">
+                        <div class="section-image-caption">点击"启用"按钮，状态变为"使用中"</div>
+                    </div>
+
+                    <h3>步骤 6：验证配置</h3>
+                    <p>打开终端，运行 <code>claude</code> 命令，如果能正常对话，说明配置成功。</p>
+
+                    <div class="alert alert-success">
+                        <div class="alert-title">配置成功标志</div>
+                        <p>终端运行 <code>claude</code> 能正常连接并收到回复。</p>
+                    </div>
+
+                    <h2 id="usage">常用操作</h2>
+
+                    <h3>切换供应商</h3>
+                    <p>当你配置了多个供应商后，切换非常简单：</p>
+                    <ul>
+                        <li><strong>主界面方式：</strong>选择供应商 → 点击"启用"</li>
+                        <li><strong>系统托盘方式：</strong>直接点击托盘图标中的供应商名称（即时生效）</li>
+                    </ul>
+
+                    <h3>配置导入/导出</h3>
+                    <p>用于备份配置或跨设备迁移：</p>
+                    <ul>
+                        <li><strong>导出：</strong>点击导出按钮，保存配置文件</li>
+                        <li><strong>导入：</strong>在新设备上点击导入，选择之前导出的文件</li>
+                    </ul>
+
+                    <h3>MCP 服务器管理</h3>
+                    <p>cc-switch 也支持 MCP 服务器的可视化管理：</p>
+                    <ol>
+                        <li>点击右上角的 "<strong>MCP</strong>" 按钮</li>
+                        <li>支持多种传输类型：stdio / http / sse</li>
+                        <li>与第 06 章（MCP 扩展）联动</li>
+                    </ol>
+
+                    <div class="alert alert-info">
+                        <div class="alert-title">MCP 管理详情</div>
+                        <p>更多 MCP 配置说明参见 <a href="chapter-06.html">第06章：MCP 服务器扩展</a>。</p>
+                    </div>
+
+                    <h3>系统托盘快捷操作</h3>
+                    <p>安装后，cc-switch 会在系统托盘（Windows/Mac 右上角或右下角）显示图标：</p>
+                    <ul>
+                        <li>点击托盘图标可以快速切换配置</li>
+                        <li>右键可以打开主界面或退出程序</li>
+                    </ul>
+
+                    <h2 id="other-cli">支持的其他 CLI</h2>
+
+                    <p>除了 Claude Code，cc-switch 还支持 Codex 和 Gemini CLI：</p>
+
+                    <h3>Codex 配置</h3>
+                    <ol>
+                        <li>切换到 "<strong>Codex</strong>" 分组</li>
+                        <li>选择 PackyCode 模板</li>
+                        <li>填入 Codex 分组的 API Key</li>
+                        <li>点击启用</li>
+                    </ol>
+
+                    <div class="section-image">
+                        <img src="https://cdn.xf233.io/project/Packy-docs/CC-Switch/008.png" alt="Codex 分组选择" loading="lazy">
+                        <div class="section-image-caption">切换到 Codex 分组</div>
+                    </div>
+
+                    <div class="alert alert-warning">
+                        <div class="alert-title">注意</div>
+                        <p>包月用户可能需要使用特殊的 API 地址，具体参考 PackyAPI 文档。</p>
+                    </div>
+
+                    <h3>Gemini CLI 配置</h3>
+                    <ol>
+                        <li>切换到 "<strong>Gemini</strong>" 分组</li>
+                        <li>选择 PackyCode 模板</li>
+                        <li>填入 Gemini 分组的 API Key</li>
+                        <li>点击启用</li>
+                    </ol>
+
+                    <h2 id="troubleshooting">故障排查</h2>
+
+                    <div class="alert alert-danger">
+                        <div class="alert-title">问题：配置不生效</div>
+                        <p><strong>可能原因：</strong></p>
+                        <ul>
+                            <li>忘记点击"启用"按钮</li>
+                            <li>终端或 AI 客户端没有重启</li>
+                            <li>API Key 填写错误</li>
+                        </ul>
+                        <p><strong>解决方案：</strong></p>
+                        <ol>
+                            <li>确认 cc-switch 显示"使用中"状态</li>
+                            <li>重启终端或 AI 客户端</li>
+                            <li>检查 API Key 是否正确复制</li>
+                        </ol>
+                    </div>
+
+                    <div class="alert alert-danger">
+                        <div class="alert-title">问题：CLI 无法连接</div>
+                        <p><strong>可能原因：</strong></p>
+                        <ul>
+                            <li>网络连接问题</li>
+                            <li>API 服务暂时不可用</li>
+                            <li>配置有误</li>
+                        </ul>
+                        <p><strong>解决方案：</strong></p>
+                        <ol>
+                            <li>确认 cc-switch 显示"使用中"状态</li>
+                            <li>检查网络连接</li>
+                            <li>尝试切换其他供应商测试</li>
+                        </ol>
+                    </div>
+
+                    <div class="alert alert-danger">
+                        <div class="alert-title">问题：安装失败</div>
+                        <p><strong>Mac 用户：</strong>如果提示"无法验证开发者"，去 系统设置 → 隐私与安全 → 点击"仍要打开"</p>
+                        <p><strong>Windows 用户：</strong>确保下载的是 .msi 文件，右键选择"安装"</p>
+                    </div>
+
+                    <h2 id="links">相关链接</h2>
+
+                    <ul>
+                        <li><a href="https://github.com/farion1231/cc-switch" target="_blank" rel="noopener">cc-switch GitHub 仓库</a></li>
+                        <li><a href="https://docs.packyapi.com/docs/ccswitch/" target="_blank" rel="noopener">PackyAPI 官方文档</a></li>
+                        <li><a href="cost-saving.html">A2：省钱与避坑</a></li>
+                        <li><a href="appendix.html">附录：速查手册</a></li>
+                    </ul>
+
+                    <button class="btn btn-secondary mark-complete-btn" style="margin: 32px 0 24px;">
+                        <svg class="icon icon-sm" aria-hidden="true"><use href="../images/icons.svg#icon-circle"></use></svg>
+                        标记为已完成（保存进度）
+                    </button>
+
+                    <nav class="chapter-nav">
+                        <a href="cost-saving.html" class="chapter-nav-card">
+                            <svg class="icon" aria-hidden="true"><use href="../images/icons.svg#icon-arrow-left"></use></svg>
+                            <div class="content">
+                                <div class="label">上一页</div>
+                                <div class="title">A2：省钱与避坑</div>
+                            </div>
+                        </a>
+                        <a href="appendix.html" class="chapter-nav-card next">
+                            <svg class="icon" aria-hidden="true"><use href="../images/icons.svg#icon-arrow-right"></use></svg>
+                            <div class="content">
+                                <div class="label">继续</div>
+                                <div class="title">附录：速查手册</div>
+                            </div>
+                        </a>
+                    </nav>
+                </article>
+            </div>
+
+            <footer class="footer">
+                <div class="footer-copyright">&copy; 2025 Claude Code 教程网站</div>
+            </footer>
+        </main>
+
+        <div class="overlay" id="overlay"></div>
+    </div>
+
+    <script src="../js/main.js"></script>
+</body>
+</html>

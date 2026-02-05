@@ -415,6 +415,16 @@ const courseData = {
             path: 'pages/cost-saving.html'
         },
         {
+            id: 'cc-switch',
+            number: 'A3',
+            title: 'cc-switch 图形化配置工具',
+            desc: '图形化界面一键切换 API 配置，无需手动编辑配置文件',
+            time: '15分钟',
+            difficulty: '简单',
+            category: '附录',
+            path: 'pages/cc-switch.html'
+        },
+        {
             id: 'scenario-pack',
             number: 'P2-1',
             title: '场景包（带练习素材）',
