@@ -1,0 +1,1730 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>A4: Everything Claude Code 参考大全 - Claude Code 教程</title>
+    <link rel="stylesheet" href="../css/style.css">
+    <style>
+        /* ECC 页面专用样式 */
+
+        /* ========== 1. 目录导航样式 ========== */
+        .ecc-toc {
+            position: sticky;
+            top: 80px;
+            background: var(--bg-card);
+            border: 1px solid var(--border-color);
+            border-radius: var(--radius-md);
+            padding: 20px;
+            margin-bottom: 24px;
+            z-index: 100;
+        }
+        .ecc-toc-title {
+            font-size: 1.1rem;
+            font-weight: 600;
+            margin-bottom: 12px;
+            color: var(--text-primary);
+        }
+        .ecc-toc-nav {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+        }
+        .ecc-toc-link {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            padding: 6px 12px;
+            background: var(--bg-secondary);
+            border-radius: var(--radius-sm);
+            color: var(--text-secondary);
+            text-decoration: none;
+            font-size: 0.9rem;
+            transition: all 0.2s;
+        }
+        .ecc-toc-link:hover {
+            background: var(--primary-color);
+            color: white;
+        }
+        .ecc-section {
+            border-top: 2px solid var(--border-color);
+            padding-top: 40px;
+            margin-top: 40px;
+        }
+        .ecc-section:first-of-type {
+            border-top: none;
+            padding-top: 0;
+            margin-top: 0;
+        }
+        .ecc-card-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+            gap: 16px;
+            margin: 20px 0;
+        }
+        .ecc-card {
+            background: var(--bg-card);
+            border: 1px solid var(--border-color);
+            border-radius: var(--radius-md);
+            padding: 16px;
+            transition: all 0.2s;
+        }
+        .ecc-card:hover {
+            border-color: var(--primary-color);
+            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+        }
+        .ecc-card-title {
+            font-weight: 600;
+            color: var(--text-primary);
+            margin-bottom: 8px;
+        }
+        .ecc-card-desc {
+            font-size: 0.9rem;
+            color: var(--text-secondary);
+        }
+        .ecc-tag {
+            display: inline-block;
+            padding: 2px 8px;
+            background: var(--primary-light);
+            color: var(--primary-color);
+            border-radius: var(--radius-sm);
+            font-size: 0.8rem;
+            margin-right: 4px;
+        }
+        .collapsible-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            cursor: pointer;
+            padding: 12px 16px;
+            background: var(--bg-secondary);
+            border-radius: var(--radius-sm);
+            margin-bottom: 8px;
+        }
+        .collapsible-header:hover {
+            background: var(--bg-tertiary);
+        }
+        .collapsible-content {
+            display: none;
+            padding: 16px;
+            border: 1px solid var(--border-color);
+            border-radius: var(--radius-sm);
+            margin-top: -4px;
+        }
+        .collapsible-content.active {
+            display: block;
+        }
+        .collapsible-icon {
+            transition: transform 0.3s;
+        }
+        .collapsible-header.active .collapsible-icon {
+            transform: rotate(180deg);
+        }
+        /* 概念关系图样式 */
+        .concept-diagram {
+            background: linear-gradient(135deg, var(--bg-card) 0%, var(--bg-secondary) 100%);
+            padding: 24px;
+            border-radius: var(--radius-md);
+            border: 1px solid var(--border-color);
+            margin: 24px 0;
+            overflow-x: auto;
+        }
+        .concept-diagram-inner {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 4px;
+            min-width: 280px;
+        }
+        .concept-item {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 12px 20px;
+            border-radius: var(--radius-md);
+            min-width: 200px;
+            transition: transform 0.2s, box-shadow 0.2s;
+        }
+        .concept-item:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+        }
+        .concept-icon {
+            font-size: 1.5rem;
+            margin-bottom: 4px;
+        }
+        .concept-label {
+            font-weight: 600;
+            color: var(--text-primary);
+        }
+        .concept-desc {
+            font-size: 0.85rem;
+            color: var(--text-secondary);
+            margin-top: 2px;
+        }
+        .concept-arrow {
+            color: var(--text-secondary);
+            font-size: 0.9rem;
+            line-height: 1;
+        }
+        .concept-connector {
+            color: var(--primary-color);
+            font-weight: bold;
+            font-family: monospace;
+        }
+        .concept-user { background: linear-gradient(135deg, #e3f2fd 0%, #bbdefb 100%); }
+        .concept-command { background: linear-gradient(135deg, #fff3e0 0%, #ffe0b2 100%); }
+        .concept-agent { background: linear-gradient(135deg, #e8f5e9 0%, #c8e6c9 100%); }
+        .concept-skill { background: linear-gradient(135deg, #fce4ec 0%, #f8bbd9 100%); }
+        .concept-rule { background: linear-gradient(135deg, #f3e5f5 0%, #e1bee7 100%); }
+        .concept-hook { background: linear-gradient(135deg, #e0f7fa 0%, #b2ebf2 100%); }
+        /* 章节要点框 */
+        .section-intro {
+            display: flex;
+            align-items: flex-start;
+            gap: 16px;
+            padding: 16px 20px;
+            background: var(--bg-secondary);
+            border-radius: var(--radius-md);
+            border-left: 4px solid var(--primary-color);
+            margin-bottom: 20px;
+        }
+        .section-intro-icon {
+            font-size: 2rem;
+            flex-shrink: 0;
+        }
+        .section-intro-content h4 {
+            margin: 0 0 8px 0;
+            color: var(--text-primary);
+        }
+        .section-intro-content p {
+            margin: 0;
+            color: var(--text-secondary);
+            font-size: 0.95rem;
+        }
+        /* 卡片图标增强 */
+        .ecc-card-with-icon {
+            display: flex;
+            align-items: flex-start;
+            gap: 12px;
+        }
+        .ecc-card-icon {
+            font-size: 1.5rem;
+            flex-shrink: 0;
+        }
+        /* 钩子流程图样式 */
+        .hook-flow-diagram {
+            display: flex;
+            flex-wrap: wrap;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            background: linear-gradient(135deg, var(--bg-card) 0%, var(--bg-secondary) 100%);
+            padding: 20px;
+            border-radius: var(--radius-md);
+            border: 1px solid var(--border-color);
+            margin: 24px 0;
+        }
+        .hook-flow-step {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 10px 14px;
+            background: var(--bg-card);
+            border-radius: var(--radius-sm);
+            border: 1px solid var(--border-color);
+            min-width: 80px;
+        }
+        .hook-flow-step.highlight-warning {
+            background: linear-gradient(135deg, #fff3e0 0%, #ffe0b2 100%);
+            border-color: #ffb74d;
+        }
+        .hook-flow-step.highlight-info {
+            background: linear-gradient(135deg, #e3f2fd 0%, #bbdefb 100%);
+            border-color: #64b5f6;
+        }
+        .hook-flow-icon {
+            font-size: 1.3rem;
+            margin-bottom: 4px;
+        }
+        .hook-flow-label {
+            font-size: 0.8rem;
+            color: var(--text-secondary);
+            text-align: center;
+        }
+        .hook-flow-arrow {
+            color: var(--primary-color);
+            font-size: 1.2rem;
+            font-weight: bold;
+        }
+        @media (max-width: 768px) {
+            .ecc-toc {
+                position: relative;
+                top: 0;
+            }
+            .ecc-toc-nav {
+                flex-direction: column;
+            }
+        }
+
+        /* ========== 2. 统一表格样式 ========== */
+        .styled-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 20px 0;
+            font-size: 0.95rem;
+            border-radius: var(--radius-sm);
+            overflow: hidden;
+            border: 1px solid var(--border-color);
+        }
+        .styled-table th {
+            background: var(--bg-secondary);
+            font-weight: 600;
+            text-align: left;
+            padding: 12px 16px;
+            border-bottom: 2px solid var(--primary-color);
+        }
+        .styled-table td {
+            padding: 12px 16px;
+            border-bottom: 1px solid var(--border-color);
+        }
+        .styled-table tr:nth-child(even) {
+            background: var(--bg-secondary);
+        }
+        .styled-table tr:hover {
+            background: var(--primary-light);
+        }
+        .styled-table code {
+            background: var(--bg-tertiary);
+            padding: 2px 6px;
+            border-radius: var(--radius-sm);
+            font-size: 0.9em;
+        }
+
+        /* ========== 3. 学习路径图样式 ========== */
+        .learning-path {
+            display: flex;
+            flex-wrap: wrap;
+            align-items: center;
+            justify-content: center;
+            gap: 12px;
+            padding: 20px;
+            background: linear-gradient(135deg, #f0f4ff 0%, #e8f5e9 50%, #fff3e0 100%);
+            border-radius: var(--radius-md);
+            margin: 24px 0;
+            border: 1px solid var(--border-color);
+        }
+        .learning-path-step {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 12px 20px;
+            background: white;
+            border-radius: var(--radius-md);
+            box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+            min-width: 120px;
+            transition: transform 0.2s, box-shadow 0.2s;
+        }
+        .learning-path-step:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 4px 16px rgba(0,0,0,0.12);
+        }
+        .learning-path-step .step-icon {
+            font-size: 1.8rem;
+            margin-bottom: 6px;
+        }
+        .learning-path-step .step-label {
+            font-weight: 600;
+            color: var(--text-primary);
+            font-size: 0.95rem;
+        }
+        .learning-path-step .step-desc {
+            font-size: 0.8rem;
+            color: var(--text-secondary);
+            margin-top: 2px;
+        }
+        .learning-path-arrow {
+            color: var(--primary-color);
+            font-size: 1.5rem;
+            font-weight: bold;
+        }
+
+        /* ========== 4. 章节配图样式 ========== */
+        .section-image-inline {
+            margin: 24px 0;
+            border-radius: var(--radius-md);
+            overflow: hidden;
+            border: 1px solid var(--border-color);
+            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+        }
+        .section-image-inline img {
+            width: 100%;
+            height: auto;
+            display: block;
+        }
+        .section-image-inline .image-caption {
+            padding: 12px 16px;
+            background: var(--bg-secondary);
+            font-size: 0.9rem;
+            color: var(--text-secondary);
+            text-align: center;
+        }
+
+        /* ========== 5. 返回顶部按钮 ========== */
+        .back-to-top {
+            position: fixed;
+            bottom: 30px;
+            right: 30px;
+            width: 50px;
+            height: 50px;
+            background: var(--primary-color);
+            color: white;
+            border: none;
+            border-radius: 50%;
+            cursor: pointer;
+            display: none;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5rem;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+            transition: all 0.3s;
+            z-index: 1000;
+        }
+        .back-to-top:hover {
+            background: var(--primary-dark);
+            transform: translateY(-3px);
+        }
+        .back-to-top.visible {
+            display: flex;
+        }
+
+        /* ========== 6. TOC 图标增强 ========== */
+        .ecc-toc-link .toc-icon {
+            margin-right: 4px;
+        }
+    </style>
+</head>
+<body data-page-id="appendix-ecc">
+    <div class="app-container">
+        <aside class="sidebar" id="sidebar">
+            <div class="sidebar-header">
+                <a href="../index.html" style="display: flex; align-items: center; gap: 12px; text-decoration: none;">
+                    <div class="logo">C</div>
+                    <span class="logo-text">Claude Code 教程</span>
+                </a>
+            </div>
+            <div class="sidebar-search">
+                <div class="search-box">
+                    <span class="search-icon" aria-hidden="true">
+                        <svg class="icon icon-xs"><use href="../images/icons.svg#icon-search"></use></svg>
+                    </span>
+                    <input type="text" placeholder="搜索章节...">
+                </div>
+            </div>
+            <nav class="sidebar-nav" id="sidebarNav"></nav>
+        </aside>
+
+        <main class="main-content">
+            <header class="top-nav">
+                <div class="top-nav-left">
+                    <button class="menu-toggle" id="menuToggle" aria-label="打开目录">
+                        <svg class="icon icon-sm" aria-hidden="true"><use href="../images/icons.svg#icon-menu"></use></svg>
+                    </button>
+                    <nav class="breadcrumb">
+                        <a href="../index.html">首页</a>
+                        <span class="separator">/</span>
+                        <span class="current">Everything Claude Code 参考大全</span>
+                    </nav>
+                </div>
+                <div class="top-nav-right">
+                    <div class="progress-indicator">
+                        <span>学习进度</span>
+                        <div class="progress-bar">
+                            <div class="progress-fill" id="progressFill" style="width: 0%"></div>
+                        </div>
+                        <span class="progress-text" id="progressText">0%</span>
+                    </div>
+                </div>
+            </header>
+
+            <div class="content-wrapper">
+                <header class="article-header">
+                    <div class="article-breadcrumb">
+                        <a href="../index.html">首页</a> / <span>A4: Everything Claude Code 参考大全</span>
+                    </div>
+                    <h1 class="article-title">A4: Everything Claude Code 参考大全</h1>
+                    <div class="article-meta">
+                        <span class="article-meta-item">
+                            <svg class="icon icon-xs" aria-hidden="true"><use href="../images/icons.svg#icon-clock"></use></svg>
+                            随时查阅
+                        </span>
+                        <span class="article-meta-item">
+                            <svg class="icon icon-xs" aria-hidden="true"><use href="../images/icons.svg#icon-tag"></use></svg>
+                            类别：附录 · 进阶
+                        </span>
+                    </div>
+                </header>
+
+                <article class="article-content">
+                    <!-- 顶部配图 -->
+                    <div class="section-image">
+                        <img src="../images/external/img_8719eb6111e637cc.jpg" alt="Everything Claude Code 参考大全" loading="lazy">
+                        <div class="section-image-caption">进阶知识库：掌握 Agents、Skills、Commands 等高级功能</div>
+                    </div>
+
+                    <!-- 快速导航目录 -->
+                    <div class="ecc-toc">
+                        <div class="ecc-toc-title">📑 快速导航</div>
+                        <nav class="ecc-toc-nav">
+                            <a href="#intro" class="ecc-toc-link"><span class="toc-icon">📌</span>开篇说明</a>
+                            <a href="#agents" class="ecc-toc-link"><span class="toc-icon">🤖</span>Agents 代理</a>
+                            <a href="#skills" class="ecc-toc-link"><span class="toc-icon">📚</span>Skills 技能</a>
+                            <a href="#commands" class="ecc-toc-link"><span class="toc-icon">⌨️</span>Commands 命令</a>
+                            <a href="#rules" class="ecc-toc-link"><span class="toc-icon">📋</span>Rules 规范</a>
+                            <a href="#hooks" class="ecc-toc-link"><span class="toc-icon">🔗</span>Hooks 钩子</a>
+                            <a href="#workflow" class="ecc-toc-link"><span class="toc-icon">🔄</span>工作流</a>
+                        </nav>
+                    </div>
+
+                    <!-- 学习路径图 -->
+                    <div class="learning-path">
+                        <div class="learning-path-step">
+                            <span class="step-icon">🚪</span>
+                            <span class="step-label">入门</span>
+                            <span class="step-desc">了解概念</span>
+                        </div>
+                        <span class="learning-path-arrow">→</span>
+                        <div class="learning-path-step">
+                            <span class="step-icon">📖</span>
+                            <span class="step-label">理解</span>
+                            <span class="step-desc">掌握关系</span>
+                        </div>
+                        <span class="learning-path-arrow">→</span>
+                        <div class="learning-path-step">
+                            <span class="step-icon">⌨️</span>
+                            <span class="step-label">实践</span>
+                            <span class="step-desc">使用命令</span>
+                        </div>
+                        <span class="learning-path-arrow">→</span>
+                        <div class="learning-path-step">
+                            <span class="step-icon">🎯</span>
+                            <span class="step-label">精通</span>
+                            <span class="step-desc">掌握工作流</span>
+                        </div>
+                    </div>
+
+                    <!-- 开篇说明 -->
+                    <section id="intro">
+                        <div class="alert alert-info">
+                            <div class="alert-title">📌 本节要点</div>
+                            <p>Everything Claude Code 是一个全面的知识库，包含了 Claude Code 的进阶功能：Agents（子代理）、Skills（技能）、Commands（命令）、Rules（规范）、Hooks（钩子）。</p>
+                            <p><strong>学完本章你能</strong>：理解 Claude Code 进阶功能体系，知道何时使用哪个代理/技能/命令。</p>
+                        </div>
+
+                        <h2>如何使用本章节</h2>
+                        <ul>
+                            <li><strong>查阅式阅读</strong>：不需要从头看到尾，用到哪个功能就查哪个</li>
+                            <li><strong>理解关系</strong>：先理解 Agents → Commands → Skills 的关系</li>
+                            <li><strong>实践结合</strong>：在项目中尝试使用这些功能</li>
+                        </ul>
+
+                        <h2>核心概念关系图</h2>
+                        <div class="concept-diagram">
+                            <div class="concept-diagram-inner">
+                                <div class="concept-item concept-user">
+                                    <span class="concept-icon">👤</span>
+                                    <span class="concept-label">你（用户）</span>
+                                </div>
+                                <div class="concept-arrow">│</div>
+                                <div class="concept-connector">└──→</div>
+                                <div class="concept-item concept-command">
+                                    <span class="concept-icon">⌨️</span>
+                                    <span class="concept-label">Commands 命令</span>
+                                    <span class="concept-desc">快捷键，一键触发</span>
+                                </div>
+                                <div class="concept-arrow">│</div>
+                                <div class="concept-connector">└──→</div>
+                                <div class="concept-item concept-agent">
+                                    <span class="concept-icon">🤖</span>
+                                    <span class="concept-label">Agents 代理</span>
+                                    <span class="concept-desc">专家，处理特定任务</span>
+                                </div>
+                                <div class="concept-arrow">│</div>
+                                <div class="concept-connector">└──→</div>
+                                <div class="concept-item concept-skill">
+                                    <span class="concept-icon">📚</span>
+                                    <span class="concept-label">Skills 技能</span>
+                                    <span class="concept-desc">指南，提供方法</span>
+                                </div>
+                                <div class="concept-arrow">│</div>
+                                <div class="concept-connector">└──→</div>
+                                <div class="concept-item concept-rule">
+                                    <span class="concept-icon">📋</span>
+                                    <span class="concept-label">Rules 规范</span>
+                                    <span class="concept-desc">规则，必须遵守</span>
+                                </div>
+                                <div class="concept-arrow">│</div>
+                                <div class="concept-connector">└──→</div>
+                                <div class="concept-item concept-hook">
+                                    <span class="concept-icon">🔗</span>
+                                    <span class="concept-label">Hooks 钩子</span>
+                                    <span class="concept-desc">监控，自动执行</span>
+                                </div>
+                            </div>
+                        </div>
+                    </section>
+
+                    <!-- 一、Agents 子代理系统 -->
+                    <section id="agents" class="ecc-section">
+                        <!-- Agents 章节配图 -->
+                        <div class="section-image-inline">
+                            <img src="../images/external/img_62d972907ea4ff88.png" alt="Claude Code 规划界面" loading="lazy">
+                            <div class="image-caption">Claude Code 规划界面 - Agents 代理系统让 Claude 成为你的开发团队</div>
+                        </div>
+
+                        <div class="section-intro">
+                            <span class="section-intro-icon">🤖</span>
+                            <div class="section-intro-content">
+                                <h4>Agents 子代理系统</h4>
+                                <p><strong>本节要点</strong>：掌握 13 个专家代理，了解何时委托任务给它们。<strong>学完你能</strong>：根据任务类型选择合适的代理，提高开发效率。</p>
+                            </div>
+                        </div>
+
+                        <h3>什么是 Agents？</h3>
+                        <p>Agents 是专门处理特定任务的"专家"。当主 Claude 遇到特定领域的问题时，可以把任务委托给它们。</p>
+
+                        <div class="alert alert-tip">
+                            <div class="alert-title">🏢 用一个公司比喻</div>
+                            <p>想象你开了一家公司：</p>
+                            <ul>
+                                <li><strong>主 Claude</strong> = CEO，负责协调和决策</li>
+                                <li><strong>Agents</strong> = 各部门专家（财务、法务、技术、安全等）</li>
+                            </ul>
+                            <p>当 CEO 遇到财务问题时，会请财务专家处理；遇到安全问题时，会请安全专家处理。</p>
+                        </div>
+
+                        <h3>所有代理一览（13个）</h3>
+
+                        <h4>规划与设计</h4>
+                        <div class="ecc-card-grid">
+                            <div class="ecc-card">
+                                <div class="ecc-card-with-icon">
+                                    <span class="ecc-card-icon">📋</span>
+                                    <div>
+                                        <div class="ecc-card-title">Planner</div>
+                                        <div class="ecc-card-desc">功能规划代理。开始新功能时制定实施计划，评估风险和复杂度。</div>
+                                        <span class="ecc-tag">opus</span>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="ecc-card">
+                                <div class="ecc-card-with-icon">
+                                    <span class="ecc-card-icon">🏗️</span>
+                                    <div>
+                                        <div class="ecc-card-title">Architect</div>
+                                        <div class="ecc-card-desc">架构设计代理。需要做系统架构决策时使用，评估技术选型。</div>
+                                        <span class="ecc-tag">opus</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <h4>开发与测试</h4>
+                        <div class="ecc-card-grid">
+                            <div class="ecc-card">
+                                <div class="ecc-card-with-icon">
+                                    <span class="ecc-card-icon">🧪</span>
+                                    <div>
+                                        <div class="ecc-card-title">TDD-Guide</div>
+                                        <div class="ecc-card-desc">测试驱动开发指导。想用测试驱动开发方式写代码时使用。</div>
+                                        <span class="ecc-tag">sonnet</span>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="ecc-card">
+                                <div class="ecc-card-with-icon">
+                                    <span class="ecc-card-icon">🔍</span>
+                                    <div>
+                                        <div class="ecc-card-title">Code-Reviewer</div>
+                                        <div class="ecc-card-desc">代码审查。检查代码质量和安全性，按严重性分类问题。</div>
+                                        <span class="ecc-tag">sonnet</span>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="ecc-card">
+                                <div class="ecc-card-with-icon">
+                                    <span class="ecc-card-icon">🎯</span>
+                                    <div>
+                                        <div class="ecc-card-title">E2E-Runner</div>
+                                        <div class="ecc-card-desc">端到端测试。运行 Playwright 等端到端测试。</div>
+                                        <span class="ecc-tag">sonnet</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <h4>安全与质量</h4>
+                        <div class="ecc-card-grid">
+                            <div class="ecc-card">
+                                <div class="ecc-card-with-icon">
+                                    <span class="ecc-card-icon">🔒</span>
+                                    <div>
+                                        <div class="ecc-card-title">Security-Reviewer</div>
+                                        <div class="ecc-card-desc">安全审查。查找 OWASP Top 10 等安全漏洞。</div>
+                                        <span class="ecc-tag">opus</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <h4>错误修复</h4>
+                        <div class="ecc-card-grid">
+                            <div class="ecc-card">
+                                <div class="ecc-card-with-icon">
+                                    <span class="ecc-card-icon">🔧</span>
+                                    <div>
+                                        <div class="ecc-card-title">Build-Error-Resolver</div>
+                                        <div class="ecc-card-desc">构建错误解决。TypeScript/JS 构建失败时使用。</div>
+                                        <span class="ecc-tag">sonnet</span>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="ecc-card">
+                                <div class="ecc-card-with-icon">
+                                    <span class="ecc-card-icon">🐹</span>
+                                    <div>
+                                        <div class="ecc-card-title">Go-Build-Resolver</div>
+                                        <div class="ecc-card-desc">Go 构建错误。Go 构建失败时使用。</div>
+                                        <span class="ecc-tag">sonnet</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <h4>重构与文档</h4>
+                        <div class="ecc-card-grid">
+                            <div class="ecc-card">
+                                <div class="ecc-card-with-icon">
+                                    <span class="ecc-card-icon">🧹</span>
+                                    <div>
+                                        <div class="ecc-card-title">Refactor-Cleaner</div>
+                                        <div class="ecc-card-desc">重构清理。删除死代码、清理依赖。</div>
+                                        <span class="ecc-tag">sonnet</span>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="ecc-card">
+                                <div class="ecc-card-with-icon">
+                                    <span class="ecc-card-icon">📝</span>
+                                    <div>
+                                        <div class="ecc-card-title">Doc-Updater</div>
+                                        <div class="ecc-card-desc">文档更新。同步更新文档和代码地图。</div>
+                                        <span class="ecc-tag">haiku</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <h4>语言特定</h4>
+                        <div class="ecc-card-grid">
+                            <div class="ecc-card">
+                                <div class="ecc-card-with-icon">
+                                    <span class="ecc-card-icon">🐹</span>
+                                    <div>
+                                        <div class="ecc-card-title">Go-Reviewer</div>
+                                        <div class="ecc-card-desc">Go 代码审查。审查 Go 语言代码。</div>
+                                        <span class="ecc-tag">sonnet</span>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="ecc-card">
+                                <div class="ecc-card-with-icon">
+                                    <span class="ecc-card-icon">🐍</span>
+                                    <div>
+                                        <div class="ecc-card-title">Python-Reviewer</div>
+                                        <div class="ecc-card-desc">Python 审查。审查 Python 代码。</div>
+                                        <span class="ecc-tag">sonnet</span>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="ecc-card">
+                                <div class="ecc-card-with-icon">
+                                    <span class="ecc-card-icon">🗄️</span>
+                                    <div>
+                                        <div class="ecc-card-title">Database-Reviewer</div>
+                                        <div class="ecc-card-desc">数据库审查。审查数据库相关代码。</div>
+                                        <span class="ecc-tag">sonnet</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <h3>代理工作方式</h3>
+
+                        <h4>触发方式</h4>
+                        <p><strong>手动触发</strong>：</p>
+                        <div class="code-block-wrapper">
+                            <div class="code-header">
+                                <span class="code-lang">bash</span>
+                                <button class="code-copy">复制代码</button>
+                            </div>
+                            <pre><code class="language-bash">/plan "添加用户认证"
+/code-review
+/security-scan</code></pre>
+                        </div>
+
+                        <p><strong>自动触发</strong>：当 Claude 检测到特定领域的问题时，自动委托给相应代理。</p>
+
+                        <h4>工具权限</h4>
+                        <table class="styled-table">
+                            <thead>
+                                <tr>
+                                    <th>工具</th>
+                                    <th>作用</th>
+                                    <th>只读代理</th>
+                                    <th>可写代理</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr><td>Read</td><td>读取文件</td><td>✅</td><td>✅</td></tr>
+                                <tr><td>Grep</td><td>搜索内容</td><td>✅</td><td>✅</td></tr>
+                                <tr><td>Glob</td><td>查找文件</td><td>✅</td><td>✅</td></tr>
+                                <tr><td>Bash</td><td>执行命令</td><td>✅</td><td>✅</td></tr>
+                                <tr><td>Write</td><td>创建文件</td><td>❌</td><td>✅</td></tr>
+                                <tr><td>Edit</td><td>编辑文件</td><td>❌</td><td>✅</td></tr>
+                            </tbody>
+                        </table>
+
+                        <h3>模型选择</h3>
+                        <p>不同代理使用不同模型，平衡成本和质量：</p>
+                        <table class="styled-table">
+                            <thead>
+                                <tr>
+                                    <th>模型</th>
+                                    <th>用途</th>
+                                    <th>代理</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr><td><strong>opus</strong></td><td>深度思考、复杂决策</td><td>planner, architect, security-reviewer</td></tr>
+                                <tr><td><strong>sonnet</strong></td><td>平衡成本和质量</td><td>大多数代理</td></tr>
+                                <tr><td><strong>haiku</strong></td><td>简单任务、节省成本</td><td>doc-updater</td></tr>
+                            </tbody>
+                        </table>
+                    </section>
+
+                    <!-- 二、Skills 技能模板 -->
+                    <section id="skills" class="ecc-section">
+                        <!-- Skills 章节配图 -->
+                        <div class="section-image-inline">
+                            <img src="../images/external/img_d45c305ed9df9fe5.jpg" alt="Skills 技能模板系统" loading="lazy">
+                            <div class="image-caption">Skills 技能模板 - 预定义的工作流程，告诉 Claude "如何"完成某类任务</div>
+                        </div>
+
+                        <div class="section-intro">
+                            <span class="section-intro-icon">📚</span>
+                            <div class="section-intro-content">
+                                <h4>Skills 技能模板</h4>
+                                <p><strong>本节要点</strong>：了解 37 个技能模板，知道每个技能的使用场景。<strong>学完你能</strong>：根据项目类型选择合适的技能，让 Claude 遵循最佳实践。</p>
+                            </div>
+                        </div>
+
+                        <h3>什么是 Skills？</h3>
+                        <p>Skills 是预定义的工作流程，告诉 Claude "如何"完成某类任务。它们包含特定领域的知识、最佳实践和具体实现模式。</p>
+
+                        <div class="alert alert-tip">
+                            <div class="alert-title">📖 三者关系比喻</div>
+                            <ul>
+                                <li><strong>Agents</strong> = 各部门专家（谁来做）</li>
+                                <li><strong>Commands</strong> = 快捷键（快速执行）</li>
+                                <li><strong>Skills</strong> = 操作指南（怎么做）</li>
+                            </ul>
+                            <p><strong>Skills 就是详细的"操作指南"</strong>，它告诉 Claude 在特定场景下应该遵循什么步骤和模式。</p>
+                        </div>
+
+                        <h3>技能分类一览（37个）</h3>
+
+                        <h4>编码标准类</h4>
+                        <div class="ecc-card-grid">
+                            <div class="ecc-card">
+                                <div class="ecc-card-with-icon">
+                                    <span class="ecc-card-icon">📐</span>
+                                    <div>
+                                        <div class="ecc-card-title">coding-standards</div>
+                                        <div class="ecc-card-desc">通用编码最佳实践。开始新项目、代码审查、重构时激活。</div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="ecc-card">
+                                <div class="ecc-card-with-icon">
+                                    <span class="ecc-card-icon">☕</span>
+                                    <div>
+                                        <div class="ecc-card-title">java-coding-standards</div>
+                                        <div class="ecc-card-desc">Java 编码标准。Java 项目使用。</div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <h4>前端模式类</h4>
+                        <div class="ecc-card-grid">
+                            <div class="ecc-card">
+                                <div class="ecc-card-with-icon">
+                                    <span class="ecc-card-icon">⚛️</span>
+                                    <div>
+                                        <div class="ecc-card-title">frontend-patterns</div>
+                                        <div class="ecc-card-desc">React、Next.js 模式。构建组件、状态管理、性能优化时使用。</div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <h4>后端模式类</h4>
+                        <div class="ecc-card-grid">
+                            <div class="ecc-card">
+                                <div class="ecc-card-with-icon">
+                                    <span class="ecc-card-icon">🔧</span>
+                                    <div>
+                                        <div class="ecc-card-title">backend-patterns</div>
+                                        <div class="ecc-card-desc">API 设计、数据库优化。设计 API、缓存、后台任务。</div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="ecc-card">
+                                <div class="ecc-card-with-icon">
+                                    <span class="ecc-card-icon">🐹</span>
+                                    <div>
+                                        <div class="ecc-card-title">golang-patterns</div>
+                                        <div class="ecc-card-desc">Go 语言惯用法。Go 项目使用。</div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="ecc-card">
+                                <div class="ecc-card-with-icon">
+                                    <span class="ecc-card-icon">🐍</span>
+                                    <div>
+                                        <div class="ecc-card-title">python-patterns</div>
+                                        <div class="ecc-card-desc">Python 惯用法。Python 项目使用。</div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="ecc-card">
+                                <div class="ecc-card-with-icon">
+                                    <span class="ecc-card-icon">🎸</span>
+                                    <div>
+                                        <div class="ecc-card-title">django-patterns</div>
+                                        <div class="ecc-card-desc">Django 模式。Django 项目使用。</div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="ecc-card">
+                                <div class="ecc-card-with-icon">
+                                    <span class="ecc-card-icon">🍃</span>
+                                    <div>
+                                        <div class="ecc-card-title">springboot-patterns</div>
+                                        <div class="ecc-card-desc">Spring Boot 模式。Spring Boot 项目使用。</div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <h4>测试相关类</h4>
+                        <div class="ecc-card-grid">
+                            <div class="ecc-card">
+                                <div class="ecc-card-with-icon">
+                                    <span class="ecc-card-icon">🧪</span>
+                                    <div>
+                                        <div class="ecc-card-title">tdd-workflow</div>
+                                        <div class="ecc-card-desc">TDD 方法论。写新功能、修 bug、重构时使用。</div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="ecc-card">
+                                <div class="ecc-card-with-icon">
+                                    <span class="ecc-card-icon">🐹</span>
+                                    <div>
+                                        <div class="ecc-card-title">golang-testing</div>
+                                        <div class="ecc-card-desc">Go 测试模式。Go 测试使用。</div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="ecc-card">
+                                <div class="ecc-card-with-icon">
+                                    <span class="ecc-card-icon">🐍</span>
+                                    <div>
+                                        <div class="ecc-card-title">python-testing</div>
+                                        <div class="ecc-card-desc">pytest 测试。Python 测试使用。</div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="ecc-card">
+                                <div class="ecc-card-with-icon">
+                                    <span class="ecc-card-icon">🎭</span>
+                                    <div>
+                                        <div class="ecc-card-title">e2e-testing</div>
+                                        <div class="ecc-card-desc">Playwright E2E 测试。端到端测试使用。</div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <h4>安全相关类</h4>
+                        <div class="ecc-card-grid">
+                            <div class="ecc-card">
+                                <div class="ecc-card-with-icon">
+                                    <span class="ecc-card-icon">🔒</span>
+                                    <div>
+                                        <div class="ecc-card-title">security-review</div>
+                                        <div class="ecc-card-desc">安全检查清单。安全审查时使用。</div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="ecc-card">
+                                <div class="ecc-card-with-icon">
+                                    <span class="ecc-card-icon">🛡️</span>
+                                    <div>
+                                        <div class="ecc-card-title">security-scan</div>
+                                        <div class="ecc-card-desc">AgentShield 安全审计。漏洞扫描时使用。</div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <h4>持续学习类</h4>
+                        <div class="ecc-card-grid">
+                            <div class="ecc-card">
+                                <div class="ecc-card-with-icon">
+                                    <span class="ecc-card-icon">🧠</span>
+                                    <div>
+                                        <div class="ecc-card-title">continuous-learning</div>
+                                        <div class="ecc-card-desc">自动提取模式。会话结束时激活。</div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="ecc-card">
+                                <div class="ecc-card-with-icon">
+                                    <span class="ecc-card-icon">💡</span>
+                                    <div>
+                                        <div class="ecc-card-title">continuous-learning-v2</div>
+                                        <div class="ecc-card-desc">直觉式学习。会话进行中使用。</div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <h3>技能激活方式</h3>
+                        <p><strong>自动激活</strong>：当 Claude 检测到技能描述中提到的场景时自动激活。例如：写 React 组件时，frontend-patterns 自动激活。</p>
+                        <p><strong>通过代理引用</strong>：代理会在需要时引用技能中的知识。例如：tdd-guide 代理会引用 tdd-workflow 技能。</p>
+                        <p><strong>通过命令调用</strong>：某些命令会加载特定技能。例如：`/tdd` 命令会加载 tdd-workflow 技能。</p>
+
+                        <h3>按语言选择技能</h3>
+                        <table class="styled-table">
+                            <thead>
+                                <tr>
+                                    <th>语言</th>
+                                    <th>推荐技能</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>TypeScript/JavaScript</td>
+                                    <td><code>coding-standards</code>, <code>frontend-patterns</code>, <code>backend-patterns</code>, <code>tdd-workflow</code></td>
+                                </tr>
+                                <tr>
+                                    <td>Python</td>
+                                    <td><code>python-patterns</code>, <code>django-patterns</code>, <code>python-testing</code>, <code>django-security</code></td>
+                                </tr>
+                                <tr>
+                                    <td>Go</td>
+                                    <td><code>golang-patterns</code>, <code>golang-testing</code></td>
+                                </tr>
+                                <tr>
+                                    <td>Java</td>
+                                    <td><code>java-coding-standards</code>, <code>springboot-patterns</code>, <code>jpa-patterns</code>, <code>springboot-security</code></td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </section>
+
+                    <!-- 三、Commands 高级命令 -->
+                    <section id="commands" class="ecc-section">
+                        <!-- Commands 章节配图 -->
+                        <div class="section-image-inline">
+                            <img src="../images/external/img_355a9470404eab38.png" alt="Claude Code 终端命令界面" loading="lazy">
+                            <div class="image-caption">Claude Code 终端界面 - Commands 让你用简短指令触发复杂工作流</div>
+                        </div>
+
+                        <div class="section-intro">
+                            <span class="section-intro-icon">⌨️</span>
+                            <div class="section-intro-content">
+                                <h4>Commands 高级命令</h4>
+                                <p><strong>本节要点</strong>：学会 31 个快捷命令，用简短指令触发复杂工作流。<strong>学完你能</strong>：快速启动规划、测试、审查等常用工作流。</p>
+                            </div>
+                        </div>
+
+                        <h3>什么是 Commands？</h3>
+                        <p>Commands 是快速执行特定任务的"快捷键"，以 `/` 开头。它们让你用简短的指令触发复杂的工作流程。</p>
+
+                        <div class="alert alert-tip">
+                            <div class="alert-title">🎹 三者关系比喻</div>
+                            <ul>
+                                <li><strong>Agents</strong> = 专家顾问（需要被委托）</li>
+                                <li><strong>Skills</strong> = 操作手册（需要被查阅）</li>
+                                <li><strong>Commands</strong> = 快捷键（一键触发）</li>
+                            </ul>
+                            <p><strong>Commands 就是你的"快捷键"</strong>，让你用一句话就能启动复杂的工作流程。</p>
+                        </div>
+
+                        <h3>命令一览（31个）</h3>
+
+                        <h4>规划与设计</h4>
+                        <table class="styled-table">
+                            <thead>
+                                <tr>
+                                    <th>命令</th>
+                                    <th>作用</th>
+                                    <th>调用的代理</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr><td><code>/plan "描述"</code></td><td>创建实施计划</td><td>planner</td></tr>
+                                <tr><td><code>/orchestrate</code></td><td>多代理协调</td><td>多个代理</td></tr>
+                            </tbody>
+                        </table>
+
+                        <h4>开发与测试</h4>
+                        <table class="styled-table">
+                            <thead>
+                                <tr>
+                                    <th>命令</th>
+                                    <th>作用</th>
+                                    <th>调用的代理</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr><td><code>/tdd</code></td><td>TDD 工作流</td><td>tdd-guide</td></tr>
+                                <tr><td><code>/code-review</code></td><td>代码审查</td><td>code-reviewer</td></tr>
+                                <tr><td><code>/build-fix</code></td><td>修复构建错误</td><td>build-error-resolver</td></tr>
+                                <tr><td><code>/e2e</code></td><td>E2E 测试</td><td>e2e-runner</td></tr>
+                                <tr><td><code>/refactor-clean</code></td><td>清理死代码</td><td>refactor-cleaner</td></tr>
+                                <tr><td><code>/test-coverage</code></td><td>测试覆盖率分析</td><td>-</td></tr>
+                            </tbody>
+                        </table>
+
+                        <h4>Go 相关</h4>
+                        <table class="styled-table">
+                            <thead>
+                                <tr>
+                                    <th>命令</th>
+                                    <th>作用</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr><td><code>/go-review</code></td><td>Go 代码审查</td></tr>
+                                <tr><td><code>/go-test</code></td><td>Go TDD 工作流</td></tr>
+                                <tr><td><code>/go-build</code></td><td>Go 构建修复</td></tr>
+                            </tbody>
+                        </table>
+
+                        <h4>Python 相关</h4>
+                        <table class="styled-table">
+                            <thead>
+                                <tr>
+                                    <th>命令</th>
+                                    <th>作用</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr><td><code>/python-review</code></td><td>Python 代码审查</td></tr>
+                            </tbody>
+                        </table>
+
+                        <h4>持续学习</h4>
+                        <table class="styled-table">
+                            <thead>
+                                <tr>
+                                    <th>命令</th>
+                                    <th>作用</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr><td><code>/learn</code></td><td>从当前会话提取模式</td></tr>
+                                <tr><td><code>/instinct-status</code></td><td>查看已学习的直觉</td></tr>
+                                <tr><td><code>/instinct-import</code></td><td>导入直觉</td></tr>
+                                <tr><td><code>/instinct-export</code></td><td>导出直觉</td></tr>
+                                <tr><td><code>/evolve</code></td><td>将直觉聚类成技能</td></tr>
+                                <tr><td><code>/skill-create</code></td><td>从 git 历史生成技能</td></tr>
+                            </tbody>
+                        </table>
+
+                        <h4>验证与检查</h4>
+                        <table class="styled-table">
+                            <thead>
+                                <tr>
+                                    <th>命令</th>
+                                    <th>作用</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr><td><code>/checkpoint</code></td><td>保存验证状态</td></tr>
+                                <tr><td><code>/verify</code></td><td>运行验证循环</td></tr>
+                                <tr><td><code>/eval</code></td><td>根据标准评估</td></tr>
+                            </tbody>
+                        </table>
+
+                        <h3>常用命令详解</h3>
+
+                        <div class="collapsible-header" onclick="toggleCollapsible(this)">
+                            <span><span style="margin-right: 8px;">📋</span><strong>/plan 命令</strong> - 创建实施计划</span>
+                            <span class="collapsible-icon">▼</span>
+                        </div>
+                        <div class="collapsible-content">
+                            <p><strong>作用</strong>：重述需求、评估风险、创建分步实施计划</p>
+                            <p><strong>使用</strong>：</p>
+                            <div class="code-block-wrapper">
+                                <pre><code class="language-bash">/plan 我需要添加实时通知功能</code></pre>
+                            </div>
+                            <p><strong>输出</strong>：</p>
+                            <ol>
+                                <li>需求重述</li>
+                                <li>分阶段计划</li>
+                                <li>依赖关系</li>
+                                <li>风险评估</li>
+                                <li>复杂度估计</li>
+                                <li><strong>等待确认</strong></li>
+                            </ol>
+                        </div>
+
+                        <div class="collapsible-header" onclick="toggleCollapsible(this)">
+                            <span><span style="margin-right: 8px;">🧪</span><strong>/tdd 命令</strong> - 测试驱动开发</span>
+                            <span class="collapsible-icon">▼</span>
+                        </div>
+                        <div class="collapsible-content">
+                            <p><strong>作用</strong>：启动测试驱动开发工作流</p>
+                            <p><strong>使用</strong>：</p>
+                            <div class="code-block-wrapper">
+                                <pre><code class="language-bash">/tdd</code></pre>
+                            </div>
+                            <p><strong>效果</strong>：强制先写测试，再写代码。遵循 RED-GREEN-REFACTOR 循环。</p>
+                        </div>
+
+                        <div class="collapsible-header" onclick="toggleCollapsible(this)">
+                            <span><span style="margin-right: 8px;">🔍</span><strong>/code-review 命令</strong> - 代码审查</span>
+                            <span class="collapsible-icon">▼</span>
+                        </div>
+                        <div class="collapsible-content">
+                            <p><strong>作用</strong>：审查代码质量、安全性、可维护性</p>
+                            <p><strong>使用</strong>：</p>
+                            <div class="code-block-wrapper">
+                                <pre><code class="language-bash">/code-review</code></pre>
+                            </div>
+                            <p><strong>输出</strong>：按严重性分类的问题列表</p>
+                        </div>
+                    </section>
+
+                    <!-- 四、Rules 规范 -->
+                    <section id="rules" class="ecc-section">
+                        <div class="section-intro">
+                            <span class="section-intro-icon">📋</span>
+                            <div class="section-intro-content">
+                                <h4>Rules 规范</h4>
+                                <p><strong>本节要点</strong>：理解编码规范体系，知道哪些是不可协商的标准。<strong>学完你能</strong>：确保代码符合测试覆盖率、安全规范等强制要求。</p>
+                            </div>
+                        </div>
+
+                        <h3>什么是 Rules？</h3>
+                        <p>Rules 是"永远要遵守"的指导原则，它们定义了标准、约定和检查清单，广泛应用于所有编码活动。</p>
+
+                        <div class="alert alert-tip">
+                            <div class="alert-title">📜 Rules vs Skills 对比</div>
+                            <ul>
+                                <li><strong>Skills</strong> = 操作指南（告诉你怎么做）</li>
+                                <li><strong>Rules</strong> = 公司规章制度（告诉你必须遵守什么）</li>
+                            </ul>
+                            <p><strong>Rules 就是你的"规章制度"</strong>，它们是不可协商的标准，比如"测试覆盖率必须80%+"、"禁止硬编码密钥"。</p>
+                        </div>
+
+                        <h3>Rules vs Skills</h3>
+                        <table class="styled-table">
+                            <thead>
+                                <tr>
+                                    <th>特性</th>
+                                    <th>Rules</th>
+                                    <th>Skills</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr><td>定义</td><td><strong>做什么</strong>（标准）</td><td><strong>怎么做</strong>（方法）</td></tr>
+                                <tr><td>例子</td><td>"80%测试覆盖率"</td><td>"如何写pytest测试"</td></tr>
+                                <tr><td>性质</td><td>强制遵守</td><td>参考指导</td></tr>
+                                <tr><td>范围</td><td>广泛应用</td><td>特定任务</td></tr>
+                            </tbody>
+                        </table>
+
+                        <h3>Common 规则详解</h3>
+
+                        <div class="collapsible-header" onclick="toggleCollapsible(this)">
+                            <span><span style="margin-right: 8px;">📐</span><strong>coding-style.md</strong> - 代码风格</span>
+                            <span class="collapsible-icon">▼</span>
+                        </div>
+                        <div class="collapsible-content">
+                            <p><strong>关键规则</strong>：</p>
+                            <ul>
+                                <li>总是使用 ...spread 而不是直接修改</li>
+                                <li>文件超过800行应该拆分</li>
+                                <li>使用描述性命名</li>
+                            </ul>
+                        </div>
+
+                        <div class="collapsible-header" onclick="toggleCollapsible(this)">
+                            <span><span style="margin-right: 8px;">🧪</span><strong>testing.md</strong> - 测试要求</span>
+                            <span class="collapsible-icon">▼</span>
+                        </div>
+                        <div class="collapsible-content">
+                            <p><strong>关键规则</strong>：</p>
+                            <ul>
+                                <li>测试覆盖率必须 80%+</li>
+                                <li>先写测试再写代码</li>
+                                <li>所有公共函数必须有测试</li>
+                            </ul>
+                        </div>
+
+                        <div class="collapsible-header" onclick="toggleCollapsible(this)">
+                            <span><span style="margin-right: 8px;">🔒</span><strong>security.md</strong> - 安全规范</span>
+                            <span class="collapsible-icon">▼</span>
+                        </div>
+                        <div class="collapsible-content">
+                            <p><strong>关键规则</strong>：</p>
+                            <ul>
+                                <li>禁止硬编码密钥</li>
+                                <li>使用环境变量</li>
+                                <li>定期运行安全扫描</li>
+                            </ul>
+                        </div>
+
+                        <div class="collapsible-header" onclick="toggleCollapsible(this)">
+                            <span><span style="margin-right: 8px;">⚡</span><strong>performance.md</strong> - 性能优化</span>
+                            <span class="collapsible-icon">▼</span>
+                        </div>
+                        <div class="collapsible-content">
+                            <p><strong>关键规则</strong>：</p>
+                            <ul>
+                                <li>默认使用 sonnet，复杂任务用 opus</li>
+                                <li>保持 MCP 服务器 < 10个</li>
+                                <li>活跃工具 < 80个</li>
+                            </ul>
+                        </div>
+
+                        <h3>安装方法</h3>
+                        <div class="code-block-wrapper">
+                            <div class="code-header">
+                                <span class="code-lang">bash</span>
+                                <button class="code-copy">复制代码</button>
+                            </div>
+                            <pre><code class="language-bash"># 安装 common + 一种或多种语言规则
+./install.sh typescript
+./install.sh python
+./install.sh golang
+
+# 同时安装多种语言
+./install.sh typescript python</code></pre>
+                        </div>
+                    </section>
+
+                    <!-- 五、Hooks 钩子 -->
+                    <section id="hooks" class="ecc-section">
+                        <div class="section-intro">
+                            <span class="section-intro-icon">🔗</span>
+                            <div class="section-intro-content">
+                                <h4>Hooks 钩子</h4>
+                                <p><strong>本节要点</strong>：掌握自动化监控机制，了解钩子的触发时机和用法。<strong>学完你能</strong>：配置自动检查、格式化等后台任务。</p>
+                            </div>
+                        </div>
+
+                        <h3>什么是 Hooks？</h3>
+                        <p>Hooks 是事件驱动的自动化机制，在 Claude Code 工具执行之前或之后触发。它们强制执行代码质量、早期捕获错误、自动化重复检查。</p>
+
+                        <div class="alert alert-tip">
+                            <div class="alert-title">⚡ Hooks 就是后台监控</div>
+                            <ul>
+                                <li><strong>Commands</strong> = 你主动按的快捷键</li>
+                                <li><strong>Agents</strong> = 你委托的专家</li>
+                                <li><strong>Hooks</strong> = 自动触发的后台监控</li>
+                            </ul>
+                            <p><strong>Hooks 就是你的"后台监控"</strong>，它们在特定事件发生时自动运行，不需要你手动触发。</p>
+                        </div>
+
+                        <h3>钩子工作流程</h3>
+                        <div class="hook-flow-diagram">
+                            <div class="hook-flow-step">
+                                <span class="hook-flow-icon">👤</span>
+                                <span class="hook-flow-label">用户请求</span>
+                            </div>
+                            <div class="hook-flow-arrow">→</div>
+                            <div class="hook-flow-step">
+                                <span class="hook-flow-icon">🤖</span>
+                                <span class="hook-flow-label">Claude 选择工具</span>
+                            </div>
+                            <div class="hook-flow-arrow">→</div>
+                            <div class="hook-flow-step highlight-warning">
+                                <span class="hook-flow-icon">⚠️</span>
+                                <span class="hook-flow-label">PreToolUse 钩子</span>
+                            </div>
+                            <div class="hook-flow-arrow">→</div>
+                            <div class="hook-flow-step">
+                                <span class="hook-flow-icon">⚙️</span>
+                                <span class="hook-flow-label">工具执行</span>
+                            </div>
+                            <div class="hook-flow-arrow">→</div>
+                            <div class="hook-flow-step highlight-info">
+                                <span class="hook-flow-icon">✅</span>
+                                <span class="hook-flow-label">PostToolUse 钩子</span>
+                            </div>
+                        </div>
+
+                        <h3>钩子类型</h3>
+                        <table class="styled-table">
+                            <thead>
+                                <tr>
+                                    <th>类型</th>
+                                    <th>触发时机</th>
+                                    <th>能否阻止</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr><td><strong>PreToolUse</strong></td><td>工具执行前</td><td>✅ 可以阻止 (exit 2)</td></tr>
+                                <tr><td><strong>PostToolUse</strong></td><td>工具执行后</td><td>❌ 不能阻止</td></tr>
+                                <tr><td><strong>Stop</strong></td><td>每次 Claude 响应后</td><td>❌ 不能阻止</td></tr>
+                                <tr><td><strong>SessionStart</strong></td><td>会话开始时</td><td>❌ 不能阻止</td></tr>
+                                <tr><td><strong>SessionEnd</strong></td><td>会话结束时</td><td>❌ 不能阻止</td></tr>
+                                <tr><td><strong>PreCompact</strong></td><td>上下文压缩前</td><td>❌ 不能阻止</td></tr>
+                            </tbody>
+                        </table>
+
+                        <h3>常用钩子示例</h3>
+
+                        <div class="collapsible-header" onclick="toggleCollapsible(this)">
+                            <span><span style="margin-right: 8px;">⚠️</span><strong>PreToolUse 钩子</strong> - 工具执行前</span>
+                            <span class="collapsible-icon">▼</span>
+                        </div>
+                        <div class="collapsible-content">
+                            <table class="styled-table">
+                                <thead>
+                                    <tr>
+                                        <th>钩子</th>
+                                        <th>匹配器</th>
+                                        <th>行为</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr><td>开发服务器阻止器</td><td>Bash</td><td>阻止 tmux 外的 npm run dev</td></tr>
+                                    <tr><td>Tmux 提醒</td><td>Bash</td><td>建议对长时间命令使用 tmux</td></tr>
+                                    <tr><td>Git push 提醒</td><td>Bash</td><td>提醒 git push 前审查变更</td></tr>
+                                    <tr><td>文档文件阻止器</td><td>Write</td><td>阻止创建随机的 .md/.txt 文件</td></tr>
+                                </tbody>
+                            </table>
+                        </div>
+
+                        <div class="collapsible-header" onclick="toggleCollapsible(this)">
+                            <span><span style="margin-right: 8px;">✅</span><strong>PostToolUse 钩子</strong> - 工具执行后</span>
+                            <span class="collapsible-icon">▼</span>
+                        </div>
+                        <div class="collapsible-content">
+                            <table class="styled-table">
+                                <thead>
+                                    <tr>
+                                        <th>钩子</th>
+                                        <th>匹配器</th>
+                                        <th>作用</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr><td>PR 记录器</td><td>Bash</td><td>gh pr create 后记录 PR URL</td></tr>
+                                    <tr><td>构建分析</td><td>Bash</td><td>构建命令后后台分析</td></tr>
+                                    <tr><td>Prettier 格式化</td><td>Edit</td><td>编辑后自动格式化 JS/TS</td></tr>
+                                    <tr><td>TypeScript 检查</td><td>Edit</td><td>编辑 .ts/.tsx 后运行 tsc --noEmit</td></tr>
+                                    <tr><td>console.log 警告</td><td>Edit</td><td>警告编辑文件中的 console.log</td></tr>
+                                </tbody>
+                            </table>
+                        </div>
+
+                        <h3>自定义钩子示例</h3>
+
+                        <div class="collapsible-header" onclick="toggleCollapsible(this)">
+                            <span><span style="margin-right: 8px;">📝</span><strong>警告 TODO 注释</strong></span>
+                            <span class="collapsible-icon">▼</span>
+                        </div>
+                        <div class="collapsible-content">
+                            <div class="code-block-wrapper">
+                                <pre><code class="language-json">{
+  "matcher": "Edit",
+  "hooks": [{
+    "type": "command",
+    "command": "node -e \"let d='';process.stdin.on('data',c=>d+=c);process.stdin.on('end',()=>{const i=JSON.parse(d);const ns=i.tool_input?.new_string||'';if(/TODO|FIXME|HACK/.test(ns)){console.error('[Hook] 添加了新的 TODO/FIXME - 考虑创建 issue')}console.log(d)})\""
+  }],
+  "description": "添加 TODO/FIXME 注释时警告"
+}</code></pre>
+                            </div>
+                        </div>
+
+                        <div class="collapsible-header" onclick="toggleCollapsible(this)">
+                            <span><span style="margin-right: 8px;">🚫</span><strong>阻止大文件创建</strong>（超过800行）</span>
+                            <span class="collapsible-icon">▼</span>
+                        </div>
+                        <div class="collapsible-content">
+                            <div class="code-block-wrapper">
+                                <pre><code class="language-json">{
+  "matcher": "Write",
+  "hooks": [{
+    "type": "command",
+    "command": "node -e \"let d='';process.stdin.on('data',c=>d+=c);process.stdin.on('end',()=>{const i=JSON.parse(d);const c=i.tool_input?.content||'';const lines=c.split('\\n').length;if(lines>800){console.error('[Hook] 已阻止: 文件超过800行');process.exit(2)}console.log(d)})\""
+  }],
+  "description": "阻止创建超过800行的文件"
+}</code></pre>
+                            </div>
+                        </div>
+
+                        <h3>钩子退出码</h3>
+                        <ul>
+                            <li><code>0</code> — 成功（继续执行）</li>
+                            <li><code>2</code> — 阻止工具调用（仅 PreToolUse）</li>
+                            <li>其他非零 — 错误（记录但不阻止）</li>
+                        </ul>
+                    </section>
+
+                    <!-- 六、企业级工作流 -->
+                    <section id="workflow" class="ecc-section">
+                        <!-- 工作流章节配图 -->
+                        <div class="section-image-inline">
+                            <img src="../images/external/img_61f7095b14e03120.jpg" alt="企业级工作流程" loading="lazy">
+                            <div class="image-caption">企业级工作流程 - 按规范完成各类开发任务</div>
+                        </div>
+
+                        <div class="section-intro">
+                            <span class="section-intro-icon">🔄</span>
+                            <div class="section-intro-content">
+                                <h4>企业级工作流</h4>
+                                <p><strong>本节要点</strong>：熟悉企业级开发流程，掌握新功能开发、Bug修复、上线前的标准流程。<strong>学完你能</strong>：按规范完成各类开发任务。</p>
+                            </div>
+                        </div>
+
+                        <h3>新功能开发流程</h3>
+
+                        <h4>完整流程</h4>
+                        <div class="code-block-wrapper">
+                            <div class="code-header">
+                                <span class="code-lang">bash</span>
+                                <button class="code-copy">复制代码</button>
+                            </div>
+                            <pre><code class="language-bash"># 1. 规划
+/plan "添加用户认证功能"
+# 等待 planner 生成计划，确认后继续
+
+# 2. TDD 开发
+/tdd
+# 按照指导先写测试，再写实现
+
+# 3. 代码审查
+/code-review
+# 检查代码质量和安全性
+
+# 4. 安全扫描（可选）
+/security-scan
+# 深度安全审查</code></pre>
+                        </div>
+
+                        <h4>简化流程（快速迭代）</h4>
+                        <div class="code-block-wrapper">
+                            <pre><code class="language-bash">/tdd           # 测试驱动开发
+/code-review   # 快速审查</code></pre>
+                        </div>
+
+                        <h3>Bug 修复流程</h3>
+                        <div class="code-block-wrapper">
+                            <div class="code-header">
+                                <span class="code-lang">bash</span>
+                                <button class="code-copy">复制代码</button>
+                            </div>
+                            <pre><code class="language-bash"># 1. TDD 方式复现 bug
+/tdd
+# 先写一个能复现 bug 的失败测试
+
+# 2. 实现修复
+# 写最少的代码让测试通过
+
+# 3. 审查
+/code-review
+# 检查是否有回归问题</code></pre>
+                        </div>
+
+                        <div class="alert alert-warning">
+                            <div class="alert-title">关键原则</div>
+                            <ul>
+                                <li><strong>先写测试</strong> — 确保真的修复了问题</li>
+                                <li><strong>最小改动</strong> — 只修复问题，不做额外修改</li>
+                                <li><strong>审查回归</strong> — 确保没有引入新问题</li>
+                            </ul>
+                        </div>
+
+                        <h3>生产准备流程</h3>
+                        <div class="code-block-wrapper">
+                            <div class="code-header">
+                                <span class="code-lang">bash</span>
+                                <button class="code-copy">复制代码</button>
+                            </div>
+                            <pre><code class="language-bash"># 1. 安全扫描
+/security-scan
+# OWASP Top 10 审计
+
+# 2. E2E 测试
+/e2e
+# 关键用户流程测试
+
+# 3. 测试覆盖率
+/test-coverage
+# 验证 80%+ 覆盖率
+
+# 4. 验证循环
+/verify
+# 全面验证</code></pre>
+                        </div>
+
+                        <h3>重构流程</h3>
+                        <div class="code-block-wrapper">
+                            <div class="code-header">
+                                <span class="code-lang">bash</span>
+                                <button class="code-copy">复制代码</button>
+                            </div>
+                            <pre><code class="language-bash"># 清理死代码
+/refactor-clean
+# 识别并删除未使用的代码、依赖、导出
+
+# 审查变更
+/code-review
+# 确保没有破坏功能</code></pre>
+                        </div>
+
+                        <h3>语言特定工作流</h3>
+
+                        <h4>Go 项目</h4>
+                        <div class="code-block-wrapper">
+                            <pre><code class="language-bash">/go-review     # Go 代码审查
+/go-test       # Go TDD 工作流
+/go-build      # 修复 Go 构建错误（如果需要）</code></pre>
+                        </div>
+
+                        <h4>Python 项目</h4>
+                        <div class="code-block-wrapper">
+                            <pre><code class="language-bash">/python-review # PEP 8、类型注解、安全审查
+pytest         # 运行 pytest 测试</code></pre>
+                        </div>
+
+                        <h3>常见场景速查表</h3>
+                        <table class="styled-table">
+                            <thead>
+                                <tr>
+                                    <th>场景</th>
+                                    <th>命令序列</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr><td>新功能</td><td><code>/plan</code> → <code>/tdd</code> → <code>/code-review</code></td></tr>
+                                <tr><td>修 bug</td><td><code>/tdd</code> → <code>/code-review</code></td></tr>
+                                <tr><td>上线前</td><td><code>/security-scan</code> → <code>/e2e</code> → <code>/test-coverage</code></td></tr>
+                                <tr><td>清理代码</td><td><code>/refactor-clean</code> → <code>/code-review</code></td></tr>
+                                <tr><td>Go 项目</td><td><code>/go-review</code> → <code>/go-test</code> → <code>/go-build</code></td></tr>
+                                <tr><td>Python 项目</td><td><code>/python-review</code> → <code>pytest</code></td></tr>
+                                <tr><td>学模式</td><td><code>/learn</code> → <code>/instinct-status</code></td></tr>
+                                <tr><td>更新文档</td><td><code>/update-codemaps</code> → <code>/update-docs</code></td></tr>
+                            </tbody>
+                        </table>
+
+                        <h3>工作流最佳实践</h3>
+                        <div class="checklist" data-id="ecc-best-practices">
+                            <div class="checklist-item">
+                                <input type="checkbox" id="bp1">
+                                <label for="bp1"><strong>规划先行</strong>：对于复杂功能，先用 /plan 制定计划，确认后再开始</label>
+                            </div>
+                            <div class="checklist-item">
+                                <input type="checkbox" id="bp2">
+                                <label for="bp2"><strong>测试驱动</strong>：总是用 /tdd 或遵循 TDD 原则，先写测试再写代码</label>
+                            </div>
+                            <div class="checklist-item">
+                                <input type="checkbox" id="bp3">
+                                <label for="bp3"><strong>定期审查</strong>：完成功能后用 /code-review 审查，不要积累太多代码</label>
+                            </div>
+                            <div class="checklist-item">
+                                <input type="checkbox" id="bp4">
+                                <label for="bp4"><strong>安全意识</strong>：涉及用户输入、认证、敏感数据的代码，用 /security-scan 审查</label>
+                            </div>
+                            <div class="checklist-item">
+                                <input type="checkbox" id="bp5">
+                                <label for="bp5"><strong>持续学习</strong>：用 /learn 和 /instinct-status 跟踪你学到的模式</label>
+                            </div>
+                            <div class="checklist-item">
+                                <input type="checkbox" id="bp6">
+                                <label for="bp6"><strong>文档同步</strong>：重大变更后用 /update-docs 保持文档同步</label>
+                            </div>
+                        </div>
+                    </section>
+
+                    <!-- 章节导航 -->
+                    <nav class="chapter-nav">
+                        <a href="appendix.html" class="chapter-nav-card">
+                            <svg class="icon" aria-hidden="true"><use href="../images/icons.svg#icon-arrow-left"></use></svg>
+                            <div class="content">
+                                <div class="label">上一章</div>
+                                <div class="title">附录：速查手册</div>
+                            </div>
+                        </a>
+                        <a href="../index.html" class="chapter-nav-card next">
+                            <svg class="icon" aria-hidden="true"><use href="../images/icons.svg#icon-home"></use></svg>
+                            <div class="content">
+                                <div class="label">返回</div>
+                                <div class="title">首页</div>
+                            </div>
+                        </a>
+                    </nav>
+                </article>
+            </div>
+
+            <footer class="footer">
+                <div class="footer-copyright">&copy; 2025 Claude Code 教程网站</div>
+            </footer>
+        </main>
+
+        <div class="overlay" id="overlay"></div>
+
+        <!-- 返回顶部按钮 -->
+        <button class="back-to-top" id="backToTop" aria-label="返回顶部">↑</button>
+    </div>
+
+    <script src="../js/main.js"></script>
+    <script>
+        // 折叠面板功能
+        function toggleCollapsible(header) {
+            header.classList.toggle('active');
+            const content = header.nextElementSibling;
+            content.classList.toggle('active');
+        }
+
+        // 返回顶部按钮功能
+        const backToTopBtn = document.getElementById('backToTop');
+
+        window.addEventListener('scroll', () => {
+            if (window.scrollY > 300) {
+                backToTopBtn.classList.add('visible');
+            } else {
+                backToTopBtn.classList.remove('visible');
+            }
+        });
+
+        backToTopBtn.addEventListener('click', () => {
+            window.scrollTo({
+                top: 0,
+                behavior: 'smooth'
+            });
+        });
+    </script>
+</body>
+</html>
