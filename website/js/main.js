@@ -433,6 +433,16 @@ const courseData = {
             difficulty: '-',
             category: '附录',
             path: 'pages/scenario-pack.html'
+        },
+        {
+            id: 'appendix-ecc',
+            number: 'A4',
+            title: 'Everything Claude Code 参考大全',
+            desc: '进阶知识库：Agents、Skills、Commands、Rules、Hooks、工作流完整指南',
+            time: '随时查阅',
+            difficulty: '进阶',
+            category: '附录',
+            path: 'pages/appendix-ecc.html'
         }
     ]
 };
