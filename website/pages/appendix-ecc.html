@@ -97,6 +97,7 @@
             text-decoration: none;
             display: block;
             cursor: pointer;
+            color: inherit;
         }
         .ecc-card-link:hover .ecc-card-title {
             color: var(--primary-color);
@@ -113,6 +114,14 @@
         }
         .ecc-card-link:hover::after {
             opacity: 1;
+        }
+        /* 确保内部元素不阻挡点击 */
+        .ecc-card-link .ecc-card-with-icon,
+        .ecc-card-link .ecc-card-icon,
+        .ecc-card-link .ecc-card-title,
+        .ecc-card-link .ecc-card-desc,
+        .ecc-card-link .ecc-tag {
+            pointer-events: none;
         }
         .collapsible-header {
             display: flex;
