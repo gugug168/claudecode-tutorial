@@ -1,0 +1,1572 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>A4-6: 企业级工作流详解 - Claude Code 教程</title>
+    <link rel="stylesheet" href="../css/style.css">
+    <style>
+        /* 继承 ECC 页面样式 */
+        .ecc-toc {
+            position: sticky;
+            top: 80px;
+            background: var(--bg-card);
+            border: 1px solid var(--border-color);
+            border-radius: var(--radius-md);
+            padding: 20px;
+            margin-bottom: 24px;
+            z-index: 100;
+        }
+        .ecc-toc-title { font-size: 1.1rem; font-weight: 600; margin-bottom: 12px; color: var(--text-primary); }
+        .ecc-toc-nav { display: flex; flex-wrap: wrap; gap: 8px; }
+        .ecc-toc-link {
+            display: inline-flex; align-items: center; gap: 6px;
+            padding: 6px 12px; background: var(--bg-secondary);
+            border-radius: var(--radius-sm); color: var(--text-secondary);
+            text-decoration: none; font-size: 0.9rem; transition: all 0.2s;
+        }
+        .ecc-toc-link:hover { background: var(--primary-color); color: white; }
+        .ecc-section { border-top: 2px solid var(--border-color); padding-top: 40px; margin-top: 40px; }
+        .section-intro {
+            display: flex; align-items: flex-start; gap: 16px;
+            padding: 16px 20px; background: var(--bg-secondary);
+            border-radius: var(--radius-md); border-left: 4px solid var(--primary-color); margin-bottom: 20px;
+        }
+        .section-intro-icon { font-size: 2rem; flex-shrink: 0; }
+        .section-intro-content h4 { margin: 0 0 8px 0; color: var(--text-primary); }
+        .section-intro-content p { margin: 0; color: var(--text-secondary); font-size: 0.95rem; }
+        .styled-table { width: 100%; border-collapse: collapse; margin: 20px 0; font-size: 0.95rem; border-radius: var(--radius-sm); overflow: hidden; border: 1px solid var(--border-color); }
+        .styled-table th { background: var(--bg-secondary); font-weight: 600; text-align: left; padding: 12px 16px; border-bottom: 2px solid var(--primary-color); }
+        .styled-table td { padding: 12px 16px; border-bottom: 1px solid var(--border-color); }
+        .styled-table tr:nth-child(even) { background: var(--bg-secondary); }
+        .styled-table tr:hover { background: var(--primary-light); }
+        .styled-table code { background: var(--bg-tertiary); padding: 2px 6px; border-radius: var(--radius-sm); font-size: 0.9em; }
+        .subpage-nav { display: flex; justify-content: space-between; align-items: center; gap: 16px; margin: 40px 0; padding: 20px; background: var(--bg-secondary); border-radius: var(--radius-md); }
+        .subpage-nav-link { display: flex; align-items: center; gap: 8px; padding: 10px 16px; background: var(--bg-card); border: 1px solid var(--border-color); border-radius: var(--radius-sm); color: var(--text-primary); text-decoration: none; transition: all 0.2s; }
+        .subpage-nav-link:hover { border-color: var(--primary-color); color: var(--primary-color); }
+        .example-box { background: linear-gradient(135deg, #f0f4ff 0%, #e8f5e9 100%); border: 1px solid var(--border-color); border-radius: var(--radius-md); padding: 20px; margin: 24px 0; }
+        .example-box-title { font-weight: 600; color: var(--primary-color); margin-bottom: 12px; display: flex; align-items: center; gap: 8px; }
+
+        /* 模型标签颜色 */
+        .ecc-tag { display: inline-block; padding: 2px 8px; background: var(--primary-light); color: var(--primary-color); border-radius: var(--radius-sm); font-size: 0.8rem; margin-right: 4px; }
+        .ecc-tag.opus { background: #e8f5e9; color: #2e7d32; }
+        .ecc-tag.sonnet { background: #e3f2fd; color: #1565c0; }
+        .ecc-tag.haiku { background: #fff3e0; color: #ef6c00; }
+
+        /* 工作流详细卡片 - 可展开 */
+        .workflow-detail-card {
+            background: var(--bg-card);
+            border: 1px solid var(--border-color);
+            border-radius: var(--radius-md);
+            margin-bottom: 16px;
+            overflow: hidden;
+            transition: all 0.3s;
+        }
+        .workflow-detail-card:hover {
+            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+        }
+        .workflow-card-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 16px 20px;
+            cursor: pointer;
+            background: linear-gradient(135deg, var(--bg-card) 0%, var(--bg-secondary) 100%);
+            border-bottom: 1px solid transparent;
+            transition: all 0.2s;
+        }
+        .workflow-card-header:hover {
+            background: var(--bg-secondary);
+        }
+        .workflow-card-header.active {
+            border-bottom-color: var(--border-color);
+            background: var(--bg-secondary);
+        }
+        .workflow-card-header-left {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+        }
+        .workflow-card-icon {
+            font-size: 2rem;
+            width: 48px;
+            height: 48px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: var(--bg-tertiary);
+            border-radius: var(--radius-sm);
+        }
+        .workflow-card-title-group {
+            display: flex;
+            flex-direction: column;
+            gap: 4px;
+        }
+        .workflow-card-title {
+            font-weight: 600;
+            font-size: 1.1rem;
+            color: var(--text-primary);
+        }
+        .workflow-card-subtitle {
+            font-size: 0.85rem;
+            color: var(--text-secondary);
+        }
+        .workflow-card-toggle {
+            font-size: 1.5rem;
+            color: var(--text-muted);
+            transition: transform 0.3s;
+        }
+        .workflow-card-header.active .workflow-card-toggle {
+            transform: rotate(180deg);
+        }
+        .workflow-card-body {
+            display: none;
+            padding: 20px;
+            background: var(--bg-card);
+        }
+        .workflow-card-body.active {
+            display: block;
+        }
+        .workflow-config-section {
+            margin-bottom: 20px;
+            padding-bottom: 20px;
+            border-bottom: 1px solid var(--border-color);
+        }
+        .workflow-config-section:last-child {
+            margin-bottom: 0;
+            padding-bottom: 0;
+            border-bottom: none;
+        }
+        .workflow-config-title {
+            font-weight: 600;
+            color: var(--text-primary);
+            margin-bottom: 12px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        .workflow-config-content {
+            color: var(--text-secondary);
+            font-size: 0.95rem;
+        }
+        .workflow-config-content ul {
+            margin: 8px 0;
+            padding-left: 20px;
+        }
+        .workflow-config-content li {
+            margin-bottom: 6px;
+        }
+        .workflow-config-content ol {
+            margin: 8px 0;
+            padding-left: 20px;
+        }
+        .workflow-config-content ol li {
+            margin-bottom: 12px;
+        }
+        .config-code {
+            background: var(--bg-tertiary);
+            padding: 12px 16px;
+            border-radius: var(--radius-sm);
+            font-family: monospace;
+            font-size: 0.9rem;
+            overflow-x: auto;
+            margin: 12px 0;
+        }
+        .config-highlight {
+            background: linear-gradient(135deg, #fff3e0 0%, #ffe0b2 100%);
+            padding: 12px 16px;
+            border-radius: var(--radius-sm);
+            border-left: 4px solid #ff9800;
+            margin: 12px 0;
+        }
+        .config-info {
+            background: linear-gradient(135deg, #e3f2fd 0%, #bbdefb 100%);
+            padding: 12px 16px;
+            border-radius: var(--radius-sm);
+            border-left: 4px solid #2196f3;
+            margin: 12px 0;
+        }
+        .config-success {
+            background: linear-gradient(135deg, #e8f5e9 0%, #c8e6c9 100%);
+            padding: 12px 16px;
+            border-radius: var(--radius-sm);
+            border-left: 4px solid #4caf50;
+            margin: 12px 0;
+        }
+        .config-warning {
+            background: linear-gradient(135deg, #fff3e0 0%, #ffe0b2 100%);
+            padding: 12px 16px;
+            border-radius: var(--radius-sm);
+            border-left: 4px solid #ff9800;
+            margin: 12px 0;
+        }
+
+        /* 快速跳转导航 */
+        .quick-nav {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+            margin-bottom: 24px;
+        }
+        .quick-nav-btn {
+            padding: 8px 16px;
+            background: var(--bg-secondary);
+            border: 1px solid var(--border-color);
+            border-radius: var(--radius-sm);
+            color: var(--text-secondary);
+            text-decoration: none;
+            font-size: 0.9rem;
+            transition: all 0.2s;
+        }
+        .quick-nav-btn:hover {
+            background: var(--primary-color);
+            color: white;
+            border-color: var(--primary-color);
+        }
+
+        /* 速查表样式 */
+        .quick-ref-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 16px;
+            margin: 20px 0;
+        }
+        .quick-ref-card {
+            background: var(--bg-card);
+            border: 1px solid var(--border-color);
+            border-radius: var(--radius-md);
+            padding: 16px;
+        }
+        .quick-ref-title {
+            font-weight: 600;
+            color: var(--text-primary);
+            margin-bottom: 12px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        .quick-ref-cmd {
+            background: var(--bg-secondary);
+            padding: 8px 12px;
+            border-radius: var(--radius-sm);
+            font-family: monospace;
+            font-size: 0.9rem;
+            margin-bottom: 8px;
+        }
+
+        /* 流程图 */
+        .flow-diagram {
+            display: flex;
+            flex-wrap: wrap;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            padding: 20px;
+            background: linear-gradient(135deg, var(--bg-card) 0%, var(--bg-secondary) 100%);
+            border-radius: var(--radius-md);
+            border: 1px solid var(--border-color);
+            margin: 24px 0;
+        }
+        .flow-step {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 12px 16px;
+            background: white;
+            border-radius: var(--radius-sm);
+            border: 1px solid var(--border-color);
+            min-width: 100px;
+        }
+        .flow-step.active {
+            border-color: var(--primary-color);
+            box-shadow: 0 0 0 2px var(--primary-light);
+        }
+        .flow-icon {
+            font-size: 1.5rem;
+            margin-bottom: 6px;
+        }
+        .flow-label {
+            font-size: 0.85rem;
+            color: var(--text-secondary);
+            text-align: center;
+        }
+        .flow-arrow {
+            color: var(--primary-color);
+            font-size: 1.5rem;
+            font-weight: bold;
+        }
+
+        @media (max-width: 768px) {
+            .ecc-toc { position: relative; top: 0; }
+            .subpage-nav { flex-direction: column; }
+            .workflow-card-header-left { flex-direction: column; align-items: flex-start; gap: 8px; }
+            .quick-ref-grid { grid-template-columns: 1fr; }
+            .flow-diagram { flex-direction: column; }
+        }
+    </style>
+</head>
+<body data-page-id="appendix-ecc-workflow">
+    <div class="app-container">
+        <aside class="sidebar" id="sidebar">
+            <div class="sidebar-header">
+                <a href="../index.html" style="display: flex; align-items: center; gap: 12px; text-decoration: none;">
+                    <div class="logo">C</div>
+                    <span class="logo-text">Claude Code 教程</span>
+                </a>
+            </div>
+            <div class="sidebar-search">
+                <div class="search-box">
+                    <span class="search-icon" aria-hidden="true">
+                        <svg class="icon icon-xs"><use href="../images/icons.svg#icon-search"></use></svg>
+                    </span>
+                    <input type="text" placeholder="搜索章节...">
+                </div>
+            </div>
+            <nav class="sidebar-nav" id="sidebarNav"></nav>
+        </aside>
+
+        <main class="main-content">
+            <header class="top-nav">
+                <div class="top-nav-left">
+                    <button class="menu-toggle" id="menuToggle" aria-label="打开目录">
+                        <svg class="icon icon-sm" aria-hidden="true"><use href="../images/icons.svg#icon-menu"></use></svg>
+                    </button>
+                    <nav class="breadcrumb">
+                        <a href="../index.html">首页</a>
+                        <span class="separator">/</span>
+                        <a href="appendix-ecc.html">ECC参考大全</a>
+                        <span class="separator">/</span>
+                        <span class="current">工作流</span>
+                    </nav>
+                </div>
+                <div class="top-nav-right">
+                    <div class="progress-indicator">
+                        <span>学习进度</span>
+                        <div class="progress-bar">
+                            <div class="progress-fill" id="progressFill" style="width: 0%"></div>
+                        </div>
+                        <span class="progress-text" id="progressText">0%</span>
+                    </div>
+                </div>
+            </header>
+
+            <div class="content-wrapper">
+                <header class="article-header">
+                    <div class="article-breadcrumb">
+                        <a href="../index.html">首页</a> / <a href="appendix-ecc.html">A4: ECC参考大全</a> / <span>A4-6: 企业级工作流详解</span>
+                    </div>
+                    <h1 class="article-title">A4-6: 企业级工作流详解</h1>
+                    <div class="article-meta">
+                        <span class="article-meta-item">
+                            <svg class="icon icon-xs" aria-hidden="true"><use href="../images/icons.svg#icon-clock"></use></svg>
+                            预计 30 分钟
+                        </span>
+                        <span class="article-meta-item">
+                            <svg class="icon icon-xs" aria-hidden="true"><use href="../images/icons.svg#icon-tag"></use></svg>
+                            类别：进阶 · 实战
+                        </span>
+                    </div>
+                </header>
+
+                <article class="article-content">
+                    <!-- 返回上级 -->
+                    <div style="margin-bottom: 24px;">
+                        <a href="appendix-ecc.html" style="display: inline-flex; align-items: center; gap: 6px; color: var(--primary-color); text-decoration: none;">
+                            <svg class="icon icon-xs"><use href="../images/icons.svg#icon-arrow-left"></use></svg>
+                            返回 ECC 参考大全
+                        </a>
+                    </div>
+
+                    <!-- 本页目录 -->
+                    <div class="ecc-toc">
+                        <div class="ecc-toc-title">📑 本页目录</div>
+                        <nav class="ecc-toc-nav">
+                            <a href="#intro" class="ecc-toc-link">📌 概念介绍</a>
+                            <a href="#new-feature" class="ecc-toc-link">🆕 新功能开发</a>
+                            <a href="#bug-fix" class="ecc-toc-link">🐛 Bug 修复</a>
+                            <a href="#production" class="ecc-toc-link">🚀 生产准备</a>
+                            <a href="#refactor" class="ecc-toc-link">🧹 代码重构</a>
+                            <a href="#language" class="ecc-toc-link">🔤 语言工作流</a>
+                            <a href="#quick-ref" class="ecc-toc-link">⚡ 速查表</a>
+                            <a href="#best-practices" class="ecc-toc-link">✨ 最佳实践</a>
+                        </nav>
+                    </div>
+
+                    <!-- 快速跳转 -->
+                    <div class="quick-nav">
+                        <span style="color: var(--text-secondary); font-size: 0.9rem;">快速跳转：</span>
+                        <a href="#workflow-full" class="quick-nav-btn">完整开发流程</a>
+                        <a href="#workflow-simple" class="quick-nav-btn">简化开发流程</a>
+                        <a href="#workflow-bug" class="quick-nav-btn">Bug修复流程</a>
+                        <a href="#workflow-prod" class="quick-nav-btn">生产准备流程</a>
+                        <a href="#workflow-go" class="quick-nav-btn">Go工作流</a>
+                        <a href="#workflow-python" class="quick-nav-btn">Python工作流</a>
+                    </div>
+
+                    <!-- 概念介绍 -->
+                    <section id="intro">
+                        <div class="section-intro">
+                            <span class="section-intro-icon">🔄</span>
+                            <div class="section-intro-content">
+                                <h4>什么是企业级工作流？</h4>
+                                <p>工作流是完成特定开发任务的标准操作步骤。就像盖房子要先设计图纸、再打地基、再砌墙一样，写代码也有规范的流程。<strong>点击下方卡片展开查看每个工作流的详细步骤</strong>。</p>
+                            </div>
+                        </div>
+
+                        <div class="alert alert-info">
+                            <div class="alert-title">🎯 如何使用本页</div>
+                            <ul>
+                                <li>点击任意<strong>工作流卡片</strong>展开查看详细步骤</li>
+                                <li>每个工作流包含：<strong>概述</strong>、<strong>适用场景</strong>、<strong>详细步骤</strong>、<strong>命令序列</strong>、<strong>实战案例</strong></li>
+                                <li>使用<strong>快速跳转</strong>按钮直达特定工作流</li>
+                            </ul>
+                        </div>
+                    </section>
+
+                    <!-- 新功能开发工作流 -->
+                    <section id="new-feature" class="ecc-section">
+                        <h2>🆕 新功能开发工作流</h2>
+                        <p>从零开始实现新功能的标准化流程，确保代码质量和可维护性。</p>
+
+                        <!-- 完整开发流程 -->
+                        <div class="workflow-detail-card" id="workflow-full">
+                            <div class="workflow-card-header" onclick="toggleWorkflowCard(this)">
+                                <div class="workflow-card-header-left">
+                                    <div class="workflow-card-icon">📋</div>
+                                    <div class="workflow-card-title-group">
+                                        <div class="workflow-card-title">完整开发流程 <span class="ecc-tag opus">复杂功能</span></div>
+                                        <div class="workflow-card-subtitle">适用于需要规划的中大型功能开发</div>
+                                    </div>
+                                </div>
+                                <span class="workflow-card-toggle">▼</span>
+                            </div>
+                            <div class="workflow-card-body">
+                                <div class="workflow-config-section">
+                                    <div class="workflow-config-title">📌 工作流概述</div>
+                                    <div class="workflow-config-content">
+                                        <p>这个流程就像<strong>盖房子的完整流程</strong>：先请设计师画图纸（规划），再按图纸一步步建造（TDD开发），最后验收（代码审查）。适用于需要深思熟虑的复杂功能。</p>
+                                        <div class="config-info">
+                                            <strong>为什么需要完整流程？</strong>
+                                            <ul>
+                                                <li>避免开发到一半发现方向不对，浪费时间</li>
+                                                <li>提前发现技术风险，做好应对方案</li>
+                                                <li>保证代码质量和安全性</li>
+                                                <li>让团队协作更顺畅</li>
+                                            </ul>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="workflow-config-section">
+                                    <div class="workflow-config-title">🎯 适用场景</div>
+                                    <div class="workflow-config-content">
+                                        <ul>
+                                            <li>✅ 需要修改3个以上文件的功能</li>
+                                            <li>✅ 涉及多个模块交互的功能</li>
+                                            <li>✅ 技术方案不确定，需要评估</li>
+                                            <li>✅ 重要功能，不能出错</li>
+                                            <li>❌ 简单的单文件修改（用简化流程）</li>
+                                            <li>❌ 小bug修复（用Bug修复流程）</li>
+                                        </ul>
+                                    </div>
+                                </div>
+
+                                <div class="workflow-config-section">
+                                    <div class="workflow-config-title">📝 详细步骤</div>
+                                    <div class="workflow-config-content">
+                                        <ol>
+                                            <li>
+                                                <strong>规划阶段</strong> — 使用 <code>/plan</code> 命令
+                                                <p style="margin: 8px 0; color: var(--text-secondary); font-size: 0.9rem;">
+                                                    Planner 会帮你分析需求、评估风险、拆解任务。就像请专业设计师画图纸，告诉你先做什么后做什么。
+                                                </p>
+                                            </li>
+                                            <li>
+                                                <strong>确认计划</strong> — 仔细阅读生成的计划
+                                                <p style="margin: 8px 0; color: var(--text-secondary); font-size: 0.9rem;">
+                                                    如果计划有问题，告诉 Planner 调整；如果没问题，说"确认"开始执行。
+                                                </p>
+                                            </li>
+                                            <li>
+                                                <strong>TDD 开发</strong> — 使用 <code>/tdd</code> 命令
+                                                <p style="margin: 8px 0; color: var(--text-secondary); font-size: 0.9rem;">
+                                                    遵循 RED→GREEN→REFACTOR 循环：先写测试，再写代码，最后优化。这就像施工时边做边检查，确保质量。
+                                                </p>
+                                            </li>
+                                            <li>
+                                                <strong>代码审查</strong> — 使用 <code>/code-review</code> 命令
+                                                <p style="margin: 8px 0; color: var(--text-secondary); font-size: 0.9rem;">
+                                                    检查代码质量、性能、可维护性。就像请监理来验收工程质量。
+                                                </p>
+                                            </li>
+                                            <li>
+                                                <strong>安全扫描（可选）</strong> — 使用 <code>/security-scan</code> 命令
+                                                <p style="margin: 8px 0; color: var(--text-secondary); font-size: 0.9rem;">
+                                                    如果涉及用户登录、支付、敏感数据，必须做安全扫描。就像请安全专家检查防盗门锁。
+                                                </p>
+                                            </li>
+                                        </ol>
+                                    </div>
+                                </div>
+
+                                <div class="workflow-config-section">
+                                    <div class="workflow-config-title">⚡ 命令序列</div>
+                                    <div class="workflow-config-content">
+                                        <div class="config-code">
+# 1. 规划阶段
+/plan "添加用户认证功能，支持邮箱和手机号登录"
+# 等待 planner 生成计划，确认后继续
+
+# 2. TDD 开发
+/tdd
+# 按照指导先写测试，再写实现
+
+# 3. 代码审查
+/code-review
+# 检查代码质量和安全性
+
+# 4. 安全扫描（如果涉及安全敏感功能）
+/security-scan
+# 深度安全审查</div>
+                                    </div>
+                                </div>
+
+                                <div class="workflow-config-section">
+                                    <div class="workflow-config-title">💡 实战案例：用户认证功能</div>
+                                    <div class="workflow-config-content">
+                                        <div class="example-box">
+                                            <div class="example-box-title">场景：为网站添加用户登录功能</div>
+                                            <div class="config-code">
+# === 第1步：规划 ===
+/plan "添加用户认证功能，支持邮箱和手机号登录"
+
+# Planner 会输出：
+# - 需求重述
+# - 技术方案对比（JWT vs Session）
+# - 分阶段计划：
+#   阶段1：数据库设计
+#   阶段2：后端API开发
+#   阶段3：前端登录表单
+# - 风险评估：密码加密、防暴力破解
+# - 预计工作量：6-8小时
+
+# 你：确认计划
+
+# === 第2步：TDD 开发 ===
+/tdd
+
+# TDD-Guide 会引导你：
+# 🔴 RED: 先写测试
+# def test_login_success():
+#     user = login("user@example.com", "password123")
+#     assert user.authenticated == True
+#
+# 运行测试 → 失败（因为还没实现）
+#
+# 🟢 GREEN: 写最少的代码让测试通过
+# 实现登录逻辑...
+#
+# 运行测试 → 通过！
+#
+# 🔵 REFACTOR: 优化代码
+# 清理重复代码，改进结构...
+
+# === 第3步：代码审查 ===
+/code-review
+
+# Code-Reviewer 会检查：
+# - 密码是否安全加密
+# - SQL 注入风险
+# - 错误处理是否完善
+# - 代码可读性
+
+# === 第4步：安全扫描 ===
+/security-scan
+
+# Security-Reviewer 会检查：
+# - OWASP Top 10 漏洞
+# - 密码存储安全
+# - 会话管理安全</div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="workflow-config-section">
+                                    <div class="workflow-config-title">⏱️ 预计时间</div>
+                                    <div class="workflow-config-content">
+                                        <table class="styled-table">
+                                            <tr><th>阶段</th><th>预计时间</th><th>说明</th></tr>
+                                            <tr><td>规划</td><td>15-30 分钟</td><td>复杂功能需要更多时间规划</td></tr>
+                                            <tr><td>TDD 开发</td><td>2-6 小时</td><td>根据功能复杂度</td></tr>
+                                            <tr><td>代码审查</td><td>15-30 分钟</td><td>自动审查，很快</td></tr>
+                                            <tr><td>安全扫描</td><td>10-20 分钟</td><td>可选，敏感功能必做</td></tr>
+                                        </table>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- 简化开发流程 -->
+                        <div class="workflow-detail-card" id="workflow-simple">
+                            <div class="workflow-card-header" onclick="toggleWorkflowCard(this)">
+                                <div class="workflow-card-header-left">
+                                    <div class="workflow-card-icon">⚡</div>
+                                    <div class="workflow-card-title-group">
+                                        <div class="workflow-card-title">简化开发流程 <span class="ecc-tag sonnet">快速迭代</span></div>
+                                        <div class="workflow-card-subtitle">适用于小功能、快速迭代场景</div>
+                                    </div>
+                                </div>
+                                <span class="workflow-card-toggle">▼</span>
+                            </div>
+                            <div class="workflow-card-body">
+                                <div class="workflow-config-section">
+                                    <div class="workflow-config-title">📌 工作流概述</div>
+                                    <div class="workflow-config-content">
+                                        <p>对于简单的小功能，不需要 elaborate 的规划。就像<strong>换个灯泡</strong>不需要画图纸，直接动手就行。这个流程跳过规划阶段，直接进入开发。</p>
+                                        <div class="config-warning">
+                                            <strong>⚠️ 什么时候用简化流程？</strong>
+                                            <ul>
+                                                <li>只需要修改1-2个文件</li>
+                                                <li>技术方案很明确</li>
+                                                <li>非核心功能，出问题影响不大</li>
+                                                <li>原型开发、快速验证想法</li>
+                                            </ul>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="workflow-config-section">
+                                    <div class="workflow-config-title">🎯 适用场景</div>
+                                    <div class="workflow-config-content">
+                                        <ul>
+                                            <li>✅ 修改单个函数或组件</li>
+                                            <li>✅ 添加简单的UI元素</li>
+                                            <li>✅ 修复小bug（不影响核心功能）</li>
+                                            <li>✅ 原型开发、快速验证</li>
+                                            <li>❌ 涉及多个模块的功能（用完整流程）</li>
+                                            <li>❌ 重要功能（用完整流程）</li>
+                                        </ul>
+                                    </div>
+                                </div>
+
+                                <div class="workflow-config-section">
+                                    <div class="workflow-config-title">📝 详细步骤</div>
+                                    <div class="workflow-config-content">
+                                        <ol>
+                                            <li>
+                                                <strong>TDD 开发</strong> — 使用 <code>/tdd</code> 命令
+                                                <p style="margin: 8px 0; color: var(--text-secondary); font-size: 0.9rem;">
+                                                    即使是简单功能，也建议先写测试。这样能保证你写的是正确的，而且以后不会改坏。
+                                                </p>
+                                            </li>
+                                            <li>
+                                                <strong>代码审查</strong> — 使用 <code>/code-review</code> 命令
+                                                <p style="margin: 8px 0; color: var(--text-secondary); font-size: 0.9rem;">
+                                                    快速检查一下代码质量，确保没有明显问题。
+                                                </p>
+                                            </li>
+                                        </ol>
+                                    </div>
+                                </div>
+
+                                <div class="workflow-config-section">
+                                    <div class="workflow-config-title">⚡ 命令序列</div>
+                                    <div class="workflow-config-content">
+                                        <div class="config-code">
+# 简化开发流程
+/tdd           # 测试驱动开发
+/code-review   # 快速审查</div>
+                                    </div>
+                                </div>
+
+                                <div class="workflow-config-section">
+                                    <div class="workflow-config-title">💡 实战案例：添加用户头像</div>
+                                    <div class="workflow-config-content">
+                                        <div class="example-box">
+                                            <div class="example-box-title">场景：在用户个人页面添加头像显示</div>
+                                            <div class="config-code">
+# === 第1步：TDD 开发 ===
+/tdd
+
+# TDD-Guide 会引导你：
+# 🔴 RED: 写测试
+# def test_display_avatar():
+#     user = User(id=1, avatar="avatar.jpg")
+#     html = render_profile(user)
+#     assert "avatar.jpg" in html
+#
+# 运行测试 → 失败
+#
+# 🟢 GREEN: 实现功能
+# 修改 profile.html，添加 &lt;img&gt; 标签
+#
+# 运行测试 → 通过！
+
+# === 第2步：代码审查 ===
+/code-review
+# 快速检查代码质量
+
+# 完成！整个过程可能只需要10-15分钟</div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </section>
+
+                    <!-- Bug 修复工作流 -->
+                    <section id="bug-fix" class="ecc-section">
+                        <h2>🐛 Bug 修复工作流</h2>
+                        <p>系统化的bug修复流程，确保真正解决问题且不引入新问题。</p>
+
+                        <div class="workflow-detail-card" id="workflow-bug">
+                            <div class="workflow-card-header" onclick="toggleWorkflowCard(this)">
+                                <div class="workflow-card-header-left">
+                                    <div class="workflow-card-icon">🔧</div>
+                                    <div class="workflow-card-title-group">
+                                        <div class="workflow-card-title">Bug 修复标准流程 <span class="ecc-tag sonnet">TDD模式</span></div>
+                                        <div class="workflow-card-subtitle">先写测试复现，再修复，最后验证</div>
+                                    </div>
+                                </div>
+                                <span class="workflow-card-toggle">▼</span>
+                            </div>
+                            <div class="workflow-card-body">
+                                <div class="workflow-config-section">
+                                    <div class="workflow-config-title">📌 工作流概述</div>
+                                    <div class="workflow-config-content">
+                                        <p>修bug最怕的是：<strong>不知道为什么修好了</strong>或者<strong>修好了又引出新bug</strong>。这个流程用TDD方法解决这个问题：先写测试证明bug存在，修复后测试通过，就说明真的修好了。</p>
+                                        <div class="flow-diagram">
+                                            <div class="flow-step">
+                                                <span class="flow-icon">📝</span>
+                                                <span class="flow-label">复现 Bug</span>
+                                            </div>
+                                            <span class="flow-arrow">→</span>
+                                            <div class="flow-step">
+                                                <span class="flow-icon">🔴</span>
+                                                <span class="flow-label">写失败测试</span>
+                                            </div>
+                                            <span class="flow-arrow">→</span>
+                                            <div class="flow-step active">
+                                                <span class="flow-icon">🔧</span>
+                                                <span class="flow-label">修复代码</span>
+                                            </div>
+                                            <span class="flow-arrow">→</span>
+                                            <div class="flow-step">
+                                                <span class="flow-icon">🟢</span>
+                                                <span class="flow-label">测试通过</span>
+                                            </div>
+                                            <span class="flow-arrow">→</span>
+                                            <div class="flow-step">
+                                                <span class="flow-icon">🔍</span>
+                                                <span class="flow-label">审查</span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="workflow-config-section">
+                                    <div class="workflow-config-title">🎯 适用场景</div>
+                                    <div class="workflow-config-content">
+                                        <ul>
+                                            <li>✅ 用户报告的bug</li>
+                                            <li>✅ 测试中发现的问题</li>
+                                            <li>✅ 代码审查发现的问题</li>
+                                            <li>✅ 生产环境的问题</li>
+                                        </ul>
+                                    </div>
+                                </div>
+
+                                <div class="workflow-config-section">
+                                    <div class="workflow-config-title">📝 详细步骤</div>
+                                    <div class="workflow-config-content">
+                                        <ol>
+                                            <li>
+                                                <strong>理解问题</strong> — 准确描述bug
+                                                <p style="margin: 8px 0; color: var(--text-secondary); font-size: 0.9rem;">
+                                                    什么条件下会发生？期望行为是什么？实际行为是什么？
+                                                </p>
+                                            </li>
+                                            <li>
+                                                <strong>写测试复现</strong> — 使用 <code>/tdd</code> 命令
+                                                <p style="margin: 8px 0; color: var(--text-secondary); font-size: 0.9rem;">
+                                                    写一个能复现bug的测试。这个测试一开始会失败（RED），这是正常的。
+                                                </p>
+                                            </li>
+                                            <li>
+                                                <strong>修复代码</strong> — 写最少的代码
+                                                <p style="margin: 8px 0; color: var(--text-secondary); font-size: 0.9rem;">
+                                                    只修改必要的代码，让测试通过（GREEN）。不要趁机做其他改动。
+                                                </p>
+                                            </li>
+                                            <li>
+                                                <strong>代码审查</strong> — 使用 <code>/code-review</code> 命令
+                                                <p style="margin: 8px 0; color: var(--text-secondary); font-size: 0.9rem;">
+                                                    检查修复是否引入新问题（回归）。
+                                                </p>
+                                            </li>
+                                        </ol>
+                                    </div>
+                                </div>
+
+                                <div class="workflow-config-section">
+                                    <div class="workflow-config-title">⚡ 命令序列</div>
+                                    <div class="workflow-config-content">
+                                        <div class="config-code">
+# Bug 修复标准流程
+/tdd           # 1. 先写测试复现 bug
+/code-review   # 2. 修复后审查，检查回归问题</div>
+                                    </div>
+                                </div>
+
+                                <div class="workflow-config-section">
+                                    <div class="workflow-config-title">💡 实战案例：登录超时Bug</div>
+                                    <div class="workflow-config-content">
+                                        <div class="example-box">
+                                            <div class="example-box-title">场景：用户报告"网络慢时登录会超时报错"</div>
+                                            <div class="config-code">
+# === 第1步：理解问题 ===
+# 用户说：网络差的时候，登录30秒就超时，但实际服务器处理需要45秒
+
+# === 第2步：TDD 复现 ===
+/tdd
+
+# Claude 引导你写测试：
+# 🔴 RED: 复现 bug
+# def test_login_slow_network():
+#     with mock_network_delay(40):  # 模拟40秒延迟
+#         result = login("user", "pass")
+#     assert result.success == True  # 期望成功，但实际会超时失败
+#
+# 运行测试 → 失败！bug 复现了
+
+# === 第3步：修复代码 ===
+# 找到超时配置，从30秒改为60秒
+# 或者实现异步处理
+
+# 运行测试 → 通过！bug 修复了
+
+# === 第4步：代码审查 ===
+/code-review
+# 检查：修改是否影响其他功能？</div>
+                                        </div>
+                                        <div class="config-highlight">
+                                            <strong>🎯 关键原则</strong>
+                                            <ul>
+                                                <li><strong>先写测试</strong> — 测试就是bug的证据，修好后测试通过就证明修好了</li>
+                                                <li><strong>最小改动</strong> — 只修复问题，不趁机重构或优化</li>
+                                                <li><strong>检查回归</strong> — 确保修复没有影响其他功能</li>
+                                                <li><strong>记录原因</strong> — 在注释或文档中说明为什么会出现这个bug</li>
+                                            </ul>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </section>
+
+                    <!-- 生产准备工作流 -->
+                    <section id="production" class="ecc-section">
+                        <h2>🚀 生产准备工作流</h2>
+                        <p>上线前的最后一道防线，确保代码可以安全部署到生产环境。</p>
+
+                        <div class="workflow-detail-card" id="workflow-prod">
+                            <div class="workflow-card-header" onclick="toggleWorkflowCard(this)">
+                                <div class="workflow-card-header-left">
+                                    <div class="workflow-card-icon">🚀</div>
+                                    <div class="workflow-card-title-group">
+                                        <div class="workflow-card-title">上线前检查流程 <span class="ecc-tag opus">必须完成</span></div>
+                                        <div class="workflow-card-subtitle">安全+测试+覆盖率，三重保险</div>
+                                    </div>
+                                </div>
+                                <span class="workflow-card-toggle">▼</span>
+                            </div>
+                            <div class="workflow-card-body">
+                                <div class="workflow-config-section">
+                                    <div class="workflow-config-title">📌 工作流概述</div>
+                                    <div class="workflow-config-content">
+                                        <p>上线前的<strong>三道防线</strong>：安全扫描检查漏洞，E2E测试验证核心功能，覆盖率检查确保测试充分。就像飞机起飞前的最后检查清单，缺一不可。</p>
+                                        <div class="config-warning">
+                                            <strong>⚠️ 绝对不能跳过的检查</strong>
+                                            <ul>
+                                                <li>涉及用户认证、支付、敏感数据的代码 → <strong>必须</strong> 安全扫描</li>
+                                                <li>核心业务流程（下单、支付、注册） → <strong>必须</strong> E2E测试</li>
+                                                <li>新功能模块 → <strong>必须</strong> 测试覆盖率检查</li>
+                                            </ul>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="workflow-config-section">
+                                    <div class="workflow-config-title">🎯 适用场景</div>
+                                    <div class="workflow-config-content">
+                                        <ul>
+                                            <li>✅ 准备部署新功能到生产环境</li>
+                                            <li>✅ 重要版本发布前</li>
+                                            <li>✅ 修复了生产环境的bug后</li>
+                                            <li>✅ 任何可能影响用户体验的变更</li>
+                                        </ul>
+                                    </div>
+                                </div>
+
+                                <div class="workflow-config-section">
+                                    <div class="workflow-config-title">📝 详细步骤</div>
+                                    <div class="workflow-config-content">
+                                        <ol>
+                                            <li>
+                                                <strong>安全扫描</strong> — 使用 <code>/security-scan</code> 命令
+                                                <p style="margin: 8px 0; color: var(--text-secondary); font-size: 0.9rem;">
+                                                    检查 OWASP Top 10 常见安全漏洞，包括SQL注入、XSS、认证问题等。
+                                                </p>
+                                            </li>
+                                            <li>
+                                                <strong>E2E 测试</strong> — 使用 <code>/e2e</code> 命令
+                                                <p style="margin: 8px 0; color: var(--text-secondary); font-size: 0.9rem;">
+                                                    运行端到端测试，模拟真实用户操作，确保核心功能正常。
+                                                </p>
+                                            </li>
+                                            <li>
+                                                <strong>测试覆盖率</strong> — 使用 <code>/test-coverage</code> 命令
+                                                <p style="margin: 8px 0; color: var(--text-secondary); font-size: 0.9rem;">
+                                                    验证测试覆盖率是否达到 80%+ 标准，确保代码有足够的测试保护。
+                                                </p>
+                                            </li>
+                                            <li>
+                                                <strong>全面验证</strong> — 使用 <code>/verify</code> 命令
+                                                <p style="margin: 8px 0; color: var(--text-secondary); font-size: 0.9rem;">
+                                                    最后的综合验证，确保所有检查项都通过。
+                                                </p>
+                                            </li>
+                                        </ol>
+                                    </div>
+                                </div>
+
+                                <div class="workflow-config-section">
+                                    <div class="workflow-config-title">⚡ 命令序列</div>
+                                    <div class="workflow-config-content">
+                                        <div class="config-code">
+# 完整上线流程
+/security-scan   # 1. 安全扫描
+/e2e             # 2. E2E 测试
+/test-coverage   # 3. 测试覆盖率
+/verify          # 4. 全面验证
+
+# 如果所有检查都通过，就可以安全上线了！</div>
+                                    </div>
+                                </div>
+
+                                <div class="workflow-config-section">
+                                    <div class="workflow-config-title">💡 实战案例：电商网站支付功能上线</div>
+                                    <div class="workflow-config-content">
+                                        <div class="example-box">
+                                            <div class="example-box-title">场景：支付功能开发完成，准备上线</div>
+                                            <div class="config-code">
+# === 第1步：安全扫描 ===
+/security-scan
+
+# Security-Reviewer 检查：
+# ✅ 支付数据是否加密传输
+# ✅ 是否防范 SQL 注入
+# ✅ 敏感信息是否记录到日志
+# ✅ CSRF 防护是否到位
+# 发现 2 个中危问题，修复后重新扫描
+
+# === 第2步：E2E 测试 ===
+/e2e
+
+# E2E-Runner 运行：
+# ✅ 用户登录 → 添加商品 → 结算 → 支付 → 订单确认
+# ✅ 支付失败场景处理
+# ✅ 网络中断重试
+# ✅ 支付超时处理
+# 所有核心流程测试通过！
+
+# === 第3步：测试覆盖率 ===
+/test-coverage
+
+# 覆盖率报告：
+# 支付模块: 85% ✅
+# 订单模块: 82% ✅
+# 整体覆盖率: 79% → 需要补充测试
+
+# 补充测试后，覆盖率达到 81%
+
+# === 第4步：全面验证 ===
+/verify
+
+# 验证结果：
+# ✅ 安全扫描通过
+# ✅ E2E 测试通过
+# ✅ 测试覆盖率达标
+# ✅ 无构建错误
+# ✅ 无类型错误
+# → 可以安全部署！</div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="workflow-config-section">
+                                    <div class="workflow-config-title">📊 检查项目清单</div>
+                                    <div class="workflow-config-content">
+                                        <table class="styled-table">
+                                            <tr><th>检查项</th><th>命令</th><th>通过标准</th></tr>
+                                            <tr><td>安全漏洞</td><td>/security-scan</td><td>无高危漏洞</td></tr>
+                                            <tr><td>核心功能</td><td>/e2e</td><td>所有场景通过</td></tr>
+                                            <tr><td>测试覆盖</td><td>/test-coverage</td><td>≥80%</td></tr>
+                                            <tr><td>类型检查</td><td>tsc --noEmit</td><td>无错误</td></tr>
+                                            <tr><td>构建成功</td><td>npm run build</td><td>无错误</td></tr>
+                                            <tr><td>单元测试</td><td>npm test</td><td>全部通过</td></tr>
+                                        </table>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </section>
+
+                    <!-- 代码重构工作流 -->
+                    <section id="refactor" class="ecc-section">
+                        <h2>🧹 代码重构工作流</h2>
+                        <p>清理技术债务，保持代码健康。</p>
+
+                        <div class="workflow-detail-card" id="workflow-refactor">
+                            <div class="workflow-card-header" onclick="toggleWorkflowCard(this)">
+                                <div class="workflow-card-header-left">
+                                    <div class="workflow-card-icon">🧹</div>
+                                    <div class="workflow-card-title-group">
+                                        <div class="workflow-card-title">代码清理流程 <span class="ecc-tag sonnet">定期维护</span></div>
+                                        <div class="workflow-card-subtitle">清理死代码，优化代码结构</div>
+                                    </div>
+                                </div>
+                                <span class="workflow-card-toggle">▼</span>
+                            </div>
+                            <div class="workflow-card-body">
+                                <div class="workflow-config-section">
+                                    <div class="workflow-config-title">📌 工作流概述</div>
+                                    <div class="workflow-config-content">
+                                        <p>就像定期打扫房间一样，代码也需要定期清理。删除不再使用的代码、函数、依赖，让项目保持整洁。</p>
+                                        <div class="config-info">
+                                            <strong>💡 为什么要清理代码？</strong>
+                                            <ul>
+                                                <li>减少代码体积，提高加载速度</li>
+                                                <li>降低维护成本（不需要维护无用代码）</li>
+                                                <li>减少安全风险（依赖包越少越安全）</li>
+                                                <li>让代码更容易理解</li>
+                                            </ul>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="workflow-config-section">
+                                    <div class="workflow-config-title">🎯 适用场景</div>
+                                    <div class="workflow-config-content">
+                                        <ul>
+                                            <li>✅ 完成一个大功能后</li>
+                                            <li>✅ 删除某个功能后</li>
+                                            <li>✅ 准备上线前</li>
+                                            <li>✅ 代码审查发现冗余时</li>
+                                        </ul>
+                                    </div>
+                                </div>
+
+                                <div class="workflow-config-section">
+                                    <div class="workflow-config-title">📝 详细步骤</div>
+                                    <div class="workflow-config-content">
+                                        <ol>
+                                            <li>
+                                                <strong>清理死代码</strong> — 使用 <code>/refactor-clean</code> 命令
+                                                <p style="margin: 8px 0; color: var(--text-secondary); font-size: 0.9rem;">
+                                                    自动识别并删除未使用的代码、依赖、导出。
+                                                </p>
+                                            </li>
+                                            <li>
+                                                <strong>代码审查</strong> — 使用 <code>/code-review</code> 命令
+                                                <p style="margin: 8px 0; color: var(--text-secondary); font-size: 0.9rem;">
+                                                    确保清理没有破坏任何功能。
+                                                </p>
+                                            </li>
+                                        </ol>
+                                    </div>
+                                </div>
+
+                                <div class="workflow-config-section">
+                                    <div class="workflow-config-title">⚡ 命令序列</div>
+                                    <div class="workflow-config-content">
+                                        <div class="config-code">
+# 清理死代码
+/refactor-clean
+# 识别并删除未使用的代码、依赖、导出
+
+# 审查变更
+/code-review
+# 确保没有破坏功能</div>
+                                    </div>
+                                </div>
+
+                                <div class="workflow-config-section">
+                                    <div class="workflow-config-title">🔍 清理内容详情</div>
+                                    <div class="workflow-config-content">
+                                        <table class="styled-table">
+                                            <tr><th>清理类型</th><th>示例</th></tr>
+                                            <tr><td>未使用的函数</td><td>定义了但从未调用的函数</td></tr>
+                                            <tr><td>未使用的变量</td><td>定义了但从未使用的变量</td></tr>
+                                            <tr><td>未使用的导入</td><td>import 了但没使用的模块</td></tr>
+                                            <tr><td>废弃的文件</td><td>不再需要的旧文件</td></tr>
+                                            <tr><td>多余的依赖</td><td>package.json 中未使用的依赖</td></tr>
+                                        </table>
+                                    </div>
+                                </div>
+
+                                <div class="workflow-config-section">
+                                    <div class="workflow-config-title">💡 实战案例：删除旧的用户推荐功能</div>
+                                    <div class="workflow-config-content">
+                                        <div class="example-box">
+                                            <div class="example-box-title">场景：产品决定移除旧的用户推荐功能</div>
+                                            <div class="config-code">
+# === 第1步：手动删除主要文件 ===
+# 删除了 recommendation/ 目录下的主要文件
+
+# === 第2步：自动清理残留 ===
+/refactor-clean
+
+# Refactor-Cleaner 发现：
+# - src/utils.ts 中有未使用的 getRecommendations() 函数
+# - types.ts 中有未使用的 Recommendation 类型
+# - package.json 中有未使用的 recommendation-api 依赖
+#
+# 清理结果：
+# 删除了 5 个未使用的导出
+# 删除了 2 个未使用的依赖包
+# 减少了 1.2MB 打包体积
+
+# === 第3步：审查 ===
+/code-review
+# 确保清理后项目仍然正常运行</div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </section>
+
+                    <!-- 语言特定工作流 -->
+                    <section id="language" class="ecc-section">
+                        <h2>🔤 语言特定工作流</h2>
+                        <p>针对不同编程语言的优化工作流。</p>
+
+                        <!-- Go 工作流 -->
+                        <div class="workflow-detail-card" id="workflow-go">
+                            <div class="workflow-card-header" onclick="toggleWorkflowCard(this)">
+                                <div class="workflow-card-header-left">
+                                    <div class="workflow-card-icon">🐹</div>
+                                    <div class="workflow-card-title-group">
+                                        <div class="workflow-card-title">Go 项目工作流</div>
+                                        <div class="workflow-card-subtitle">Go 语言特化的开发流程</div>
+                                    </div>
+                                </div>
+                                <span class="workflow-card-toggle">▼</span>
+                            </div>
+                            <div class="workflow-card-body">
+                                <div class="workflow-config-section">
+                                    <div class="workflow-config-title">📌 工作流概述</div>
+                                    <div class="workflow-config-content">
+                                        <p>Go 语言有其独特的惯用法和最佳实践。这个工作流专门针对 Go 项目优化，包括 Go 特定的代码审查和测试方法。</p>
+                                    </div>
+                                </div>
+
+                                <div class="workflow-config-section">
+                                    <div class="workflow-config-title">⚡ 命令序列</div>
+                                    <div class="workflow-config-content">
+                                        <div class="config-code">
+# Go 项目标准流程
+/go-review     # Go 代码审查（检查惯用法、错误处理）
+/go-test       # Go TDD 工作流
+/go-build      # 修复 Go 构建错误（如果需要）</div>
+                                    </div>
+                                </div>
+
+                                <div class="workflow-config-section">
+                                    <div class="workflow-config-title">🔍 Go 审查检查项</div>
+                                    <div class="workflow-config-content">
+                                        <table class="styled-table">
+                                            <tr><th>检查项</th><th>说明</th></tr>
+                                            <tr><td>Go 惯用法</td><td>idiomatic Go 风格，不是 Python/Java 风格的翻译</td></tr>
+                                            <tr><td>错误处理</td><td>if err != nil 模式，不要忽略错误</td></tr>
+                                            <tr><td>并发安全</td><td>goroutine、channel 的正确使用</td></tr>
+                                            <tr><td>性能</td><td>避免不必要的内存分配，减少 GC 压力</td></tr>
+                                        </table>
+                                    </div>
+                                </div>
+
+                                <div class="workflow-config-section">
+                                    <div class="workflow-config-title">💡 实战案例：实现 Go HTTP 服务</div>
+                                    <div class="workflow-config-content">
+                                        <div class="example-box">
+                                            <div class="example-box-title">场景：用 Go 实现一个简单的用户 API</div>
+                                            <div class="config-code">
+# === 第1步：规划 ===
+/plan "用 Go 实现用户 CRUD API"
+
+# === 第2步：Go TDD 开发 ===
+/go-test
+
+# TDD 引导你：
+# 🔴 RED: 写测试
+# func TestGetUser(t *testing.T) {
+#     req := httptest.NewRequest("GET", "/user/123", nil)
+#     w := httptest.NewRecorder()
+#     handler(w, req)
+#     assert.Equal(t, 200, w.Code)
+# }
+#
+# 🟢 GREEN: 实现功能
+# func handler(w http.ResponseWriter, r *http.Request) {
+#     // 实现...
+# }
+#
+# 运行 go test → 通过！
+
+# === 第3步：Go 代码审查 ===
+/go-review
+
+# Go-Reviewer 检查：
+# ✅ 错误处理是否完善
+# ✅ 是否遵循 Go 惯用法
+# ✅ goroutine 使用是否安全
+# ✅ 内存泄漏风险</div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Python 工作流 -->
+                        <div class="workflow-detail-card" id="workflow-python">
+                            <div class="workflow-card-header" onclick="toggleWorkflowCard(this)">
+                                <div class="workflow-card-header-left">
+                                    <div class="workflow-card-icon">🐍</div>
+                                    <div class="workflow-card-title-group">
+                                        <div class="workflow-card-title">Python 项目工作流</div>
+                                        <div class="workflow-card-subtitle">Python 特化的开发流程</div>
+                                    </div>
+                                </div>
+                                <span class="workflow-card-toggle">▼</span>
+                            </div>
+                            <div class="workflow-card-body">
+                                <div class="workflow-config-section">
+                                    <div class="workflow-config-title">⚡ 命令序列</div>
+                                    <div class="workflow-config-content">
+                                        <div class="config-code">
+# Python 项目标准流程
+/python-review # PEP 8、类型注解、安全审查
+pytest         # 运行 pytest 测试</div>
+                                    </div>
+                                </div>
+
+                                <div class="workflow-config-section">
+                                    <div class="workflow-config-title">🔍 Python 审查检查项</div>
+                                    <div class="workflow-config-content">
+                                        <table class="styled-table">
+                                            <tr><th>检查项</th><th>说明</th></tr>
+                                            <tr><td>PEP 8 规范</td><td>代码风格是否符合 Python 官方规范</td></tr>
+                                            <tr><td>类型注解</td><td>类型提示是否完整、正确</td></tr>
+                                            <tr><td>Pythonic 写法</td><td>是否使用列表推导、生成器等 Python 特性</td></tr>
+                                            <tr><td>常见陷阱</td><td>可变默认参数、循环导入等常见问题</td></tr>
+                                        </table>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- TypeScript/JavaScript 工作流 -->
+                        <div class="workflow-detail-card" id="workflow-typescript">
+                            <div class="workflow-card-header" onclick="toggleWorkflowCard(this)">
+                                <div class="workflow-card-header-left">
+                                    <div class="workflow-card-icon">📘</div>
+                                    <div class="workflow-card-title-group">
+                                        <div class="workflow-card-title">TypeScript/JavaScript 工作流</div>
+                                        <div class="workflow-card-subtitle">前端开发标准流程</div>
+                                    </div>
+                                </div>
+                                <span class="workflow-card-toggle">▼</span>
+                            </div>
+                            <div class="workflow-card-body">
+                                <div class="workflow-config-section">
+                                    <div class="workflow-config-title">⚡ 命令序列</div>
+                                    <div class="workflow-config-content">
+                                        <div class="config-code">
+# TypeScript/JavaScript 项目标准流程
+/tdd           # TDD 开发
+/code-review   # 代码审查
+/build-fix     # 修复构建错误（如果需要）</div>
+                                    </div>
+                                </div>
+
+                                <div class="workflow-config-section">
+                                    <div class="workflow-config-title">💡 常见问题修复</div>
+                                    <div class="workflow-config-content">
+                                        <table class="styled-table">
+                                            <tr><th>问题</th><th>命令</th></tr>
+                                            <tr><td>类型错误</td><td>/build-fix</td></tr>
+                                            <tr><td>模块导入</td><td>/build-fix</td></tr>
+                                            <tr><td>ESLint 错误</td><td>/build-fix</td></tr>
+                                            <tr><td>依赖问题</td><td>/build-fix</td></tr>
+                                        </table>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Java/Spring Boot 工作流 -->
+                        <div class="workflow-detail-card" id="workflow-java">
+                            <div class="workflow-card-header" onclick="toggleWorkflowCard(this)">
+                                <div class="workflow-card-header-left">
+                                    <div class="workflow-card-icon">☕</div>
+                                    <div class="workflow-card-title-group">
+                                        <div class="workflow-card-title">Java/Spring Boot 工作流</div>
+                                        <div class="workflow-card-subtitle">企业级 Java 开发流程</div>
+                                    </div>
+                                </div>
+                                <span class="workflow-card-toggle">▼</span>
+                            </div>
+                            <div class="workflow-card-body">
+                                <div class="workflow-config-section">
+                                    <div class="workflow-config-title">⚡ 命令序列</div>
+                                    <div class="workflow-config-content">
+                                        <div class="config-code">
+# Java/Spring Boot 项目标准流程
+/plan          # 规划（复杂功能）
+/tdd           # TDD 开发
+/code-review   # 代码审查
+/security-scan # 安全扫描（涉及安全功能时）</div>
+                                    </div>
+                                </div>
+
+                                <div class="workflow-config-section">
+                                    <div class="workflow-config-title">🔍 Java 审查检查项</div>
+                                    <div class="workflow-config-content">
+                                        <table class="styled-table">
+                                            <tr><th>检查项</th><th>说明</th></tr>
+                                            <tr><td>Spring 最佳实践</td><td>依赖注入、事务管理等</td></tr>
+                                            <tr><td>异常处理</td><td>@ControllerAdvice、自定义异常</td></tr>
+                                            <tr><td>安全配置</td><td>Spring Security 配置</td></tr>
+                                            <tr><td>JPA/Hibernate</td><td>N+1 查询、懒加载问题</td></tr>
+                                        </table>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </section>
+
+                    <!-- 场景速查表 -->
+                    <section id="quick-ref" class="ecc-section">
+                        <h2>⚡ 场景速查表</h2>
+                        <p>快速找到你需要的命令组合。</p>
+
+                        <div class="quick-ref-grid">
+                            <div class="quick-ref-card">
+                                <div class="quick-ref-title">🆕 新功能</div>
+                                <div class="quick-ref-cmd">/plan → /tdd → /code-review</div>
+                                <p style="font-size: 0.9rem; color: var(--text-secondary);">先规划再开发最后审查</p>
+                            </div>
+                            <div class="quick-ref-card">
+                                <div class="quick-ref-title">🐛 修 Bug</div>
+                                <div class="quick-ref-cmd">/tdd → /code-review</div>
+                                <p style="font-size: 0.9rem; color: var(--text-secondary);">先写测试复现再修复</p>
+                            </div>
+                            <div class="quick-ref-card">
+                                <div class="quick-ref-title">🚀 上线前</div>
+                                <div class="quick-ref-cmd">/security-scan → /e2e → /test-coverage</div>
+                                <p style="font-size: 0.9rem; color: var(--text-secondary);">安全+测试+覆盖率全检查</p>
+                            </div>
+                            <div class="quick-ref-card">
+                                <div class="quick-ref-title">🧹 清理代码</div>
+                                <div class="quick-ref-cmd">/refactor-clean → /code-review</div>
+                                <p style="font-size: 0.9rem; color: var(--text-secondary);">清理死代码后审查</p>
+                            </div>
+                            <div class="quick-ref-card">
+                                <div class="quick-ref-title">🐹 Go 项目</div>
+                                <div class="quick-ref-cmd">/go-review → /go-test → /go-build</div>
+                                <p style="font-size: 0.9rem; color: var(--text-secondary);">Go 专用工作流</p>
+                            </div>
+                            <div class="quick-ref-card">
+                                <div class="quick-ref-title">🐍 Python 项目</div>
+                                <div class="quick-ref-cmd">/python-review → pytest</div>
+                                <p style="font-size: 0.9rem; color: var(--text-secondary);">Python 专用工作流</p>
+                            </div>
+                            <div class="quick-ref-card">
+                                <div class="quick-ref-title">📘 TypeScript</div>
+                                <div class="quick-ref-cmd">/tdd → /code-review → /build-fix</div>
+                                <p style="font-size: 0.9rem; color: var(--text-secondary);">前端开发工作流</p>
+                            </div>
+                            <div class="quick-ref-card">
+                                <div class="quick-ref-title">☕ Java 项目</div>
+                                <div class="quick-ref-cmd">/plan → /tdd → /code-review → /security-scan</div>
+                                <p style="font-size: 0.9rem; color: var(--text-secondary);">企业级 Java 工作流</p>
+                            </div>
+                            <div class="quick-ref-card">
+                                <div class="quick-ref-title">⚡ 快速迭代</div>
+                                <div class="quick-ref-cmd">/tdd → /code-review</div>
+                                <p style="font-size: 0.9rem; color: var(--text-secondary);">小功能快速开发</p>
+                            </div>
+                            <div class="quick-ref-card">
+                                <div class="quick-ref-title">📚 学模式</div>
+                                <div class="quick-ref-cmd">/learn → /instinct-status</div>
+                                <p style="font-size: 0.9rem; color: var(--text-secondary);">从当前会话学习模式</p>
+                            </div>
+                            <div class="quick-ref-card">
+                                <div class="quick-ref-title">📝 更新文档</div>
+                                <div class="quick-ref-cmd">/update-codemaps → /update-docs</div>
+                                <p style="font-size: 0.9rem; color: var(--text-secondary);">同步更新文档</p>
+                            </div>
+                            <div class="quick-ref-card">
+                                <div class="quick-ref-title">🔍 代码审查</div>
+                                <div class="quick-ref-cmd">/code-review</div>
+                                <p style="font-size: 0.9rem; color: var(--text-secondary);">单独审查代码质量</p>
+                            </div>
+                        </div>
+                    </section>
+
+                    <!-- 最佳实践 -->
+                    <section id="best-practices" class="ecc-section">
+                        <h2>✨ 工作流最佳实践</h2>
+
+                        <div class="checklist" data-id="ecc-workflow-best-practices">
+                            <div class="checklist-item">
+                                <input type="checkbox" id="bp1">
+                                <label for="bp1"><strong>规划先行</strong>：对于复杂功能，先用 /plan 制定计划，确认后再开始</label>
+                            </div>
+                            <div class="checklist-item">
+                                <input type="checkbox" id="bp2">
+                                <label for="bp2"><strong>测试驱动</strong>：总是用 /tdd 或遵循 TDD 原则，先写测试再写代码</label>
+                            </div>
+                            <div class="checklist-item">
+                                <input type="checkbox" id="bp3">
+                                <label for="bp3"><strong>定期审查</strong>：完成功能后用 /code-review 审查，不要积累太多代码</label>
+                            </div>
+                            <div class="checklist-item">
+                                <input type="checkbox" id="bp4">
+                                <label for="bp4"><strong>安全意识</strong>：涉及用户输入、认证、敏感数据的代码，用 /security-scan 审查</label>
+                            </div>
+                            <div class="checklist-item">
+                                <input type="checkbox" id="bp5">
+                                <label for="bp5"><strong>持续学习</strong>：用 /learn 和 /instinct-status 跟踪你学到的模式</label>
+                            </div>
+                            <div class="checklist-item">
+                                <input type="checkbox" id="bp6">
+                                <label for="bp6"><strong>文档同步</strong>：重大变更后用 /update-docs 保持文档同步</label>
+                            </div>
+                            <div class="checklist-item">
+                                <input type="checkbox" id="bp7">
+                                <label for="bp7"><strong>使用 Git</strong>：每完成一个功能点就提交，方便回退</label>
+                            </div>
+                            <div class="checklist-item">
+                                <input type="checkbox" id="bp8">
+                                <label for="bp8"><strong>保持简单</strong>：小功能用简化流程，大功能用完整流程</label>
+                            </div>
+                        </div>
+
+                        <div class="alert alert-tip">
+                            <div class="alert-title">💡 记住这个原则</div>
+                            <p><strong>小步快跑，频繁验证</strong></p>
+                            <ul>
+                                <li>不要一次性写太多代码</li>
+                                <li>每完成一个小功能就测试、审查</li>
+                                <li>发现问题立即修复，不要积累</li>
+                                <li>保持代码始终处于可发布状态</li>
+                            </ul>
+                        </div>
+
+                        <div class="example-box">
+                            <div class="example-box-title">🎯 工作流选择决策树</div>
+                            <div style="font-size: 0.95rem; color: var(--text-secondary);">
+                                <p><strong>Q: 要做什么？</strong></p>
+                                <ul style="margin: 8px 0;">
+                                    <li>新功能 → 复杂吗？
+                                        <ul style="margin: 4px 0;">
+                                            <li>是 → 完整开发流程 (/plan → /tdd → /code-review)</li>
+                                            <li>否 → 简化开发流程 (/tdd → /code-review)</li>
+                                        </ul>
+                                    </li>
+                                    <li>修bug → Bug修复流程 (/tdd → /code-review)</li>
+                                    <li>准备上线 → 生产准备流程 (/security-scan → /e2e → /test-coverage → /verify)</li>
+                                    <li>清理代码 → 重构流程 (/refactor-clean → /code-review)</li>
+                                </ul>
+                            </div>
+                        </div>
+                    </section>
+
+                    <!-- 子页面导航 -->
+                    <div class="subpage-nav">
+                        <a href="appendix-ecc-hooks.html" class="subpage-nav-link">
+                            <svg class="icon icon-xs"><use href="../images/icons.svg#icon-arrow-left"></use></svg>
+                            上一节：Hooks 钩子
+                        </a>
+                        <a href="appendix-ecc.html" class="subpage-nav-link">
+                            返回 ECC 参考大全
+                        </a>
+                        <span class="subpage-nav-link" style="opacity: 0.5; cursor: default;">
+                            已是最后一节
+                        </span>
+                    </div>
+
+                    <!-- 章节导航 -->
+                    <nav class="chapter-nav">
+                        <a href="appendix-ecc-hooks.html" class="chapter-nav-card">
+                            <svg class="icon" aria-hidden="true"><use href="../images/icons.svg#icon-arrow-left"></use></svg>
+                            <div class="content">
+                                <div class="label">上一节</div>
+                                <div class="title">Hooks 钩子详解</div>
+                            </div>
+                        </a>
+                        <a href="appendix-ecc.html" class="chapter-nav-card next">
+                            <svg class="icon" aria-hidden="true"><use href="../images/icons.svg#icon-home"></use></svg>
+                            <div class="content">
+                                <div class="label">返回</div>
+                                <div class="title">ECC 参考大全</div>
+                            </div>
+                        </a>
+                    </nav>
+                </article>
+            </div>
+
+            <footer class="footer">
+                <div class="footer-links">
+                    <a href="https://www.tumuai.net/" target="_blank">土木AI官网</a>
+                    <a href="https://fv2fbshiww0.feishu.cn/wiki/QFcFwHXxLiyVT7kRMAWcRtmXn0I" target="_blank">知识库</a>
+                    <a href="https://github.com/anthropics/claude-code" target="_blank">GitHub</a>
+                    <a href="https://docs.anthropic.com/en/docs/claude-code/overview" target="_blank">官方文档</a>
+                    <a href="appendix.html">速查手册</a>
+                </div>
+                <div class="footer-copyright">&copy; 2025 Claude Code 教程网站</div>
+            </footer>
+        </main>
+
+        <div class="overlay" id="overlay"></div>
+    </div>
+
+    <script src="../js/main.js"></script>
+    <script>
+        // 工作流卡片展开/收起功能
+        function toggleWorkflowCard(header) {
+            header.classList.toggle('active');
+            const body = header.nextElementSibling;
+            body.classList.toggle('active');
+        }
+
+        // 页面加载时，如果有 hash，自动展开对应卡片
+        document.addEventListener('DOMContentLoaded', function() {
+            const hash = window.location.hash;
+            if (hash) {
+                const card = document.querySelector(hash);
+                if (card && card.classList.contains('workflow-detail-card')) {
+                    const header = card.querySelector('.workflow-card-header');
+                    toggleWorkflowCard(header);
+                    // 滚动到卡片位置
+                    setTimeout(() => {
+                        card.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                    }, 100);
+                }
+            }
+        });
+    </script>
+</body>
+</html>

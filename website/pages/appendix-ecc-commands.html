@@ -1,0 +1,2058 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>A4-2: Commands 命令详解 - Claude Code 教程</title>
+    <link rel="stylesheet" href="../css/style.css">
+    <style>
+        /* 继承 ECC 页面样式 */
+        .ecc-toc {
+            position: sticky;
+            top: 80px;
+            background: var(--bg-card);
+            border: 1px solid var(--border-color);
+            border-radius: var(--radius-md);
+            padding: 20px;
+            margin-bottom: 24px;
+            z-index: 100;
+        }
+        .ecc-toc-title { font-size: 1.1rem; font-weight: 600; margin-bottom: 12px; color: var(--text-primary); }
+        .ecc-toc-nav { display: flex; flex-wrap: wrap; gap: 8px; }
+        .ecc-toc-link {
+            display: inline-flex; align-items: center; gap: 6px;
+            padding: 6px 12px; background: var(--bg-secondary);
+            border-radius: var(--radius-sm); color: var(--text-secondary);
+            text-decoration: none; font-size: 0.9rem; transition: all 0.2s;
+        }
+        .ecc-toc-link:hover { background: var(--primary-color); color: white; }
+        .ecc-section { border-top: 2px solid var(--border-color); padding-top: 40px; margin-top: 40px; }
+        .section-intro {
+            display: flex; align-items: flex-start; gap: 16px;
+            padding: 16px 20px; background: var(--bg-secondary);
+            border-radius: var(--radius-md); border-left: 4px solid var(--primary-color); margin-bottom: 20px;
+        }
+        .section-intro-icon { font-size: 2rem; flex-shrink: 0; }
+        .section-intro-content h4 { margin: 0 0 8px 0; color: var(--text-primary); }
+        .section-intro-content p { margin: 0; color: var(--text-secondary); font-size: 0.95rem; }
+        .styled-table { width: 100%; border-collapse: collapse; margin: 20px 0; font-size: 0.95rem; border-radius: var(--radius-sm); overflow: hidden; border: 1px solid var(--border-color); }
+        .styled-table th { background: var(--bg-secondary); font-weight: 600; text-align: left; padding: 12px 16px; border-bottom: 2px solid var(--primary-color); }
+        .styled-table td { padding: 12px 16px; border-bottom: 1px solid var(--border-color); }
+        .styled-table tr:nth-child(even) { background: var(--bg-secondary); }
+        .styled-table tr:hover { background: var(--primary-light); }
+        .styled-table code { background: var(--bg-tertiary); padding: 2px 6px; border-radius: var(--radius-sm); font-size: 0.9em; }
+        .subpage-nav { display: flex; justify-content: space-between; align-items: center; gap: 16px; margin: 40px 0; padding: 20px; background: var(--bg-secondary); border-radius: var(--radius-md); }
+        .subpage-nav-link { display: flex; align-items: center; gap: 8px; padding: 10px 16px; background: var(--bg-card); border: 1px solid var(--border-color); border-radius: var(--radius-sm); color: var(--text-primary); text-decoration: none; transition: all 0.2s; }
+        .subpage-nav-link:hover { border-color: var(--primary-color); color: var(--primary-color); }
+        .example-box { background: linear-gradient(135deg, #f0f4ff 0%, #e8f5e9 100%); border: 1px solid var(--border-color); border-radius: var(--radius-md); padding: 20px; margin: 24px 0; }
+        .example-box-title { font-weight: 600; color: var(--primary-color); margin-bottom: 12px; display: flex; align-items: center; gap: 8px; }
+
+        /* 命令详细卡片 - 可展开 */
+        .command-detail-card {
+            background: var(--bg-card);
+            border: 1px solid var(--border-color);
+            border-radius: var(--radius-md);
+            margin-bottom: 16px;
+            overflow: hidden;
+            transition: all 0.3s;
+        }
+        .command-detail-card:hover {
+            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+        }
+        .command-card-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 16px 20px;
+            cursor: pointer;
+            background: linear-gradient(135deg, var(--bg-card) 0%, var(--bg-secondary) 100%);
+            border-bottom: 1px solid transparent;
+            transition: all 0.2s;
+        }
+        .command-card-header:hover {
+            background: var(--bg-secondary);
+        }
+        .command-card-header.active {
+            border-bottom-color: var(--border-color);
+            background: var(--bg-secondary);
+        }
+        .command-card-header-left {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+        }
+        .command-card-icon {
+            font-size: 2rem;
+            width: 48px;
+            height: 48px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: var(--bg-tertiary);
+            border-radius: var(--radius-sm);
+        }
+        .command-card-title-group {
+            display: flex;
+            flex-direction: column;
+            gap: 4px;
+        }
+        .command-card-title {
+            font-weight: 600;
+            font-size: 1.1rem;
+            color: var(--text-primary);
+        }
+        .command-card-subtitle {
+            font-size: 0.85rem;
+            color: var(--text-secondary);
+        }
+        .command-card-toggle {
+            font-size: 1.5rem;
+            color: var(--text-muted);
+            transition: transform 0.3s;
+        }
+        .command-card-header.active .command-card-toggle {
+            transform: rotate(180deg);
+        }
+        .command-card-body {
+            display: none;
+            padding: 20px;
+            background: var(--bg-card);
+        }
+        .command-card-body.active {
+            display: block;
+        }
+        .command-config-section {
+            margin-bottom: 20px;
+            padding-bottom: 20px;
+            border-bottom: 1px solid var(--border-color);
+        }
+        .command-config-section:last-child {
+            margin-bottom: 0;
+            padding-bottom: 0;
+            border-bottom: none;
+        }
+        .command-config-title {
+            font-weight: 600;
+            color: var(--text-primary);
+            margin-bottom: 12px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        .command-config-content {
+            color: var(--text-secondary);
+            font-size: 0.95rem;
+        }
+        .command-config-content ul {
+            margin: 8px 0;
+            padding-left: 20px;
+        }
+        .command-config-content li {
+            margin-bottom: 6px;
+        }
+        .config-code {
+            background: var(--bg-tertiary);
+            padding: 12px 16px;
+            border-radius: var(--radius-sm);
+            font-family: monospace;
+            font-size: 0.9rem;
+            overflow-x: auto;
+            margin: 12px 0;
+        }
+        .config-highlight {
+            background: linear-gradient(135deg, #fff3e0 0%, #ffe0b2 100%);
+            padding: 12px 16px;
+            border-radius: var(--radius-sm);
+            border-left: 4px solid #ff9800;
+            margin: 12px 0;
+        }
+        .config-info {
+            background: linear-gradient(135deg, #e3f2fd 0%, #bbdefb 100%);
+            padding: 12px 16px;
+            border-radius: var(--radius-sm);
+            border-left: 4px solid #2196f3;
+            margin: 12px 0;
+        }
+        .config-success {
+            background: linear-gradient(135deg, #e8f5e9 0%, #c8e6c9 100%);
+            padding: 12px 16px;
+            border-radius: var(--radius-sm);
+            border-left: 4px solid #4caf50;
+            margin: 12px 0;
+        }
+
+        /* 快速跳转导航 */
+        .quick-nav {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+            margin-bottom: 24px;
+        }
+        .quick-nav-btn {
+            padding: 8px 16px;
+            background: var(--bg-secondary);
+            border: 1px solid var(--border-color);
+            border-radius: var(--radius-sm);
+            color: var(--text-secondary);
+            text-decoration: none;
+            font-size: 0.9rem;
+            transition: all 0.2s;
+        }
+        .quick-nav-btn:hover {
+            background: var(--primary-color);
+            color: white;
+            border-color: var(--primary-color);
+        }
+
+        /* 命令代码标签 */
+        .command-code-tag {
+            display: inline-block;
+            padding: 2px 8px;
+            background: var(--primary-color);
+            color: white;
+            border-radius: var(--radius-sm);
+            font-family: monospace;
+            font-size: 0.85rem;
+            margin-right: 6px;
+        }
+
+        @media (max-width: 768px) {
+            .ecc-toc { position: relative; top: 0; }
+            .subpage-nav { flex-direction: column; }
+            .command-card-header-left { flex-direction: column; align-items: flex-start; gap: 8px; }
+        }
+    </style>
+</head>
+<body data-page-id="appendix-ecc-commands">
+    <div class="app-container">
+        <aside class="sidebar" id="sidebar">
+            <div class="sidebar-header">
+                <a href="../index.html" style="display: flex; align-items: center; gap: 12px; text-decoration: none;">
+                    <div class="logo">C</div>
+                    <span class="logo-text">Claude Code 教程</span>
+                </a>
+            </div>
+            <div class="sidebar-search">
+                <div class="search-box">
+                    <span class="search-icon" aria-hidden="true">
+                        <svg class="icon icon-xs"><use href="../images/icons.svg#icon-search"></use></svg>
+                    </span>
+                    <input type="text" placeholder="搜索章节...">
+                </div>
+            </div>
+            <nav class="sidebar-nav" id="sidebarNav"></nav>
+        </aside>
+
+        <main class="main-content">
+            <header class="top-nav">
+                <div class="top-nav-left">
+                    <button class="menu-toggle" id="menuToggle" aria-label="打开目录">
+                        <svg class="icon icon-sm" aria-hidden="true"><use href="../images/icons.svg#icon-menu"></use></svg>
+                    </button>
+                    <nav class="breadcrumb">
+                        <a href="../index.html">首页</a>
+                        <span class="separator">/</span>
+                        <a href="appendix-ecc.html">ECC参考大全</a>
+                        <span class="separator">/</span>
+                        <span class="current">Commands 命令</span>
+                    </nav>
+                </div>
+                <div class="top-nav-right">
+                    <div class="progress-indicator">
+                        <span>学习进度</span>
+                        <div class="progress-bar">
+                            <div class="progress-fill" id="progressFill" style="width: 0%"></div>
+                        </div>
+                        <span class="progress-text" id="progressText">0%</span>
+                    </div>
+                </div>
+            </header>
+
+            <div class="content-wrapper">
+                <header class="article-header">
+                    <div class="article-breadcrumb">
+                        <a href="../index.html">首页</a> / <a href="appendix-ecc.html">A4: ECC参考大全</a> / <span>A4-2: Commands 命令详解</span>
+                    </div>
+                    <h1 class="article-title">A4-2: Commands 命令详解</h1>
+                    <div class="article-meta">
+                        <span class="article-meta-item">
+                            <svg class="icon icon-xs" aria-hidden="true"><use href="../images/icons.svg#icon-clock"></use></svg>
+                            预计 35 分钟
+                        </span>
+                        <span class="article-meta-item">
+                            <svg class="icon icon-xs" aria-hidden="true"><use href="../images/icons.svg#icon-tag"></use></svg>
+                            类别：进阶 · 核心
+                        </span>
+                    </div>
+                </header>
+
+                <article class="article-content">
+                    <!-- 返回上级 -->
+                    <div style="margin-bottom: 24px;">
+                        <a href="appendix-ecc.html" style="display: inline-flex; align-items: center; gap: 6px; color: var(--primary-color); text-decoration: none;">
+                            <svg class="icon icon-xs"><use href="../images/icons.svg#icon-arrow-left"></use></svg>
+                            返回 ECC 参考大全
+                        </a>
+                    </div>
+
+                    <!-- 本页目录 -->
+                    <div class="ecc-toc">
+                        <div class="ecc-toc-title">📑 本页目录</div>
+                        <nav class="ecc-toc-nav">
+                            <a href="#intro" class="ecc-toc-link">📌 概念介绍</a>
+                            <a href="#planning" class="ecc-toc-link">📋 规划类命令</a>
+                            <a href="#dev-test" class="ecc-toc-link">🧪 开发测试类</a>
+                            <a href="#go" class="ecc-toc-link">🐹 Go 相关命令</a>
+                            <a href="#python" class="ecc-toc-link">🐍 Python 相关</a>
+                            <a href="#learning" class="ecc-toc-link">🧠 学习类命令</a>
+                            <a href="#verify" class="ecc-toc-link">✅ 验证类命令</a>
+                            <a href="#security" class="ecc-toc-link">🔒 安全类命令</a>
+                            <a href="#git" class="ecc-toc-link">📦 Git 类命令</a>
+                            <a href="#quick-ref" class="ecc-toc-link">⚡ 速查表</a>
+                        </nav>
+                    </div>
+
+                    <!-- 快速跳转 -->
+                    <div class="quick-nav">
+                        <span style="color: var(--text-secondary); font-size: 0.9rem;">常用命令快速跳转：</span>
+                        <a href="#plan" class="quick-nav-btn">/plan</a>
+                        <a href="#tdd" class="quick-nav-btn">/tdd</a>
+                        <a href="#code-review" class="quick-nav-btn">/code-review</a>
+                        <a href="#build-fix" class="quick-nav-btn">/build-fix</a>
+                        <a href="#security-scan" class="quick-nav-btn">/security-scan</a>
+                        <a href="#learn" class="quick-nav-btn">/learn</a>
+                    </div>
+
+                    <!-- 概念介绍 -->
+                    <section id="intro">
+                        <div class="section-intro">
+                            <span class="section-intro-icon">⌨️</span>
+                            <div class="section-intro-content">
+                                <h4>什么是 Commands？</h4>
+                                <p>Commands 是快速执行特定任务的"快捷键"，以 <code>/</code> 开头。它们让你用简短的指令触发复杂的工作流程。<strong>点击下方卡片展开查看每个命令的详细用法</strong>。</p>
+                            </div>
+                        </div>
+
+                        <div class="alert alert-info">
+                            <div class="alert-title">🎯 如何使用本页</div>
+                            <ul>
+                                <li>点击任意<strong>命令卡片</strong>展开查看详细用法</li>
+                                <li>每个命令包含：<strong>通俗解释</strong>、<strong>命令语法</strong>、<strong>使用场景</strong>、<strong>输出内容</strong>、<strong>使用示例</strong></li>
+                                <li>使用<strong>快速跳转</strong>按钮直达特定命令</li>
+                            </ul>
+                        </div>
+
+                        <h2>三者关系比喻</h2>
+                        <table class="styled-table">
+                            <thead>
+                                <tr><th>概念</th><th>比喻</th><th>作用</th></tr>
+                            </thead>
+                            <tbody>
+                                <tr><td>Agents</td><td>专家顾问</td><td>需要被委托</td></tr>
+                                <tr><td>Skills</td><td>操作手册</td><td>需要被查阅</td></tr>
+                                <tr><td><strong>Commands</strong></td><td><strong>快捷键</strong></td><td><strong>一键触发</strong></td></tr>
+                            </tbody>
+                        </table>
+                    </section>
+
+                    <!-- 规划类命令 -->
+                    <section id="planning" class="ecc-section">
+                        <h2>📋 规划类命令</h2>
+                        <p>用于项目初期的规划和任务协调，帮助你在开始前理清思路。</p>
+
+                        <!-- /plan 命令 -->
+                        <div class="command-detail-card" id="plan">
+                            <div class="command-card-header" onclick="toggleCommandCard(this)">
+                                <div class="command-card-header-left">
+                                    <div class="command-card-icon">📋</div>
+                                    <div class="command-card-title-group">
+                                        <div class="command-card-title">/plan 命令</div>
+                                        <div class="command-card-subtitle">创建实施计划 - 开始复杂功能前的"项目顾问"</div>
+                                    </div>
+                                </div>
+                                <span class="command-card-toggle">▼</span>
+                            </div>
+                            <div class="command-card-body">
+                                <div class="command-config-section">
+                                    <div class="command-config-title">📌 命令概述</div>
+                                    <div class="command-config-content">
+                                        <p>就像在施工前先画图纸一样，<code>/plan</code> 会在你开始编码前帮你理清思路。它会重述你的需求、分析风险、拆解任务，让你知道接下来要做什么。</p>
+                                        <div class="config-info">
+                                            <strong>💡 为什么需要规划？</strong>
+                                            <ul>
+                                                <li>避免理解偏差 - 确认 Claude 真正懂了你的需求</li>
+                                                <li>预见风险 - 提前发现可能的问题</li>
+                                                <li>分步实施 - 把大任务拆成小步骤</li>
+                                                <li>评估工作量 - 知道需要多长时间</li>
+                                            </ul>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="command-config-section">
+                                    <div class="command-config-title">⌨️ 命令语法</div>
+                                    <div class="command-config-content">
+                                        <div class="config-code">
+/plan "描述你想做什么"
+
+# 示例：
+/plan "添加用户登录功能"
+/plan "重构数据库连接层"
+/plan "添加实时通知系统"</div>
+                                    </div>
+                                </div>
+
+                                <div class="command-config-section">
+                                    <div class="command-config-title">🎯 使用场景</div>
+                                    <div class="command-config-content">
+                                        <ul>
+                                            <li>✅ 开始一个复杂的新功能</li>
+                                            <li>✅ 需要修改多个文件的任务</li>
+                                            <li>✅ 不确定如何实现的需求</li>
+                                            <li>✅ 需要评估工作量时</li>
+                                            <li>❌ 简单的 bug 修复（不需要）</li>
+                                            <li>❌ 单文件的修改（不需要）</li>
+                                        </ul>
+                                    </div>
+                                </div>
+
+                                <div class="command-config-section">
+                                    <div class="command-config-title">🤖 调用的代理</div>
+                                    <div class="command-config-content">
+                                        <p><strong>Planner 代理</strong> - 专门负责功能规划和任务拆解</p>
+                                    </div>
+                                </div>
+
+                                <div class="command-config-section">
+                                    <div class="command-config-title">📄 输出内容</div>
+                                    <div class="command-config-content">
+                                        <div class="config-code">
+## 1. 需求重述
+> Claude 用自己的话复述你的需求，确认理解正确
+
+## 2. 分阶段计划
+- **阶段1**：[任务名]
+  - 具体步骤...
+- **阶段2**：[任务名]
+  - 具体步骤...
+
+## 3. 依赖关系
+- 需要先完成 A 才能做 B
+- 需要 C 库的支持
+
+## 4. 风险评估
+- 🔴 高风险：[描述及缓解方案]
+- 🟡 中风险：[描述及缓解方案]
+
+## 5. 复杂度估计
+- 预计工作量：X 小时 / X 天
+- 涉及文件数：约 X 个
+
+## 6. 等待确认
+> Claude 会等待你确认计划后再开始执行</div>
+                                    </div>
+                                </div>
+
+                                <div class="command-config-section">
+                                    <div class="command-config-title">💡 使用示例</div>
+                                    <div class="command-config-content">
+                                        <div class="example-box">
+                                            <div class="example-box-title">场景：添加用户登录功能</div>
+                                            <div class="config-code">
+# 你输入：
+/plan "添加用户登录功能，支持邮箱和手机号登录"
+
+# Claude 输出（精简版）：
+
+## 需求重述
+实现一个用户登录系统：
+1. 支持邮箱登录
+2. 支持手机号登录
+3. 密码加密存储
+4. 登录状态保持（session/token）
+
+## 分阶段计划
+
+### 阶段1：数据库设计（预计 30 分钟）
+- 创建 users 表（id, email, phone, password_hash）
+- 添加唯一索引（email, phone）
+
+### 阶段2：后端 API（预计 2 小时）
+- 实现注册接口
+- 实现登录接口
+- JWT token 生成和验证
+- 密码加密（bcrypt）
+
+### 阶段3：前端登录页（预计 1.5 小时）
+- 登录表单组件
+- 切换邮箱/手机号登录
+- 表单验证
+- 错误提示
+
+### 阶段4：登录状态管理（预计 1 小时）
+- 存储登录凭证
+- 路由守卫
+- 自动登录
+
+## 风险评估
+- 🟡 密码安全性 → 使用 bcrypt 加密
+- 🟡 手机号格式 → 需要正则验证
+
+## 复杂度估计
+- 总工作量：约 5 小时
+- 涉及文件：约 10 个
+
+---
+请确认计划是否合理？</div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- /orchestrate 命令 -->
+                        <div class="command-detail-card" id="orchestrate">
+                            <div class="command-card-header" onclick="toggleCommandCard(this)">
+                                <div class="command-card-header-left">
+                                    <div class="command-card-icon">🎯</div>
+                                    <div class="command-card-title-group">
+                                        <div class="command-card-title">/orchestrate 命令</div>
+                                        <div class="command-card-subtitle">多代理协调 - 同时调用多个"专家"协作</div>
+                                    </div>
+                                </div>
+                                <span class="command-card-toggle">▼</span>
+                            </div>
+                            <div class="command-card-body">
+                                <div class="command-config-section">
+                                    <div class="command-config-title">📌 命令概述</div>
+                                    <div class="command-config-content">
+                                        <p>就像一个项目经理协调多个专家同时工作，<code>/orchestrate</code> 会同时调用多个代理并行处理任务，提高效率。</p>
+                                    </div>
+                                </div>
+
+                                <div class="command-config-section">
+                                    <div class="command-config-title">⌨️ 命令语法</div>
+                                    <div class="command-config-content">
+                                        <div class="config-code">
+/orchestrate "描述复杂任务"
+
+# 示例：
+/orchestrate "全面审查这个项目"
+/orchestrate "重构支付系统并添加测试"</div>
+                                    </div>
+                                </div>
+
+                                <div class="command-config-section">
+                                    <div class="command-config-title">🎯 使用场景</div>
+                                    <div class="command-config-content">
+                                        <ul>
+                                            <li>需要同时进行代码审查和安全扫描</li>
+                                            <li>大型重构项目</li>
+                                            <li>需要多个专业领域的任务</li>
+                                        </ul>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </section>
+
+                    <!-- 开发测试类命令 -->
+                    <section id="dev-test" class="ecc-section">
+                        <h2>🧪 开发测试类命令</h2>
+                        <p>日常开发中最常用的命令，涵盖编码、测试、审查、修复等流程。</p>
+
+                        <!-- /tdd 命令 -->
+                        <div class="command-detail-card" id="tdd">
+                            <div class="command-card-header" onclick="toggleCommandCard(this)">
+                                <div class="command-card-header-left">
+                                    <div class="command-card-icon">🧪</div>
+                                    <div class="command-card-title-group">
+                                        <div class="command-card-title">/tdd 命令</div>
+                                        <div class="command-card-subtitle">测试驱动开发 - 先写测试再写代码，质量有保障</div>
+                                    </div>
+                                </div>
+                                <span class="command-card-toggle">▼</span>
+                            </div>
+                            <div class="command-card-body">
+                                <div class="command-config-section">
+                                    <div class="command-config-title">📌 命令概述</div>
+                                    <div class="command-config-content">
+                                        <p>TDD（Test-Driven Development）是一种开发方法：<strong>先写测试，再写代码</strong>。这就像先定好验收标准，再开始干活。<code>/tdd</code> 会强制你遵循这个流程。</p>
+                                        <div class="config-highlight">
+                                            <strong>TDD 三步循环</strong>：
+                                            <ol>
+                                                <li>🔴 <strong>RED</strong> - 写一个失败的测试</li>
+                                                <li>🟢 <strong>GREEN</strong> - 写最少代码让测试通过</li>
+                                                <li>🔵 <strong>REFACTOR</strong> - 优化代码结构</li>
+                                            </ol>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="command-config-section">
+                                    <div class="command-config-title">⌨️ 命令语法</div>
+                                    <div class="command-config-content">
+                                        <div class="config-code">
+/tdd
+
+# 可以配合描述
+/tdd "实现用户登录功能"</div>
+                                    </div>
+                                </div>
+
+                                <div class="command-config-section">
+                                    <div class="command-config-title">🎯 使用场景</div>
+                                    <div class="command-config-content">
+                                        <ul>
+                                            <li>✅ 开发新功能时</li>
+                                            <li>✅ 修复 bug 时</li>
+                                            <li>✅ 重构代码时</li>
+                                            <li>✅ 对代码质量要求高的项目</li>
+                                        </ul>
+                                    </div>
+                                </div>
+
+                                <div class="command-config-section">
+                                    <div class="command-config-title">🤖 调用的代理</div>
+                                    <div class="command-config-content">
+                                        <p><strong>TDD-Guide 代理</strong> - 测试驱动开发指导专家</p>
+                                    </div>
+                                </div>
+
+                                <div class="command-config-section">
+                                    <div class="command-config-title">📄 输出内容</div>
+                                    <div class="command-config-content">
+                                        <div class="config-code">
+## 1. 确定功能需求
+> 明确要实现什么功能
+
+## 2. 🔴 RED - 写失败测试
+```python
+def test_add():
+    calc = Calculator()
+    assert calc.add(2, 3) == 5  # 还没实现，会失败
+```
+
+## 3. 运行测试，确认失败
+
+## 4. 🟢 GREEN - 最小实现
+```python
+class Calculator:
+    def add(self, a, b):
+        return a + b  # 最简单的实现
+```
+
+## 5. 运行测试，确认通过
+
+## 6. 🔵 REFACTOR - 优化
+- 检查代码质量
+- 添加更多测试用例
+- 优化代码结构
+
+## 7. 重复循环</div>
+                                    </div>
+                                </div>
+
+                                <div class="command-config-section">
+                                    <div class="command-config-title">💡 使用示例</div>
+                                    <div class="command-config-content">
+                                        <div class="example-box">
+                                            <div class="example-box-title">场景：用 TDD 实现计算器</div>
+                                            <div class="config-code">
+# 你输入：
+/tdd 实现一个简单的计算器，支持加减乘除
+
+# Claude 会引导你：
+
+## 🔴 第1步：先写第一个测试
+```python
+def test_add():
+    calc = Calculator()
+    assert calc.add(2, 3) == 5
+```
+
+运行测试 → ❌ 失败（Calculator 类不存在）
+
+## 🟢 第2步：最小实现
+```python
+class Calculator:
+    def add(self, a, b):
+        return a + b
+```
+
+运行测试 → ✅ 通过
+
+## 继续下一个功能...
+```python
+def test_subtract():
+    calc = Calculator()
+    assert calc.subtract(5, 3) == 2
+```
+
+# 重复直到所有功能完成</div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- /code-review 命令 -->
+                        <div class="command-detail-card" id="code-review">
+                            <div class="command-card-header" onclick="toggleCommandCard(this)">
+                                <div class="command-card-header-left">
+                                    <div class="command-card-icon">🔍</div>
+                                    <div class="command-card-title-group">
+                                        <div class="command-card-title">/code-review 命令</div>
+                                        <div class="command-card-subtitle">代码审查 - 找出代码中的问题</div>
+                                    </div>
+                                </div>
+                                <span class="command-card-toggle">▼</span>
+                            </div>
+                            <div class="command-card-body">
+                                <div class="command-config-section">
+                                    <div class="command-config-title">📌 命令概述</div>
+                                    <div class="command-config-content">
+                                        <p>就像给代码做体检，<code>/code-review</code> 会全面检查代码质量、安全性、可维护性，并按严重程度分类输出问题列表。</p>
+                                    </div>
+                                </div>
+
+                                <div class="command-config-section">
+                                    <div class="command-config-title">⌨️ 命令语法</div>
+                                    <div class="command-config-content">
+                                        <div class="config-code">
+/code-review
+
+# 审查特定文件
+/code-review src/auth.py
+
+# 审查最近的修改
+/code-review 我刚才写的代码</div>
+                                    </div>
+                                </div>
+
+                                <div class="command-config-section">
+                                    <div class="command-config-title">🎯 使用场景</div>
+                                    <div class="command-config-content">
+                                        <ul>
+                                            <li>✅ 完成功能后</li>
+                                            <li>✅ 提交 PR 前</li>
+                                            <li>✅ 代码合并前</li>
+                                            <li>✅ 定期代码质量检查</li>
+                                        </ul>
+                                    </div>
+                                </div>
+
+                                <div class="command-config-section">
+                                    <div class="command-config-title">🤖 调用的代理</div>
+                                    <div class="command-config-content">
+                                        <p><strong>Code-Reviewer 代理</strong> - 代码审查专家</p>
+                                    </div>
+                                </div>
+
+                                <div class="command-config-section">
+                                    <div class="command-config-title">📄 输出内容</div>
+                                    <div class="command-config-content">
+                                        <div class="config-code">
+## 审查摘要
+- 审查文件：3 个
+- 发现问题：8 个
+- 严重程度：🔴 2 | 🟡 4 | 🟢 2
+
+---
+
+## 🔴 严重问题（必须修复）
+
+### 1. 潜在的空指针异常
+**文件**：src/auth.py:45
+**代码**：
+```python
+user = get_user(id)
+return user.name  # 如果 user 为 None 会报错
+```
+**建议**：添加空值检查
+
+---
+
+## 🟡 警告问题（建议修复）
+
+### 3. 变量命名不清晰
+**文件**：src/utils.py:12
+**代码**：d = data
+**建议**：使用描述性名称 processed_data
+
+---
+
+## 🟢 建议改进（可选）
+
+### 7. 可以简化条件判断
+**文件**：src/main.py:30</div>
+                                    </div>
+                                </div>
+
+                                <div class="command-config-section">
+                                    <div class="command-config-title">🔍 审查维度</div>
+                                    <div class="command-config-content">
+                                        <table class="styled-table">
+                                            <tr><th>维度</th><th>检查内容</th></tr>
+                                            <tr><td>🐛 逻辑问题</td><td>边界条件、空值处理、类型错误</td></tr>
+                                            <tr><td>📖 可读性</td><td>命名规范、代码结构、注释质量</td></tr>
+                                            <tr><td>⚡ 性能</td><td>N+1 查询、内存泄漏、不必要的循环</td></tr>
+                                            <tr><td>🔧 可维护性</td><td>代码重复、耦合度、单一职责</td></tr>
+                                            <tr><td>🔒 安全性</td><td>SQL 注入、XSS、敏感数据暴露</td></tr>
+                                            <tr><td>📐 规范</td><td>代码风格、最佳实践</td></tr>
+                                        </table>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- /build-fix 命令 -->
+                        <div class="command-detail-card" id="build-fix">
+                            <div class="command-card-header" onclick="toggleCommandCard(this)">
+                                <div class="command-card-header-left">
+                                    <div class="command-card-icon">🔧</div>
+                                    <div class="command-card-title-group">
+                                        <div class="command-card-title">/build-fix 命令</div>
+                                        <div class="command-card-subtitle">修复构建错误 - 快速解决 TypeScript/JavaScript 构建失败</div>
+                                    </div>
+                                </div>
+                                <span class="command-card-toggle">▼</span>
+                            </div>
+                            <div class="command-card-body">
+                                <div class="command-config-section">
+                                    <div class="command-config-title">📌 命令概述</div>
+                                    <div class="command-config-content">
+                                        <p>当 <code>npm run build</code> 失败时，<code>/build-fix</code> 会快速分析错误并修复。它的特点是<strong>最小化修改</strong>，只修复错误，不改变代码逻辑。</p>
+                                        <div class="config-success">
+                                            <strong>✅ 为什么用这个？</strong>
+                                            <ul>
+                                                <li>节省时间 - 自动分析并修复错误</li>
+                                                <li>安全 - 只改错误相关的代码</li>
+                                                <li>可预测 - 不会意外改变功能</li>
+                                            </ul>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="command-config-section">
+                                    <div class="command-config-title">⌨️ 命令语法</div>
+                                    <div class="command-config-content">
+                                        <div class="config-code">
+# 构建失败后使用
+/build-fix
+
+# 查看错误分析
+/build-fix --analyze</div>
+                                    </div>
+                                </div>
+
+                                <div class="command-config-section">
+                                    <div class="command-config-title">🎯 使用场景</div>
+                                    <div class="command-config-content">
+                                        <ul>
+                                            <li>✅ TypeScript 类型错误</li>
+                                            <li>✅ 模块导入错误</li>
+                                            <li>✅ Webpack/Vite 构建错误</li>
+                                            <li>✅ ESLint 报错</li>
+                                            <li>✅ 依赖版本冲突</li>
+                                        </ul>
+                                    </div>
+                                </div>
+
+                                <div class="command-config-section">
+                                    <div class="command-config-title">🤖 调用的代理</div>
+                                    <div class="command-config-content">
+                                        <p><strong>Build-Error-Resolver 代理</strong> - 构建错误修复专家</p>
+                                    </div>
+                                </div>
+
+                                <div class="command-config-section">
+                                    <div class="command-config-title">🔍 能解决的问题</div>
+                                    <div class="command-config-content">
+                                        <table class="styled-table">
+                                            <tr><th>问题类型</th><th>示例</th></tr>
+                                            <tr><td>类型错误</td><td>Type 'string' is not assignable to type 'number'</td></tr>
+                                            <tr><td>模块导入</td><td>Cannot find module 'xxx'</td></tr>
+                                            <tr><td>构建配置</td><td>Webpack/Vite 配置错误</td></tr>
+                                            <tr><td>ESLint 错误</td><td>Missing semicolon, etc.</td></tr>
+                                            <tr><td>依赖问题</td><td>版本冲突、缺少依赖</td></tr>
+                                        </table>
+                                    </div>
+                                </div>
+
+                                <div class="command-config-section">
+                                    <div class="command-config-title">💡 工作原理</div>
+                                    <div class="command-config-content">
+                                        <div class="config-info">
+                                            <ol>
+                                                <li>分析错误信息和堆栈跟踪</li>
+                                                <li>定位问题根源文件和行号</li>
+                                                <li>生成最小化修复方案</li>
+                                                <li>应用修复并验证</li>
+                                                <li>如果还有错误，继续处理下一个</li>
+                                            </ol>
+                                        </div>
+                                        <div class="config-highlight">
+                                            <strong>⚠️ 重要原则</strong>：只修复错误本身，不做额外改动（如代码优化、重构等），确保改动可预测、可审查。
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- /e2e 命令 -->
+                        <div class="command-detail-card" id="e2e">
+                            <div class="command-card-header" onclick="toggleCommandCard(this)">
+                                <div class="command-card-header-left">
+                                    <div class="command-card-icon">🎭</div>
+                                    <div class="command-card-title-group">
+                                        <div class="command-card-title">/e2e 命令</div>
+                                        <div class="command-card-subtitle">端到端测试 - 模拟真实用户操作验证系统</div>
+                                    </div>
+                                </div>
+                                <span class="command-card-toggle">▼</span>
+                            </div>
+                            <div class="command-card-body">
+                                <div class="command-config-section">
+                                    <div class="command-config-title">📌 命令概述</div>
+                                    <div class="command-config-content">
+                                        <p>E2E（End-to-End）测试模拟真实用户操作，比如点击按钮、填写表单、跳转页面等。适合上线前的最终验证。</p>
+                                    </div>
+                                </div>
+
+                                <div class="command-config-section">
+                                    <div class="command-config-title">⌨️ 命令语法</div>
+                                    <div class="command-config-content">
+                                        <div class="config-code">
+/e2e
+
+# 运行特定测试
+/e2e login-flow
+
+# 生成测试报告
+/e2e --report</div>
+                                    </div>
+                                </div>
+
+                                <div class="command-config-section">
+                                    <div class="command-config-title">🎯 使用场景</div>
+                                    <div class="command-config-content">
+                                        <ul>
+                                            <li>✅ 上线前验证核心流程</li>
+                                            <li>✅ 回归测试</li>
+                                            <li>✅ 测试用户交互流程</li>
+                                            <li>✅ 跨浏览器兼容性测试</li>
+                                        </ul>
+                                    </div>
+                                </div>
+
+                                <div class="command-config-section">
+                                    <div class="command-config-title">🤖 调用的代理</div>
+                                    <div class="command-config-content">
+                                        <p><strong>E2E-Runner 代理</strong> - 运行 Playwright 等端到端测试</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- /refactor-clean 命令 -->
+                        <div class="command-detail-card" id="refactor-clean">
+                            <div class="command-card-header" onclick="toggleCommandCard(this)">
+                                <div class="command-card-header-left">
+                                    <div class="command-card-icon">🧹</div>
+                                    <div class="command-card-title-group">
+                                        <div class="command-card-title">/refactor-clean 命令</div>
+                                        <div class="command-card-subtitle">清理死代码 - 删除不再使用的代码和依赖</div>
+                                    </div>
+                                </div>
+                                <span class="command-card-toggle">▼</span>
+                            </div>
+                            <div class="command-card-body">
+                                <div class="command-config-section">
+                                    <div class="command-config-title">📌 命令概述</div>
+                                    <div class="command-config-content">
+                                        <p>就像给房间做大扫除，<code>/refactor-clean</code> 会找出并删除未使用的代码、函数、变量、导入和依赖，让项目更整洁。</p>
+                                    </div>
+                                </div>
+
+                                <div class="command-config-section">
+                                    <div class="command-config-title">⌨️ 命令语法</div>
+                                    <div class="command-config-content">
+                                        <div class="config-code">
+/refactor-clean
+
+# 清理特定目录
+/refactor-clean src/utils/
+
+# 预览模式（只显示，不删除）
+/refactor-clean --dry-run</div>
+                                    </div>
+                                </div>
+
+                                <div class="command-config-section">
+                                    <div class="command-config-title">🎯 使用场景</div>
+                                    <div class="command-config-content">
+                                        <ul>
+                                            <li>✅ 大重构后</li>
+                                            <li>✅ 删除功能后</li>
+                                            <li>✅ 项目维护时</li>
+                                        </ul>
+                                    </div>
+                                </div>
+
+                                <div class="command-config-section">
+                                    <div class="command-config-title">🤖 调用的代理</div>
+                                    <div class="command-config-content">
+                                        <p><strong>Refactor-Cleaner 代理</strong> - 代码清理专家</p>
+                                    </div>
+                                </div>
+
+                                <div class="command-config-section">
+                                    <div class="command-config-title">🔍 清理内容</div>
+                                    <div class="command-config-content">
+                                        <table class="styled-table">
+                                            <tr><th>类型</th><th>示例</th></tr>
+                                            <tr><td>未使用的函数</td><td>定义了但从未调用的函数</td></tr>
+                                            <tr><td>未使用的变量</td><td>定义了但从未使用的变量</td></tr>
+                                            <tr><td>未使用的导入</td><td>import 了但没使用的模块</td></tr>
+                                            <tr><td>废弃的文件</td><td>不再需要的旧文件</td></tr>
+                                            <tr><td>多余的依赖</td><td>package.json 中未使用的依赖</td></tr>
+                                        </table>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- /test-coverage 命令 -->
+                        <div class="command-detail-card" id="test-coverage">
+                            <div class="command-card-header" onclick="toggleCommandCard(this)">
+                                <div class="command-card-header-left">
+                                    <div class="command-card-icon">📊</div>
+                                    <div class="command-card-title-group">
+                                        <div class="command-card-title">/test-coverage 命令</div>
+                                        <div class="command-card-subtitle">测试覆盖率分析 - 确保测试覆盖足够全面</div>
+                                    </div>
+                                </div>
+                                <span class="command-card-toggle">▼</span>
+                            </div>
+                            <div class="command-card-body">
+                                <div class="command-config-section">
+                                    <div class="command-config-title">📌 命令概述</div>
+                                    <div class="command-config-content">
+                                        <p>测试覆盖率是指有多少代码被测试执行过。<code>/test-coverage</code> 会分析测试覆盖率，确保达到 80% 以上的标准。</p>
+                                        <div class="config-info">
+                                            <strong>📊 覆盖率标准</strong>：
+                                            <ul>
+                                                <li>🟢 优秀：80%+</li>
+                                                <li>🟡 良好：60-80%</li>
+                                                <li>🔴 需改进：<60%</li>
+                                            </ul>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="command-config-section">
+                                    <div class="command-config-title">⌨️ 命令语法</div>
+                                    <div class="command-config-content">
+                                        <div class="config-code">
+/test-coverage
+
+# 生成详细报告
+/test-coverage --report</div>
+                                    </div>
+                                </div>
+
+                                <div class="command-config-section">
+                                    <div class="command-config-title">🎯 使用场景</div>
+                                    <div class="command-config-content">
+                                        <ul>
+                                            <li>✅ 上线前验证</li>
+                                            <li>✅ 质量检查</li>
+                                            <li>✅ 持续集成流程</li>
+                                        </ul>
+                                    </div>
+                                </div>
+
+                                <div class="command-config-section">
+                                    <div class="command-config-title">📄 输出内容</div>
+                                    <div class="command-config-content">
+                                        <div class="config-code">
+## 测试覆盖率报告
+
+### 总体覆盖率
+- 行覆盖率：75%
+- 分支覆盖率：68%
+- 函数覆盖率：82%
+
+### 未覆盖的文件
+- src/utils/deprecated.py (0%)
+- src/legacy/old-code.js (12%)
+
+### 建议补充测试的模块
+1. auth.py - 登录失败场景
+2. payment.js - 异常处理</div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </section>
+
+                    <!-- Go 相关命令 -->
+                    <section id="go" class="ecc-section">
+                        <h2>🐹 Go 相关命令</h2>
+                        <p>专门针对 Go 语言的命令，涵盖审查、测试、构建。</p>
+
+                        <!-- /go-review 命令 -->
+                        <div class="command-detail-card" id="go-review">
+                            <div class="command-card-header" onclick="toggleCommandCard(this)">
+                                <div class="command-card-header-left">
+                                    <div class="command-card-icon">🐹</div>
+                                    <div class="command-card-title-group">
+                                        <div class="command-card-title">/go-review 命令</div>
+                                        <div class="command-card-subtitle">Go 代码审查 - 检查 Go 惯用法和并发安全</div>
+                                    </div>
+                                </div>
+                                <span class="command-card-toggle">▼</span>
+                            </div>
+                            <div class="command-card-body">
+                                <div class="command-config-section">
+                                    <div class="command-config-title">📌 命令概述</div>
+                                    <div class="command-config-content">
+                                        <p>专门审查 Go 代码，检查是否符合 Go 的惯用法（idiomatic Go）、错误处理是否正确、并发是否安全。</p>
+                                    </div>
+                                </div>
+
+                                <div class="command-config-section">
+                                    <div class="command-config-title">⌨️ 命令语法</div>
+                                    <div class="command-config-content">
+                                        <div class="config-code">
+/go-review
+
+# 审查特定包
+/go-review ./internal/auth</div>
+                                    </div>
+                                </div>
+
+                                <div class="command-config-section">
+                                    <div class="command-config-title">🔍 检查内容</div>
+                                    <div class="command-config-content">
+                                        <ul>
+                                            <li><strong>Go 惯用法</strong>：idiomatic Go 风格</li>
+                                            <li><strong>错误处理</strong>：if err != nil 模式</li>
+                                            <li><strong>并发安全</strong>：goroutine、channel 使用</li>
+                                            <li><strong>性能</strong>：内存分配、GC 压力</li>
+                                        </ul>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- /go-test 命令 -->
+                        <div class="command-detail-card" id="go-test">
+                            <div class="command-card-header" onclick="toggleCommandCard(this)">
+                                <div class="command-card-header-left">
+                                    <div class="command-card-icon">🧪</div>
+                                    <div class="command-card-title-group">
+                                        <div class="command-card-title">/go-test 命令</div>
+                                        <div class="command-card-subtitle">Go TDD 工作流 - Go 项目测试驱动开发</div>
+                                    </div>
+                                </div>
+                                <span class="command-card-toggle">▼</span>
+                            </div>
+                            <div class="command-card-body">
+                                <div class="command-config-section">
+                                    <div class="command-config-title">📌 命令概述</div>
+                                    <div class="command-config-content">
+                                        <p>在 Go 项目中使用 TDD 方法开发，遵循 Go 的测试惯例（如 <code>_test.go</code> 文件）。</p>
+                                    </div>
+                                </div>
+
+                                <div class="command-config-section">
+                                    <div class="command-config-title">⌨️ 命令语法</div>
+                                    <div class="command-config-content">
+                                        <div class="config-code">
+/go-test</div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- /go-build 命令 -->
+                        <div class="command-detail-card" id="go-build">
+                            <div class="command-card-header" onclick="toggleCommandCard(this)">
+                                <div class="command-card-header-left">
+                                    <div class="command-card-icon">🔧</div>
+                                    <div class="command-card-title-group">
+                                        <div class="command-card-title">/go-build 命令</div>
+                                        <div class="command-card-subtitle">修复 Go 构建错误 - Go 编译失败时快速修复</div>
+                                    </div>
+                                </div>
+                                <span class="command-card-toggle">▼</span>
+                            </div>
+                            <div class="command-card-body">
+                                <div class="command-config-section">
+                                    <div class="command-config-title">📌 命令概述</div>
+                                    <div class="command-config-content">
+                                        <p>当 <code>go build</code> 失败时使用，快速修复 Go 编译错误。</p>
+                                    </div>
+                                </div>
+
+                                <div class="command-config-section">
+                                    <div class="command-config-title">⌨️ 命令语法</div>
+                                    <div class="command-config-content">
+                                        <div class="config-code">
+/go-build
+
+# 修复测试错误
+/go-build --test</div>
+                                    </div>
+                                </div>
+
+                                <div class="command-config-section">
+                                    <div class="command-config-title">🔍 能解决的问题</div>
+                                    <div class="command-config-content">
+                                        <table class="styled-table">
+                                            <tr><th>问题类型</th><th>示例</th></tr>
+                                            <tr><td>导入循环</td><td>import cycle not allowed</td></tr>
+                                            <tr><td>类型不匹配</td><td>cannot use x as type Y</td></tr>
+                                            <tr><td>未使用变量</td><td>declared and not used</td></tr>
+                                            <tr><td>依赖问题</td><td>go.mod 版本冲突</td></tr>
+                                        </table>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </section>
+
+                    <!-- Python 相关命令 -->
+                    <section id="python" class="ecc-section">
+                        <h2>🐍 Python 相关命令</h2>
+                        <p>专门针对 Python 语言的命令。</p>
+
+                        <!-- /python-review 命令 -->
+                        <div class="command-detail-card" id="python-review">
+                            <div class="command-card-header" onclick="toggleCommandCard(this)">
+                                <div class="command-card-header-left">
+                                    <div class="command-card-icon">🐍</div>
+                                    <div class="command-card-title-group">
+                                        <div class="command-card-title">/python-review 命令</div>
+                                        <div class="command-card-subtitle">Python 代码审查 - PEP 8 规范和类型注解</div>
+                                    </div>
+                                </div>
+                                <span class="command-card-toggle">▼</span>
+                            </div>
+                            <div class="command-card-body">
+                                <div class="command-config-section">
+                                    <div class="command-config-title">📌 命令概述</div>
+                                    <div class="command-config-content">
+                                        <p>专门审查 Python 代码，检查 PEP 8 规范、类型注解、Pythonic 写法等。</p>
+                                    </div>
+                                </div>
+
+                                <div class="command-config-section">
+                                    <div class="command-config-title">⌨️ 命令语法</div>
+                                    <div class="command-config-content">
+                                        <div class="config-code">
+/python-review
+
+# 审查特定文件
+/python-review src/main.py</div>
+                                    </div>
+                                </div>
+
+                                <div class="command-config-section">
+                                    <div class="command-config-title">🔍 检查内容</div>
+                                    <div class="command-config-content">
+                                        <ul>
+                                            <li><strong>PEP 8 规范</strong>：代码风格检查</li>
+                                            <li><strong>类型注解</strong>：Type hints 完整性</li>
+                                            <li><strong>Pythonic 写法</strong>：列表推导、生成器等</li>
+                                            <li><strong>常见陷阱</strong>：可变默认参数等</li>
+                                        </ul>
+                                    </div>
+                                </div>
+
+                                <div class="command-config-section">
+                                    <div class="command-config-title">💡 Python 项目建议</div>
+                                    <div class="command-config-content">
+                                        <div class="config-info">
+                                            除了使用 <code>/python-review</code>，还应该：
+                                            <ul>
+                                                <li>配合 pytest 运行测试</li>
+                                                <li>使用 <code>/security-scan</code> 检查安全问题</li>
+                                                <li>Django/Flask 项目可请求框架相关技能</li>
+                                            </ul>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </section>
+
+                    <!-- 学习类命令 -->
+                    <section id="learning" class="ecc-section">
+                        <h2>🧠 学习类命令</h2>
+                        <p>让 Claude "记住"你的经验和偏好，越用越聪明。</p>
+
+                        <!-- /learn 命令 -->
+                        <div class="command-detail-card" id="learn">
+                            <div class="command-card-header" onclick="toggleCommandCard(this)">
+                                <div class="command-card-header-left">
+                                    <div class="command-card-icon">🧠</div>
+                                    <div class="command-card-title-group">
+                                        <div class="command-card-title">/learn 命令</div>
+                                        <div class="command-card-subtitle">提取模式 - 从当前会话学习经验</div>
+                                    </div>
+                                </div>
+                                <span class="command-card-toggle">▼</span>
+                            </div>
+                            <div class="command-card-body">
+                                <div class="command-config-section">
+                                    <div class="command-config-title">📌 命令概述</div>
+                                    <div class="command-config-content">
+                                        <p>就像让 Claude 记笔记，<code>/learn</code> 会分析当前会话，提取可复用的模式和经验，存入知识库。以后遇到类似问题，Claude 就能直接应用这些经验。</p>
+                                        <div class="config-success">
+                                            <strong>✨ 为什么要用？</strong>
+                                            <ul>
+                                                <li>避免重复解释 - Claude 记住你的偏好</li>
+                                                <li>积累经验 - 成功的解决方案会被记住</li>
+                                                <li>越来越聪明 - 用得越多，理解越深</li>
+                                            </ul>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="command-config-section">
+                                    <div class="command-config-title">⌨️ 命令语法</div>
+                                    <div class="command-config-content">
+                                        <div class="config-code">
+/learn
+
+# 也可以描述要学习什么
+/learn 学习这种错误处理模式</div>
+                                    </div>
+                                </div>
+
+                                <div class="command-config-section">
+                                    <div class="command-config-title">🎯 使用场景</div>
+                                    <div class="command-config-content">
+                                        <ul>
+                                            <li>✅ 完成一个复杂任务后</li>
+                                            <li>✅ 解决了一个难题后</li>
+                                            <li>✅ 发现了一个好的模式后</li>
+                                            <li>✅ 项目完成后总结经验</li>
+                                        </ul>
+                                    </div>
+                                </div>
+
+                                <div class="command-config-section">
+                                    <div class="command-config-title">📄 输出内容</div>
+                                    <div class="command-config-content">
+                                        <div class="config-code">
+## 学习内容提取
+
+### 模式 1：错误处理模式
+- **描述**：统一使用 Result 类型处理错误
+- **场景**：所有可能失败的函数
+- **示例**：[代码示例]
+
+### 模式 2：API 响应格式
+- **描述**：所有 API 返回统一格式
+- **字段**：{ success, data, error }
+- **示例**：[代码示例]
+
+### 偏好设置
+- 命名风格：camelCase
+- 测试框架：pytest
+- 代码风格：Prettier
+
+已保存 3 个模式和 2 个偏好到知识库</div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- /instinct-status 命令 -->
+                        <div class="command-detail-card" id="instinct-status">
+                            <div class="command-card-header" onclick="toggleCommandCard(this)">
+                                <div class="command-card-header-left">
+                                    <div class="command-card-icon">📊</div>
+                                    <div class="command-card-title-group">
+                                        <div class="command-card-title">/instinct-status 命令</div>
+                                        <div class="command-card-subtitle">查看已学习的直觉 - 显示知识库中的模式</div>
+                                    </div>
+                                </div>
+                                <span class="command-card-toggle">▼</span>
+                            </div>
+                            <div class="command-card-body">
+                                <div class="command-config-section">
+                                    <div class="command-config-title">📌 命令概述</div>
+                                    <div class="command-config-content">
+                                        <p>查看 Claude 已经学会了什么，就像查看"笔记本"里记了多少东西。</p>
+                                    </div>
+                                </div>
+
+                                <div class="command-config-section">
+                                    <div class="command-config-title">⌨️ 命令语法</div>
+                                    <div class="command-config-content">
+                                        <div class="config-code">
+/instinct-status</div>
+                                    </div>
+                                </div>
+
+                                <div class="command-config-section">
+                                    <div class="command-config-title">📄 输出内容</div>
+                                    <div class="command-config-content">
+                                        <div class="config-code">
+## 已学习的直觉（共 12 个）
+
+### 代码模式（8 个）
+1. 错误处理 - Result 类型
+2. API 响应 - 统一格式
+3. 状态管理 - Zustand
+4. ...
+
+### 偏好设置（4 个）
+1. 命名风格：camelCase
+2. 测试框架：pytest
+3. ...</div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- /instinct-import 命令 -->
+                        <div class="command-detail-card" id="instinct-import">
+                            <div class="command-card-header" onclick="toggleCommandCard(this)">
+                                <div class="command-card-header-left">
+                                    <div class="command-card-icon">📥</div>
+                                    <div class="command-card-title-group">
+                                        <div class="command-card-title">/instinct-import 命令</div>
+                                        <div class="command-card-subtitle">导入直觉 - 从外部导入学习到的模式</div>
+                                    </div>
+                                </div>
+                                <span class="command-card-toggle">▼</span>
+                            </div>
+                            <div class="command-card-body">
+                                <div class="command-config-section">
+                                    <div class="command-config-title">📌 命令概述</div>
+                                    <div class="command-config-content">
+                                        <p>从文件或外部来源导入已经学习好的模式，比如从同事那里分享的知识库。</p>
+                                    </div>
+                                </div>
+
+                                <div class="command-config-section">
+                                    <div class="command-config-title">⌨️ 命令语法</div>
+                                    <div class="command-config-content">
+                                        <div class="config-code">
+/instinct-import patterns.json</div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- /instinct-export 命令 -->
+                        <div class="command-detail-card" id="instinct-export">
+                            <div class="command-card-header" onclick="toggleCommandCard(this)">
+                                <div class="command-card-header-left">
+                                    <div class="command-card-icon">📤</div>
+                                    <div class="command-card-title-group">
+                                        <div class="command-card-title">/instinct-export 命令</div>
+                                        <div class="command-card-subtitle">导出直觉 - 导出学习到的模式供分享</div>
+                                    </div>
+                                </div>
+                                <span class="command-card-toggle">▼</span>
+                            </div>
+                            <div class="command-card-body">
+                                <div class="command-config-section">
+                                    <div class="command-config-title">📌 命令概述</div>
+                                    <div class="command-config-content">
+                                        <p>导出已学习的模式到文件，可以分享给团队成员或备份。</p>
+                                    </div>
+                                </div>
+
+                                <div class="command-config-section">
+                                    <div class="command-config-title">⌨️ 命令语法</div>
+                                    <div class="command-config-content">
+                                        <div class="config-code">
+/instinct-export patterns.json</div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- /evolve 命令 -->
+                        <div class="command-detail-card" id="evolve">
+                            <div class="command-card-header" onclick="toggleCommandCard(this)">
+                                <div class="command-card-header-left">
+                                    <div class="command-card-icon">🔄</div>
+                                    <div class="command-card-title-group">
+                                        <div class="command-card-title">/evolve 命令</div>
+                                        <div class="command-card-subtitle">进化为技能 - 将相关直觉合并为技能</div>
+                                    </div>
+                                </div>
+                                <span class="command-card-toggle">▼</span>
+                            </div>
+                            <div class="command-card-body">
+                                <div class="command-config-section">
+                                    <div class="command-config-title">📌 命令概述</div>
+                                    <div class="command-config-content">
+                                        <p>当积累了足够多的相关直觉后，可以用 <code>/evolve</code> 把它们合并成一个"技能"，方便以后直接调用。</p>
+                                        <div class="config-info">
+                                            <strong>直觉 vs 技能</strong>：
+                                            <ul>
+                                                <li><strong>直觉</strong>：零散的模式，自动应用</li>
+                                                <li><strong>技能</strong>：成体系的知识，显式调用</li>
+                                            </ul>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="command-config-section">
+                                    <div class="command-config-title">⌨️ 命令语法</div>
+                                    <div class="command-config-content">
+                                        <div class="config-code">
+/evolve</div>
+                                    </div>
+                                </div>
+
+                                <div class="command-config-section">
+                                    <div class="command-config-title">📄 输出内容</div>
+                                    <div class="command-config-content">
+                                        <div class="config-code">
+## 检测到可进化的直觉组
+
+### 组 1：React 状态管理
+包含 5 个相关直觉：
+- useState 使用模式
+- useEffect 依赖处理
+- Context API 使用
+- ...
+建议进化为：react-state-management 技能
+
+### 组 2：错误处理
+包含 3 个相关直觉：
+- Result 类型
+- 错误边界
+- ...
+建议进化为：error-handling 技能
+
+是否继续进化？</div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- /skill-create 命令 -->
+                        <div class="command-detail-card" id="skill-create">
+                            <div class="command-card-header" onclick="toggleCommandCard(this)">
+                                <div class="command-card-header-left">
+                                    <div class="command-card-icon">📜</div>
+                                    <div class="command-card-title-group">
+                                        <div class="command-card-title">/skill-create 命令</div>
+                                        <div class="command-card-subtitle">从 Git 历史生成技能 - 自动分析提交历史</div>
+                                    </div>
+                                </div>
+                                <span class="command-card-toggle">▼</span>
+                            </div>
+                            <div class="command-card-body">
+                                <div class="command-config-section">
+                                    <div class="command-config-title">📌 命令概述</div>
+                                    <div class="command-config-content">
+                                        <p>分析 Git 提交历史，自动提取工作模式并生成技能。适合已经有很多提交历史的项目。</p>
+                                    </div>
+                                </div>
+
+                                <div class="command-config-section">
+                                    <div class="command-config-title">⌨️ 命令语法</div>
+                                    <div class="command-config-content">
+                                        <div class="config-code">
+/skill-create
+
+# 从特定分支生成
+/skill-create --branch feature/auth</div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </section>
+
+                    <!-- 验证类命令 -->
+                    <section id="verify" class="ecc-section">
+                        <h2>✅ 验证类命令</h2>
+                        <p>用于验证代码正确性和保存检查点。</p>
+
+                        <!-- /checkpoint 命令 -->
+                        <div class="command-detail-card" id="checkpoint">
+                            <div class="command-card-header" onclick="toggleCommandCard(this)">
+                                <div class="command-card-header-left">
+                                    <div class="command-card-icon">🚩</div>
+                                    <div class="command-card-title-group">
+                                        <div class="command-card-title">/checkpoint 命令</div>
+                                        <div class="command-card-subtitle">保存检查点 - 记录当前代码状态</div>
+                                    </div>
+                                </div>
+                                <span class="command-card-toggle">▼</span>
+                            </div>
+                            <div class="command-card-body">
+                                <div class="command-config-section">
+                                    <div class="command-config-title">📌 命令概述</div>
+                                    <div class="command-config-content">
+                                        <p>就像游戏存档，<code>/checkpoint</code> 会保存当前代码状态，方便以后验证或回滚。</p>
+                                    </div>
+                                </div>
+
+                                <div class="command-config-section">
+                                    <div class="command-config-title">⌨️ 命令语法</div>
+                                    <div class="command-config-content">
+                                        <div class="config-code">
+/checkpoint
+
+# 添加描述
+/checkpoint "完成用户登录功能"</div>
+                                    </div>
+                                </div>
+
+                                <div class="command-config-section">
+                                    <div class="command-config-title">🎯 使用场景</div>
+                                    <div class="command-config-content">
+                                        <ul>
+                                            <li>✅ 完成一个重要功能后</li>
+                                            <li>✅ 重大修改前</li>
+                                            <li>✅ 需要对比前后变化时</li>
+                                        </ul>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- /verify 命令 -->
+                        <div class="command-detail-card" id="verify">
+                            <div class="command-card-header" onclick="toggleCommandCard(this)">
+                                <div class="command-card-header-left">
+                                    <div class="command-card-icon">✅</div>
+                                    <div class="command-card-title-group">
+                                        <div class="command-card-title">/verify 命令</div>
+                                        <div class="command-card-subtitle">运行验证循环 - 全面验证代码正确性</div>
+                                    </div>
+                                </div>
+                                <span class="command-card-toggle">▼</span>
+                            </div>
+                            <div class="command-card-body">
+                                <div class="command-config-section">
+                                    <div class="command-config-title">📌 命令概述</div>
+                                    <div class="command-config-content">
+                                        <p>运行完整的验证流程，包括测试、类型检查、代码审查等，确保代码质量达标。</p>
+                                    </div>
+                                </div>
+
+                                <div class="command-config-section">
+                                    <div class="command-config-title">⌨️ 命令语法</div>
+                                    <div class="command-config-content">
+                                        <div class="config-code">
+/verify
+
+# 验证特定功能
+/verify "用户登录功能"</div>
+                                    </div>
+                                </div>
+
+                                <div class="command-config-section">
+                                    <div class="command-config-title">📄 验证内容</div>
+                                    <div class="command-config-content">
+                                        <ul>
+                                            <li>运行所有测试</li>
+                                            <li>类型检查</li>
+                                            <li>代码审查</li>
+                                            <li>安全扫描</li>
+                                        </ul>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- /eval 命令 -->
+                        <div class="command-detail-card" id="eval">
+                            <div class="command-card-header" onclick="toggleCommandCard(this)">
+                                <div class="command-card-header-left">
+                                    <div class="command-card-icon">📏</div>
+                                    <div class="command-card-title-group">
+                                        <div class="command-card-title">/eval 命令</div>
+                                        <div class="command-card-subtitle">根据标准评估 - 按特定标准评估代码</div>
+                                    </div>
+                                </div>
+                                <span class="command-card-toggle">▼</span>
+                            </div>
+                            <div class="command-card-body">
+                                <div class="command-config-section">
+                                    <div class="command-config-title">📌 命令概述</div>
+                                    <div class="command-config-content">
+                                        <p>按照自定义标准评估代码，比如团队规范、性能要求等。</p>
+                                    </div>
+                                </div>
+
+                                <div class="command-config-section">
+                                    <div class="command-config-title">⌨️ 命令语法</div>
+                                    <div class="command-config-content">
+                                        <div class="config-code">
+/eval "评估标准"
+
+# 示例
+/val "按照团队 PEP8 规范评估"
+/eval "检查性能是否达到要求"</div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </section>
+
+                    <!-- 安全类命令 -->
+                    <section id="security" class="ecc-section">
+                        <h2>🔒 安全类命令</h2>
+                        <p>专门处理安全相关的检查。</p>
+
+                        <!-- /security-review 命令 -->
+                        <div class="command-detail-card" id="security-review">
+                            <div class="command-card-header" onclick="toggleCommandCard(this)">
+                                <div class="command-card-header-left">
+                                    <div class="command-card-icon">🔒</div>
+                                    <div class="command-card-title-group">
+                                        <div class="command-card-title">/security-review 命令</div>
+                                        <div class="command-card-subtitle">安全审查 - 深度安全审计</div>
+                                    </div>
+                                </div>
+                                <span class="command-card-toggle">▼</span>
+                            </div>
+                            <div class="command-card-body">
+                                <div class="command-config-section">
+                                    <div class="command-config-title">📌 命令概述</div>
+                                    <div class="command-config-content">
+                                        <p>深度安全审计，检查 OWASP Top 10 等常见安全漏洞。</p>
+                                    </div>
+                                </div>
+
+                                <div class="command-config-section">
+                                    <div class="command-config-title">⌨️ 命令语法</div>
+                                    <div class="command-config-content">
+                                        <div class="config-code">
+/security-review
+
+# 审查特定文件
+/security-review src/auth.py</div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- /security-scan 命令 -->
+                        <div class="command-detail-card" id="security-scan">
+                            <div class="command-card-header" onclick="toggleCommandCard(this)">
+                                <div class="command-card-header-left">
+                                    <div class="command-card-icon">🔍</div>
+                                    <div class="command-card-title-group">
+                                        <div class="command-card-title">/security-scan 命令</div>
+                                        <div class="command-card-subtitle">安全扫描 - 快速扫描常见漏洞</div>
+                                    </div>
+                                </div>
+                                <span class="command-card-toggle">▼</span>
+                            </div>
+                            <div class="command-card-body">
+                                <div class="command-config-section">
+                                    <div class="command-config-title">📌 命令概述</div>
+                                    <div class="command-config-content">
+                                        <p>快速扫描常见安全漏洞，适合日常开发中频繁使用。</p>
+                                        <div class="config-highlight">
+                                            <strong>⚠️ 什么时候必须使用？</strong>
+                                            <ul>
+                                                <li>处理用户登录、注册、密码相关功能</li>
+                                                <li>涉及数据库操作，特别是拼接 SQL</li>
+                                                <li>处理文件上传</li>
+                                                <li>调用外部 API 或服务</li>
+                                                <li>处理支付、订单等敏感业务</li>
+                                            </ul>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="command-config-section">
+                                    <div class="command-config-title">⌨️ 命令语法</div>
+                                    <div class="command-config-content">
+                                        <div class="config-code">
+/security-scan
+
+# 扫描特定文件
+/security-scan src/auth.py
+
+# 深度扫描
+/security-scan --deep</div>
+                                    </div>
+                                </div>
+
+                                <div class="command-config-section">
+                                    <div class="command-config-title">🤖 调用的代理</div>
+                                    <div class="command-config-content">
+                                        <p><strong>Security-Reviewer 代理</strong> - 安全审查专家</p>
+                                    </div>
+                                </div>
+
+                                <div class="command-config-section">
+                                    <div class="command-config-title">🔍 检查内容（OWASP Top 10）</div>
+                                    <div class="command-config-content">
+                                        <table class="styled-table">
+                                            <tr><th>编号</th><th>漏洞类型</th><th>检查点</th></tr>
+                                            <tr><td>A01</td><td>访问控制失效</td><td>权限检查、越权访问</td></tr>
+                                            <tr><td>A02</td><td>加密失败</td><td>敏感数据加密、密钥管理</td></tr>
+                                            <tr><td>A03</td><td>注入攻击</td><td>SQL 注入、命令注入</td></tr>
+                                            <tr><td>A04</td><td>不安全设计</td><td>架构层面安全问题</td></tr>
+                                            <tr><td>A05</td><td>安全配置错误</td><td>默认配置、错误信息暴露</td></tr>
+                                            <tr><td>A06</td><td>易受攻击组件</td><td>依赖包漏洞</td></tr>
+                                            <tr><td>A07</td><td>身份识别失败</td><td>认证、会话管理</td></tr>
+                                            <tr><td>A08</td><td>软件完整性失败</td><td>CI/CD 安全</td></tr>
+                                            <tr><td>A09</td><td>日志监控失败</td><td>安全日志、监控</td></tr>
+                                            <tr><td>A10</td><td>服务器端请求伪造</td><td>SSRF 漏洞</td></tr>
+                                        </table>
+                                    </div>
+                                </div>
+
+                                <div class="command-config-section">
+                                    <div class="command-config-title">📄 输出格式</div>
+                                    <div class="command-config-content">
+                                        <div class="config-code">
+## 🚨 安全报告
+
+### 🔴 高危漏洞
+
+#### 1. SQL 注入风险
+**文件**：src/db.py:23
+**严重程度**：🔴 高危
+**代码**：
+```python
+query = f"SELECT * FROM users WHERE id = {user_id}"
+```
+**风险**：攻击者可以通过 user_id 注入恶意 SQL
+**修复**：
+```python
+query = "SELECT * FROM users WHERE id = ?"
+cursor.execute(query, (user_id,))
+```
+
+---
+
+### 🟡 中危漏洞
+
+#### 2. 敏感信息泄露
+**文件**：src/config.py:5
+**严重程度**：🟡 中危
+**代码**：API_KEY = "sk-xxxxx"
+**建议**：使用环境变量存储密钥
+
+---
+
+### 🟢 低危问题
+
+#### 3. 缺少输入验证
+**文件**：src/api.py:45
+**建议**：添加输入验证和清理</div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </section>
+
+                    <!-- Git 类命令 -->
+                    <section id="git" class="ecc-section">
+                        <h2>📦 Git 类命令</h2>
+                        <p>Git 操作相关的命令。</p>
+
+                        <!-- /commit 命令 -->
+                        <div class="command-detail-card" id="commit">
+                            <div class="command-card-header" onclick="toggleCommandCard(this)">
+                                <div class="command-card-header-left">
+                                    <div class="command-card-icon">📦</div>
+                                    <div class="command-card-title-group">
+                                        <div class="command-card-title">/commit 命令</div>
+                                        <div class="command-card-subtitle">创建提交 - 智能生成提交信息</div>
+                                    </div>
+                                </div>
+                                <span class="command-card-toggle">▼</span>
+                            </div>
+                            <div class="command-card-body">
+                                <div class="command-config-section">
+                                    <div class="command-config-title">📌 命令概述</div>
+                                    <div class="command-config-content">
+                                        <p>分析当前更改，自动生成规范的提交信息，并创建 Git 提交。</p>
+                                    </div>
+                                </div>
+
+                                <div class="command-config-section">
+                                    <div class="command-config-title">⌨️ 命令语法</div>
+                                    <div class="command-config-content">
+                                        <div class="config-code">
+/commit
+
+# 添加自定义消息
+/commit "修复登录bug"</div>
+                                    </div>
+                                </div>
+
+                                <div class="command-config-section">
+                                    <div class="command-config-title">📄 输出内容</div>
+                                    <div class="command-config-content">
+                                        <div class="config-code">
+## 分析变更
+
+### 修改的文件（3 个）
+- src/auth.py
+- src/login.js
+- tests/auth.test.js
+
+### 生成的提交信息
+```
+feat: 添加用户登录功能
+
+- 实现邮箱和手机号登录
+- 添加 JWT token 认证
+- 新增登录表单组件
+- 添加相关测试
+
+Co-Authored-By: Claude
+```
+
+### 提交统计
+- 新增：150 行
+- 删除：20 行
+- 修改：5 个文件</div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </section>
+
+                    <!-- 命令速查表 -->
+                    <section id="quick-ref" class="ecc-section">
+                        <h2>⚡ 命令速查表</h2>
+
+                        <h3>按场景速查</h3>
+                        <table class="styled-table">
+                            <thead>
+                                <tr><th>场景</th><th>命令序列</th></tr>
+                            </thead>
+                            <tbody>
+                                <tr><td>新功能开发</td><td><code>/plan</code> → <code>/tdd</code> → <code>/code-review</code></td></tr>
+                                <tr><td>修 bug</td><td><code>/tdd</code> → <code>/code-review</code></td></tr>
+                                <tr><td>上线前检查</td><td><code>/security-scan</code> → <code>/e2e</code> → <code>/test-coverage</code></td></tr>
+                                <tr><td>清理代码</td><td><code>/refactor-clean</code> → <code>/code-review</code></td></tr>
+                                <tr><td>Go 项目</td><td><code>/go-review</code> → <code>/go-test</code> → <code>/go-build</code></td></tr>
+                                <tr><td>Python 项目</td><td><code>/python-review</code> → <code>pytest</code></td></tr>
+                                <tr><td>学习模式</td><td><code>/learn</code> → <code>/instinct-status</code></td></tr>
+                                <tr><td>构建失败</td><td><code>/build-fix</code>（JS/TS）<code>/go-build</code>（Go）</td></tr>
+                            </tbody>
+                        </table>
+
+                        <h3>完整命令列表（31个）</h3>
+                        <table class="styled-table">
+                            <thead>
+                                <tr><th>分类</th><th>命令</th><th>作用</th></tr>
+                            </thead>
+                            <tbody>
+                                <tr><td>规划（2）</td><td><code>/plan</code> <code>/orchestrate</code></td><td>创建计划、多代理协调</td></tr>
+                                <tr><td>开发测试（6）</td><td><code>/tdd</code> <code>/code-review</code> <code>/build-fix</code> <code>/e2e</code> <code>/refactor-clean</code> <code>/test-coverage</code></td><td>TDD、审查、修复、测试、清理</td></tr>
+                                <tr><td>Go（3）</td><td><code>/go-review</code> <code>/go-test</code> <code>/go-build</code></td><td>Go 审查、测试、构建</td></tr>
+                                <tr><td>Python（1）</td><td><code>/python-review</code></td><td>Python 审查</td></tr>
+                                <tr><td>学习（6）</td><td><code>/learn</code> <code>/instinct-status</code> <code>/instinct-import</code> <code>/instinct-export</code> <code>/evolve</code> <code>/skill-create</code></td><td>学习、查看、导入导出、进化</td></tr>
+                                <tr><td>验证（3）</td><td><code>/checkpoint</code> <code>/verify</code> <code>/eval</code></td><td>保存检查点、验证、评估</td></tr>
+                                <tr><td>安全（2）</td><td><code>/security-review</code> <code>/security-scan</code></td><td>安全审查、扫描</td></tr>
+                                <tr><td>Git（1）</td><td><code>/commit</code></td><td>创建提交</td></tr>
+                            </tbody>
+                        </table>
+
+                        <div class="alert alert-tip">
+                            <div class="alert-title">💡 最佳实践</div>
+                            <ul>
+                                <li><strong>复杂功能先用 /plan</strong>：开始前先规划，避免走弯路</li>
+                                <li><strong>写代码用 /tdd</strong>：先写测试再写代码，质量有保障</li>
+                                <li><strong>完成后用 /code-review</strong>：检查代码质量</li>
+                                <li><strong>安全敏感用 /security-scan</strong>：涉及用户数据必须扫描</li>
+                                <li><strong>构建失败用 /build-fix</strong>：快速修复类型错误</li>
+                                <li><strong>定期使用 /learn</strong>：让 Claude 记住你的偏好和经验</li>
+                            </ul>
+                        </div>
+                    </section>
+
+                    <!-- 子页面导航 -->
+                    <div class="subpage-nav">
+                        <a href="appendix-ecc-agents.html" class="subpage-nav-link">
+                            <svg class="icon icon-xs"><use href="../images/icons.svg#icon-arrow-left"></use></svg>
+                            上一节：Agents 代理
+                        </a>
+                        <a href="appendix-ecc.html" class="subpage-nav-link">
+                            返回 ECC 参考大全
+                        </a>
+                        <a href="appendix-ecc-skills.html" class="subpage-nav-link">
+                            下一节：Skills 技能
+                            <svg class="icon icon-xs"><use href="../images/icons.svg#icon-arrow-right"></use></svg>
+                        </a>
+                    </div>
+
+                    <!-- 章节导航 -->
+                    <nav class="chapter-nav">
+                        <a href="appendix-ecc-agents.html" class="chapter-nav-card">
+                            <svg class="icon" aria-hidden="true"><use href="../images/icons.svg#icon-arrow-left"></use></svg>
+                            <div class="content">
+                                <div class="label">上一节</div>
+                                <div class="title">Agents 子代理系统详解</div>
+                            </div>
+                        </a>
+                        <a href="appendix-ecc-skills.html" class="chapter-nav-card next">
+                            <svg class="icon" aria-hidden="true"><use href="../images/icons.svg#icon-arrow-right"></use></svg>
+                            <div class="content">
+                                <div class="label">下一节</div>
+                                <div class="title">Skills 技能模板详解</div>
+                            </div>
+                        </a>
+                    </nav>
+                </article>
+            </div>
+
+            <footer class="footer">
+                <div class="footer-links">
+                    <a href="https://www.tumuai.net/" target="_blank">土木AI官网</a>
+                    <a href="https://fv2fbshiww0.feishu.cn/wiki/QFcFwHXxLiyVT7kRMAWcRtmXn0I" target="_blank">知识库</a>
+                    <a href="https://github.com/anthropics/claude-code" target="_blank">GitHub</a>
+                    <a href="https://docs.anthropic.com/en/docs/claude-code/overview" target="_blank">官方文档</a>
+                    <a href="appendix.html">速查手册</a>
+                </div>
+                <div class="footer-copyright">&copy; 2025 Claude Code 教程网站</div>
+            </footer>
+        </main>
+
+        <div class="overlay" id="overlay"></div>
+    </div>
+
+    <script src="../js/main.js"></script>
+    <script>
+        // 命令卡片展开/收起功能
+        function toggleCommandCard(header) {
+            header.classList.toggle('active');
+            const body = header.nextElementSibling;
+            body.classList.toggle('active');
+        }
+
+        // 页面加载时，如果有 hash，自动展开对应卡片
+        document.addEventListener('DOMContentLoaded', function() {
+            const hash = window.location.hash;
+            if (hash) {
+                const card = document.querySelector(hash);
+                if (card && card.classList.contains('command-detail-card')) {
+                    const header = card.querySelector('.command-card-header');
+                    toggleCommandCard(header);
+                    // 滚动到卡片位置
+                    setTimeout(() => {
+                        card.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                    }, 100);
+                }
+            }
+        });
+    </script>
+</body>
+</html>

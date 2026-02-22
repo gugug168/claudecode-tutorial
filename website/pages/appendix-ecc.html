@@ -466,12 +466,6 @@
                 </header>
 
                 <article class="article-content">
-                    <!-- 顶部配图 -->
-                    <div class="section-image">
-                        <img src="../images/external/img_8719eb6111e637cc.jpg" alt="Everything Claude Code 参考大全" loading="lazy">
-                        <div class="section-image-caption">进阶知识库：掌握 Agents、Skills、Commands 等高级功能</div>
-                    </div>
-
                     <!-- 快速导航目录 -->
                     <div class="ecc-toc">
                         <div class="ecc-toc-title">📑 快速导航</div>
@@ -811,16 +805,19 @@
                                 <tr><td><strong>haiku</strong></td><td>简单任务、节省成本</td><td>doc-updater</td></tr>
                             </tbody>
                         </table>
+
+                        <!-- 查看详情按钮 -->
+                        <div style="margin-top: 24px; text-align: center;">
+                            <a href="appendix-ecc-agents.html" class="btn btn-primary" style="display: inline-flex; align-items: center; gap: 8px; padding: 12px 24px; background: var(--primary-color); color: white; border-radius: var(--radius-md); text-decoration: none; font-weight: 600;">
+                                <span>查看 Agents 详解</span>
+                                <svg class="icon icon-sm" aria-hidden="true"><use href="../images/icons.svg#icon-arrow-right"></use></svg>
+                            </a>
+                            <p style="margin-top: 8px; font-size: 0.85rem; color: var(--text-secondary);">包含：13个代理详细介绍、触发方式、实战案例</p>
+                        </div>
                     </section>
 
                     <!-- 二、Skills 技能模板 -->
                     <section id="skills" class="ecc-section">
-                        <!-- Skills 章节配图 -->
-                        <div class="section-image-inline">
-                            <img src="../images/external/img_d45c305ed9df9fe5.jpg" alt="Skills 技能模板系统" loading="lazy">
-                            <div class="image-caption">Skills 技能模板 - 预定义的工作流程，告诉 Claude "如何"完成某类任务</div>
-                        </div>
-
                         <div class="section-intro">
                             <span class="section-intro-icon">📚</span>
                             <div class="section-intro-content">
@@ -1044,6 +1041,15 @@
                                 </tr>
                             </tbody>
                         </table>
+
+                        <!-- 查看详情按钮 -->
+                        <div style="margin-top: 24px; text-align: center;">
+                            <a href="appendix-ecc-skills.html" class="btn btn-primary" style="display: inline-flex; align-items: center; gap: 8px; padding: 12px 24px; background: var(--primary-color); color: white; border-radius: var(--radius-md); text-decoration: none; font-weight: 600;">
+                                <span>查看 Skills 详解</span>
+                                <svg class="icon icon-sm" aria-hidden="true"><use href="../images/icons.svg#icon-arrow-right"></use></svg>
+                            </a>
+                            <p style="margin-top: 8px; font-size: 0.85rem; color: var(--text-secondary);">包含：37个技能分类介绍、激活方式、选择指南</p>
+                        </div>
                     </section>
 
                     <!-- 三、Commands 高级命令 -->
@@ -1220,6 +1226,15 @@
                             </div>
                             <p><strong>输出</strong>：按严重性分类的问题列表</p>
                         </div>
+
+                        <!-- 查看详情按钮 -->
+                        <div style="margin-top: 24px; text-align: center;">
+                            <a href="appendix-ecc-commands.html" class="btn btn-primary" style="display: inline-flex; align-items: center; gap: 8px; padding: 12px 24px; background: var(--primary-color); color: white; border-radius: var(--radius-md); text-decoration: none; font-weight: 600;">
+                                <span>查看 Commands 详解</span>
+                                <svg class="icon icon-sm" aria-hidden="true"><use href="../images/icons.svg#icon-arrow-right"></use></svg>
+                            </a>
+                            <p style="margin-top: 8px; font-size: 0.85rem; color: var(--text-secondary);">包含：31个命令详解、使用示例、速查表</p>
+                        </div>
                     </section>
 
                     <!-- 四、Rules 规范 -->
@@ -1328,6 +1343,15 @@
 
 # 同时安装多种语言
 ./install.sh typescript python</code></pre>
+                        </div>
+
+                        <!-- 查看详情按钮 -->
+                        <div style="margin-top: 24px; text-align: center;">
+                            <a href="appendix-ecc-rules.html" class="btn btn-primary" style="display: inline-flex; align-items: center; gap: 8px; padding: 12px 24px; background: var(--primary-color); color: white; border-radius: var(--radius-md); text-decoration: none; font-weight: 600;">
+                                <span>查看 Rules 详解</span>
+                                <svg class="icon icon-sm" aria-hidden="true"><use href="../images/icons.svg#icon-arrow-right"></use></svg>
+                            </a>
+                            <p style="margin-top: 8px; font-size: 0.85rem; color: var(--text-secondary);">包含：Common规则详解、语言特定规则、实战案例</p>
                         </div>
                     </section>
 
@@ -1490,6 +1514,15 @@
                             <li><code>2</code> — 阻止工具调用（仅 PreToolUse）</li>
                             <li>其他非零 — 错误（记录但不阻止）</li>
                         </ul>
+
+                        <!-- 查看详情按钮 -->
+                        <div style="margin-top: 24px; text-align: center;">
+                            <a href="appendix-ecc-hooks.html" class="btn btn-primary" style="display: inline-flex; align-items: center; gap: 8px; padding: 12px 24px; background: var(--primary-color); color: white; border-radius: var(--radius-md); text-decoration: none; font-weight: 600;">
+                                <span>查看 Hooks 详解</span>
+                                <svg class="icon icon-sm" aria-hidden="true"><use href="../images/icons.svg#icon-arrow-right"></use></svg>
+                            </a>
+                            <p style="margin-top: 8px; font-size: 0.85rem; color: var(--text-secondary);">包含：6种钩子类型、自定义钩子、实战案例</p>
+                        </div>
                     </section>
 
                     <!-- 六、企业级工作流 -->
@@ -1665,6 +1698,15 @@ pytest         # 运行 pytest 测试</code></pre>
                                 <input type="checkbox" id="bp6">
                                 <label for="bp6"><strong>文档同步</strong>：重大变更后用 /update-docs 保持文档同步</label>
                             </div>
+                        </div>
+
+                        <!-- 查看详情按钮 -->
+                        <div style="margin-top: 24px; text-align: center;">
+                            <a href="appendix-ecc-workflow.html" class="btn btn-primary" style="display: inline-flex; align-items: center; gap: 8px; padding: 12px 24px; background: var(--primary-color); color: white; border-radius: var(--radius-md); text-decoration: none; font-weight: 600;">
+                                <span>查看工作流详解</span>
+                                <svg class="icon icon-sm" aria-hidden="true"><use href="../images/icons.svg#icon-arrow-right"></use></svg>
+                            </a>
+                            <p style="margin-top: 8px; font-size: 0.85rem; color: var(--text-secondary);">包含：完整工作流程、语言特定工作流、速查表</p>
                         </div>
                     </section>
 

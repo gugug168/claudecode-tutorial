@@ -1,0 +1,1822 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>A4-5: Hooks 钩子详解 - Claude Code 教程</title>
+    <link rel="stylesheet" href="../css/style.css">
+    <style>
+        /* 继承 ECC 页面样式 */
+        .ecc-toc {
+            position: sticky;
+            top: 80px;
+            background: var(--bg-card);
+            border: 1px solid var(--border-color);
+            border-radius: var(--radius-md);
+            padding: 20px;
+            margin-bottom: 24px;
+            z-index: 100;
+        }
+        .ecc-toc-title { font-size: 1.1rem; font-weight: 600; margin-bottom: 12px; color: var(--text-primary); }
+        .ecc-toc-nav { display: flex; flex-wrap: wrap; gap: 8px; }
+        .ecc-toc-link {
+            display: inline-flex; align-items: center; gap: 6px;
+            padding: 6px 12px; background: var(--bg-secondary);
+            border-radius: var(--radius-sm); color: var(--text-secondary);
+            text-decoration: none; font-size: 0.9rem; transition: all 0.2s;
+        }
+        .ecc-toc-link:hover { background: var(--primary-color); color: white; }
+        .ecc-section { border-top: 2px solid var(--border-color); padding-top: 40px; margin-top: 40px; }
+        .section-intro {
+            display: flex; align-items: flex-start; gap: 16px;
+            padding: 16px 20px; background: var(--bg-secondary);
+            border-radius: var(--radius-md); border-left: 4px solid var(--primary-color); margin-bottom: 20px;
+        }
+        .section-intro-icon { font-size: 2rem; flex-shrink: 0; }
+        .section-intro-content h4 { margin: 0 0 8px 0; color: var(--text-primary); }
+        .section-intro-content p { margin: 0; color: var(--text-secondary); font-size: 0.95rem; }
+        .styled-table { width: 100%; border-collapse: collapse; margin: 20px 0; font-size: 0.95rem; border-radius: var(--radius-sm); overflow: hidden; border: 1px solid var(--border-color); }
+        .styled-table th { background: var(--bg-secondary); font-weight: 600; text-align: left; padding: 12px 16px; border-bottom: 2px solid var(--primary-color); }
+        .styled-table td { padding: 12px 16px; border-bottom: 1px solid var(--border-color); }
+        .styled-table tr:nth-child(even) { background: var(--bg-secondary); }
+        .styled-table tr:hover { background: var(--primary-light); }
+        .styled-table code { background: var(--bg-tertiary); padding: 2px 6px; border-radius: var(--radius-sm); font-size: 0.9em; }
+        .subpage-nav { display: flex; justify-content: space-between; align-items: center; gap: 16px; margin: 40px 0; padding: 20px; background: var(--bg-secondary); border-radius: var(--radius-md); }
+        .subpage-nav-link { display: flex; align-items: center; gap: 8px; padding: 10px 16px; background: var(--bg-card); border: 1px solid var(--border-color); border-radius: var(--radius-sm); color: var(--text-primary); text-decoration: none; transition: all 0.2s; }
+        .subpage-nav-link:hover { border-color: var(--primary-color); color: var(--primary-color); }
+        .example-box { background: linear-gradient(135deg, #f0f4ff 0%, #e8f5e9 100%); border: 1px solid var(--border-color); border-radius: var(--radius-md); padding: 20px; margin: 24px 0; }
+        .example-box-title { font-weight: 600; color: var(--primary-color); margin-bottom: 12px; display: flex; align-items: center; gap: 8px; }
+
+        /* 流程图样式 */
+        .hook-flow-diagram {
+            display: flex;
+            flex-wrap: wrap;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            background: linear-gradient(135deg, var(--bg-card) 0%, var(--bg-secondary) 100%);
+            padding: 24px;
+            border-radius: var(--radius-md);
+            border: 1px solid var(--border-color);
+            margin: 24px 0;
+        }
+        .hook-flow-step {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 12px 16px;
+            background: var(--bg-card);
+            border-radius: var(--radius-sm);
+            border: 1px solid var(--border-color);
+            min-width: 100px;
+        }
+        .hook-flow-step.highlight-warning {
+            background: linear-gradient(135deg, #fff3e0 0%, #ffe0b2 100%);
+            border-color: #ffb74d;
+        }
+        .hook-flow-step.highlight-info {
+            background: linear-gradient(135deg, #e3f2fd 0%, #bbdefb 100%);
+            border-color: #64b5f6;
+        }
+        .hook-flow-step.highlight-success {
+            background: linear-gradient(135deg, #e8f5e9 0%, #c8e6c9 100%);
+            border-color: #81c784;
+        }
+        .hook-flow-icon {
+            font-size: 1.5rem;
+            margin-bottom: 6px;
+        }
+        .hook-flow-label {
+            font-size: 0.85rem;
+            color: var(--text-secondary);
+            text-align: center;
+        }
+        .hook-flow-arrow {
+            color: var(--primary-color);
+            font-size: 1.5rem;
+            font-weight: bold;
+        }
+
+        /* Hook 详细卡片 - 可展开 */
+        .hook-detail-card {
+            background: var(--bg-card);
+            border: 1px solid var(--border-color);
+            border-radius: var(--radius-md);
+            margin-bottom: 16px;
+            overflow: hidden;
+            transition: all 0.3s;
+        }
+        .hook-detail-card:hover {
+            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+        }
+        .hook-card-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 16px 20px;
+            cursor: pointer;
+            background: linear-gradient(135deg, var(--bg-card) 0%, var(--bg-secondary) 100%);
+            border-bottom: 1px solid transparent;
+            transition: all 0.2s;
+        }
+        .hook-card-header:hover {
+            background: var(--bg-secondary);
+        }
+        .hook-card-header.active {
+            border-bottom-color: var(--border-color);
+            background: var(--bg-secondary);
+        }
+        .hook-card-header-left {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+        }
+        .hook-card-icon {
+            font-size: 2rem;
+            width: 48px;
+            height: 48px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: var(--bg-tertiary);
+            border-radius: var(--radius-sm);
+        }
+        .hook-card-title-group {
+            display: flex;
+            flex-direction: column;
+            gap: 4px;
+        }
+        .hook-card-title {
+            font-weight: 600;
+            font-size: 1.1rem;
+            color: var(--text-primary);
+        }
+        .hook-card-subtitle {
+            font-size: 0.85rem;
+            color: var(--text-secondary);
+        }
+        .hook-card-toggle {
+            font-size: 1.5rem;
+            color: var(--text-muted);
+            transition: transform 0.3s;
+        }
+        .hook-card-header.active .hook-card-toggle {
+            transform: rotate(180deg);
+        }
+        .hook-card-body {
+            display: none;
+            padding: 20px;
+            background: var(--bg-card);
+        }
+        .hook-card-body.active {
+            display: block;
+        }
+        .hook-config-section {
+            margin-bottom: 20px;
+            padding-bottom: 20px;
+            border-bottom: 1px solid var(--border-color);
+        }
+        .hook-config-section:last-child {
+            margin-bottom: 0;
+            padding-bottom: 0;
+            border-bottom: none;
+        }
+        .hook-config-title {
+            font-weight: 600;
+            color: var(--text-primary);
+            margin-bottom: 12px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        .hook-config-content {
+            color: var(--text-secondary);
+            font-size: 0.95rem;
+        }
+        .hook-config-content ul {
+            margin: 8px 0;
+            padding-left: 20px;
+        }
+        .hook-config-content li {
+            margin-bottom: 6px;
+        }
+        .config-code {
+            background: var(--bg-tertiary);
+            padding: 12px 16px;
+            border-radius: var(--radius-sm);
+            font-family: monospace;
+            font-size: 0.9rem;
+            overflow-x: auto;
+            margin: 12px 0;
+        }
+        .config-highlight {
+            background: linear-gradient(135deg, #fff3e0 0%, #ffe0b2 100%);
+            padding: 12px 16px;
+            border-radius: var(--radius-sm);
+            border-left: 4px solid #ff9800;
+            margin: 12px 0;
+        }
+        .config-info {
+            background: linear-gradient(135deg, #e3f2fd 0%, #bbdefb 100%);
+            padding: 12px 16px;
+            border-radius: var(--radius-sm);
+            border-left: 4px solid #2196f3;
+            margin: 12px 0;
+        }
+        .config-success {
+            background: linear-gradient(135deg, #e8f5e9 0%, #c8e6c9 100%);
+            padding: 12px 16px;
+            border-radius: var(--radius-sm);
+            border-left: 4px solid #4caf50;
+            margin: 12px 0;
+        }
+        .config-danger {
+            background: linear-gradient(135deg, #ffebee 0%, #ffcdd2 100%);
+            padding: 12px 16px;
+            border-radius: var(--radius-sm);
+            border-left: 4px solid #f44336;
+            margin: 12px 0;
+        }
+
+        /* 快速跳转导航 */
+        .quick-nav {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+            margin-bottom: 24px;
+        }
+        .quick-nav-btn {
+            padding: 8px 16px;
+            background: var(--bg-secondary);
+            border: 1px solid var(--border-color);
+            border-radius: var(--radius-sm);
+            color: var(--text-secondary);
+            text-decoration: none;
+            font-size: 0.9rem;
+            transition: all 0.2s;
+        }
+        .quick-nav-btn:hover {
+            background: var(--primary-color);
+            color: white;
+            border-color: var(--primary-color);
+        }
+
+        /* Hook 类型标签 */
+        .hook-type-tag {
+            display: inline-block;
+            padding: 2px 8px;
+            border-radius: var(--radius-sm);
+            font-size: 0.75rem;
+            margin-right: 4px;
+            font-weight: 600;
+        }
+        .hook-type-tag.pre { background: #fff3e0; color: #ef6c00; }
+        .hook-type-tag.post { background: #e8f5e9; color: #2e7d32; }
+        .hook-type-tag.session { background: #e3f2fd; color: #1565c0; }
+
+        @media (max-width: 768px) {
+            .ecc-toc { position: relative; top: 0; }
+            .subpage-nav { flex-direction: column; }
+            .hook-card-header-left { flex-direction: column; align-items: flex-start; gap: 8px; }
+        }
+    </style>
+</head>
+<body data-page-id="appendix-ecc-hooks">
+    <div class="app-container">
+        <aside class="sidebar" id="sidebar">
+            <div class="sidebar-header">
+                <a href="../index.html" style="display: flex; align-items: center; gap: 12px; text-decoration: none;">
+                    <div class="logo">C</div>
+                    <span class="logo-text">Claude Code 教程</span>
+                </a>
+            </div>
+            <div class="sidebar-search">
+                <div class="search-box">
+                    <span class="search-icon" aria-hidden="true">
+                        <svg class="icon icon-xs"><use href="../images/icons.svg#icon-search"></use></svg>
+                    </span>
+                    <input type="text" placeholder="搜索章节...">
+                </div>
+            </div>
+            <nav class="sidebar-nav" id="sidebarNav"></nav>
+        </aside>
+
+        <main class="main-content">
+            <header class="top-nav">
+                <div class="top-nav-left">
+                    <button class="menu-toggle" id="menuToggle" aria-label="打开目录">
+                        <svg class="icon icon-sm" aria-hidden="true"><use href="../images/icons.svg#icon-menu"></use></svg>
+                    </button>
+                    <nav class="breadcrumb">
+                        <a href="../index.html">首页</a>
+                        <span class="separator">/</span>
+                        <a href="appendix-ecc.html">ECC参考大全</a>
+                        <span class="separator">/</span>
+                        <span class="current">Hooks 钩子</span>
+                    </nav>
+                </div>
+                <div class="top-nav-right">
+                    <div class="progress-indicator">
+                        <span>学习进度</span>
+                        <div class="progress-bar">
+                            <div class="progress-fill" id="progressFill" style="width: 0%"></div>
+                        </div>
+                        <span class="progress-text" id="progressText">0%</span>
+                    </div>
+                </div>
+            </header>
+
+            <div class="content-wrapper">
+                <header class="article-header">
+                    <div class="article-breadcrumb">
+                        <a href="../index.html">首页</a> / <a href="appendix-ecc.html">A4: ECC参考大全</a> / <span>A4-5: Hooks 钩子详解</span>
+                    </div>
+                    <h1 class="article-title">A4-5: Hooks 钩子详解</h1>
+                    <div class="article-meta">
+                        <span class="article-meta-item">
+                            <svg class="icon icon-xs" aria-hidden="true"><use href="../images/icons.svg#icon-clock"></use></svg>
+                            预计 25 分钟
+                        </span>
+                        <span class="article-meta-item">
+                            <svg class="icon icon-xs" aria-hidden="true"><use href="../images/icons.svg#icon-tag"></use></svg>
+                            类别：进阶 · 自动化
+                        </span>
+                    </div>
+                </header>
+
+                <article class="article-content">
+                    <!-- 返回上级 -->
+                    <div style="margin-bottom: 24px;">
+                        <a href="appendix-ecc.html" style="display: inline-flex; align-items: center; gap: 6px; color: var(--primary-color); text-decoration: none;">
+                            <svg class="icon icon-xs"><use href="../images/icons.svg#icon-arrow-left"></use></svg>
+                            返回 ECC 参考大全
+                        </a>
+                    </div>
+
+                    <!-- 本页目录 -->
+                    <div class="ecc-toc">
+                        <div class="ecc-toc-title">📑 本页目录</div>
+                        <nav class="ecc-toc-nav">
+                            <a href="#intro" class="ecc-toc-link">📌 概念介绍</a>
+                            <a href="#flow" class="ecc-toc-link">🔄 工作流程</a>
+                            <a href="#hook-types" class="ecc-toc-link">📂 钩子类型</a>
+                            <a href="#pre-examples" class="ecc-toc-link">⚠️ PreToolUse 实例</a>
+                            <a href="#post-examples" class="ecc-toc-link">✅ PostToolUse 实例</a>
+                            <a href="#exit-code" class="ecc-toc-link">🔢 退出码说明</a>
+                            <a href="#custom" class="ecc-toc-link">🔧 自定义钩子</a>
+                        </nav>
+                    </div>
+
+                    <!-- 快速跳转 -->
+                    <div class="quick-nav">
+                        <span style="color: var(--text-secondary); font-size: 0.9rem;">快速跳转：</span>
+                        <a href="#pretooluse" class="quick-nav-btn">PreToolUse</a>
+                        <a href="#posttooluse" class="quick-nav-btn">PostToolUse</a>
+                        <a href="#dev-server" class="quick-nav-btn">开发服务器阻止</a>
+                        <a href="#tmux" class="quick-nav-btn">Tmux 提醒</a>
+                        <a href="#large-file" class="quick-nav-btn">大文件阻止</a>
+                        <a href="#auto-format" class="quick-nav-btn">自动格式化</a>
+                        <a href="#console-detect" class="quick-nav-btn">console.log 检测</a>
+                    </div>
+
+                    <!-- 概念介绍 -->
+                    <section id="intro">
+                        <div class="section-intro">
+                            <span class="section-intro-icon">🔗</span>
+                            <div class="section-intro-content">
+                                <h4>什么是 Hooks？</h4>
+                                <p>Hooks（钩子）是事件驱动的自动化机制，就像<strong>后台监控程序</strong>，在 Claude Code 执行操作前后自动触发。<strong>点击下方卡片展开查看每个钩子的详细配置和使用方法</strong>。</p>
+                            </div>
+                        </div>
+
+                        <div class="alert alert-info">
+                            <div class="alert-title">🎯 如何使用本页</div>
+                            <ul>
+                                <li>点击任意<strong>钩子卡片</strong>展开查看详细配置</li>
+                                <li>每个钩子包含：<strong>概述</strong>、<strong>触发时机</strong>、<strong>配置示例</strong>、<strong>实战案例</strong></li>
+                                <li>使用<strong>快速跳转</strong>按钮直达特定钩子</li>
+                            </ul>
+                        </div>
+
+                        <h2>Hooks 就像智能助手</h2>
+                        <table class="styled-table">
+                            <thead>
+                                <tr>
+                                    <th>概念</th>
+                                    <th>比喻</th>
+                                    <th>触发方式</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>Commands</td>
+                                    <td>你主动按的快捷键</td>
+                                    <td>手动触发</td>
+                                </tr>
+                                <tr>
+                                    <td>Agents</td>
+                                    <td>你委托的专家</td>
+                                    <td>手动委托</td>
+                                </tr>
+                                <tr>
+                                    <td><strong>Hooks</strong></td>
+                                    <td><strong>自动触发的智能助手</strong></td>
+                                    <td><strong>事件驱动，自动执行</strong></td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </section>
+
+                    <!-- 工作流程 -->
+                    <section id="flow" class="ecc-section">
+                        <h2>🔄 钩子工作流程</h2>
+
+                        <div class="hook-flow-diagram">
+                            <div class="hook-flow-step">
+                                <span class="hook-flow-icon">👤</span>
+                                <span class="hook-flow-label">用户请求</span>
+                            </div>
+                            <span class="hook-flow-arrow">→</span>
+                            <div class="hook-flow-step">
+                                <span class="hook-flow-icon">🤖</span>
+                                <span class="hook-flow-label">Claude 选择工具</span>
+                            </div>
+                            <span class="hook-flow-arrow">→</span>
+                            <div class="hook-flow-step highlight-warning">
+                                <span class="hook-flow-icon">⚠️</span>
+                                <span class="hook-flow-label">PreToolUse 钩子</span>
+                            </div>
+                            <span class="hook-flow-arrow">→</span>
+                            <div class="hook-flow-step">
+                                <span class="hook-flow-icon">⚙️</span>
+                                <span class="hook-flow-label">工具执行</span>
+                            </div>
+                            <span class="hook-flow-arrow">→</span>
+                            <div class="hook-flow-step highlight-info">
+                                <span class="hook-flow-icon">✅</span>
+                                <span class="hook-flow-label">PostToolUse 钩子</span>
+                            </div>
+                            <span class="hook-flow-arrow">→</span>
+                            <div class="hook-flow-step highlight-success">
+                                <span class="hook-flow-icon">🎉</span>
+                                <span class="hook-flow-label">完成</span>
+                            </div>
+                        </div>
+
+                        <div class="example-box">
+                            <div class="example-box-title">💡 流程说明</div>
+                            <ol>
+                                <li><strong>用户请求</strong>：你输入"创建一个新文件"</li>
+                                <li><strong>Claude 选择工具</strong>：决定使用 Write 工具</li>
+                                <li><strong>PreToolUse 钩子</strong>：检查是否允许创建此类文件</li>
+                                <li><strong>工具执行</strong>：如果钩子通过，执行 Write 操作</li>
+                                <li><strong>PostToolUse 钩子</strong>：执行后检查，如格式化</li>
+                                <li><strong>完成</strong>：返回结果给你</li>
+                            </ol>
+                        </div>
+                    </section>
+
+                    <!-- 钩子类型总览 -->
+                    <section id="hook-types" class="ecc-section">
+                        <h2>📂 钩子类型总览</h2>
+                        <p>下面列出了所有钩子类型，<strong>点击卡片</strong>查看详细信息。</p>
+
+                        <!-- PreToolUse 钩子 -->
+                        <div class="hook-detail-card" id="pretooluse">
+                            <div class="hook-card-header" onclick="toggleHookCard(this)">
+                                <div class="hook-card-header-left">
+                                    <div class="hook-card-icon">⚠️</div>
+                                    <div class="hook-card-title-group">
+                                        <div class="hook-card-title">PreToolUse <span class="hook-type-tag pre">工具执行前</span></div>
+                                        <div class="hook-card-subtitle">在工具执行前触发，可以阻止操作</div>
+                                    </div>
+                                </div>
+                                <span class="hook-card-toggle">▼</span>
+                            </div>
+                            <div class="hook-card-body">
+                                <div class="hook-config-section">
+                                    <div class="hook-config-title">📌 钩子概述</div>
+                                    <div class="hook-config-content">
+                                        <p>PreToolUse 是最重要的钩子类型，因为它<strong>可以阻止操作执行</strong>。它就像一个"守门员"，在危险操作发生前进行拦截。</p>
+                                        <div class="config-highlight">
+                                            <strong>核心特性</strong>：
+                                            <ul>
+                                                <li>在工具调用前触发</li>
+                                                <li>可以检查工具输入参数</li>
+                                                <li>可以通过退出码 2 阻止操作</li>
+                                                <li>可以修改输入参数（高级用法）</li>
+                                            </ul>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="hook-config-section">
+                                    <div class="hook-config-title">⚡ 触发时机</div>
+                                    <div class="hook-config-content">
+                                        <ul>
+                                            <li>✅ Claude 决定使用某个工具后</li>
+                                            <li>✅ 工具实际执行前</li>
+                                            <li>✅ 可以访问工具的完整输入参数</li>
+                                        </ul>
+                                        <div class="config-info">
+                                            <strong>典型场景</strong>：阻止危险命令、验证文件大小、检查开发服务器环境
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="hook-config-section">
+                                    <div class="hook-config-title">🛡️ 可阻止操作</div>
+                                    <div class="hook-config-content">
+                                        <p><strong>是</strong> - 这是 PreToolUse 最强大的特性</p>
+                                        <p>通过返回退出码 2，可以完全阻止工具执行。例如：</p>
+                                        <div class="config-code">
+# 钩子脚本检查到危险操作
+if is_dangerous_operation:
+    print("[Hook] 阻止: 此操作危险")
+    exit(2)  # 返回退出码 2，阻止工具执行
+
+# 工具不会被执行，用户会看到阻止消息</div>
+                                    </div>
+                                </div>
+
+                                <div class="hook-config-section">
+                                    <div class="hook-config-title">📋 常用匹配器</div>
+                                    <div class="hook-config-content">
+                                        <table class="styled-table">
+                                            <tr><th>匹配器</th><th>匹配的工具</th><th>典型用途</th></tr>
+                                            <tr><td>Bash</td><td>终端命令</td><td>阻止危险命令、开发服务器检查</td></tr>
+                                            <tr><td>Write</td><td>创建文件</td><td>阻止大文件、检查文件类型</td></tr>
+                                            <tr><td>Edit</td><td>编辑文件</td><td>阻止编辑敏感文件</td></tr>
+                                            <tr><td>*</td><td>所有工具</td><td>全局检查</td></tr>
+                                        </table>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- PostToolUse 钩子 -->
+                        <div class="hook-detail-card" id="posttooluse">
+                            <div class="hook-card-header" onclick="toggleHookCard(this)">
+                                <div class="hook-card-header-left">
+                                    <div class="hook-card-icon">✅</div>
+                                    <div class="hook-card-title-group">
+                                        <div class="hook-card-title">PostToolUse <span class="hook-type-tag post">工具执行后</span></div>
+                                        <div class="hook-card-subtitle">在工具执行后触发，用于自动化后续处理</div>
+                                    </div>
+                                </div>
+                                <span class="hook-card-toggle">▼</span>
+                            </div>
+                            <div class="hook-card-body">
+                                <div class="hook-config-section">
+                                    <div class="hook-config-title">📌 钩子概述</div>
+                                    <div class="hook-config-content">
+                                        <p>PostToolUse 在工具执行完成后触发，主要用于<strong>自动化后续处理</strong>。它就像一个"清洁工"，在操作完成后自动收拾整理。</p>
+                                        <div class="config-highlight">
+                                            <strong>核心用途</strong>：
+                                            <ul>
+                                                <li>自动格式化代码</li>
+                                                <li>运行类型检查</li>
+                                                <li>检测问题代码（console.log、TODO）</li>
+                                                <li>记录操作日志</li>
+                                            </ul>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="hook-config-section">
+                                    <div class="hook-config-title">⚡ 触发时机</div>
+                                    <div class="hook-config-content">
+                                        <ul>
+                                            <li>✅ 工具执行完成后</li>
+                                            <li>✅ 可以访问工具执行结果</li>
+                                            <li>✅ 无论成功或失败都会触发</li>
+                                        </ul>
+                                    </div>
+                                </div>
+
+                                <div class="hook-config-section">
+                                    <div class="hook-config-title">🛡️ 可阻止操作</div>
+                                    <div class="hook-config-content">
+                                        <p><strong>否</strong> - 操作已经完成，无法阻止</p>
+                                        <div class="config-danger">
+                                            <strong>重要限制</strong>：PostToolUse 不能阻止已执行的操作，因为它在操作完成后才触发。如果需要阻止操作，必须使用 PreToolUse。
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="hook-config-section">
+                                    <div class="hook-config-title">📋 常用匹配器</div>
+                                    <div class="hook-config-content">
+                                        <table class="styled-table">
+                                            <tr><th>匹配器</th><th>典型用途</th></tr>
+                                            <tr><td>Edit</td><td>自动格式化、类型检查、console.log 检测</td></tr>
+                                            <tr><td>Write</td><td>新文件格式化、添加版权声明</td></tr>
+                                            <tr><td>Bash</td><td>构建分析、测试结果记录</td></tr>
+                                        </table>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Stop 钩子 -->
+                        <div class="hook-detail-card">
+                            <div class="hook-card-header" onclick="toggleHookCard(this)">
+                                <div class="hook-card-header-left">
+                                    <div class="hook-card-icon">🛑</div>
+                                    <div class="hook-card-title-group">
+                                        <div class="hook-card-title">Stop <span class="hook-type-tag session">响应后</span></div>
+                                        <div class="hook-card-subtitle">每次 Claude 响应后触发</div>
+                                    </div>
+                                </div>
+                                <span class="hook-card-toggle">▼</span>
+                            </div>
+                            <div class="hook-card-body">
+                                <div class="hook-config-section">
+                                    <div class="hook-config-title">📌 钩子概述</div>
+                                    <div class="hook-config-content">
+                                        <p>Stop 钩子在每次 Claude 完成响应后触发，常用于<strong>状态检查和用户提醒</strong>。</p>
+                                    </div>
+                                </div>
+
+                                <div class="hook-config-section">
+                                    <div class="hook-config-title">⚡ 触发时机</div>
+                                    <div class="hook-config-content">
+                                        <ul>
+                                            <li>✅ 每次 Claude 响应完成后</li>
+                                            <li>✅ 在返回结果给用户之前</li>
+                                        </ul>
+                                    </div>
+                                </div>
+
+                                <div class="hook-config-section">
+                                    <div class="hook-config-title">💡 典型用途</div>
+                                    <div class="hook-config-content">
+                                        <ul>
+                                            <li>检查会话状态</li>
+                                            <li>提醒用户某个重要事项</li>
+                                            <li>记录响应日志</li>
+                                        </ul>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- SessionStart 钩子 -->
+                        <div class="hook-detail-card">
+                            <div class="hook-card-header" onclick="toggleHookCard(this)">
+                                <div class="hook-card-header-left">
+                                    <div class="hook-card-icon">🚀</div>
+                                    <div class="hook-card-title-group">
+                                        <div class="hook-card-title">SessionStart <span class="hook-type-tag session">会话开始</span></div>
+                                        <div class="hook-card-subtitle">会话开始时触发一次</div>
+                                    </div>
+                                </div>
+                                <span class="hook-card-toggle">▼</span>
+                            </div>
+                            <div class="hook-card-body">
+                                <div class="hook-config-section">
+                                    <div class="hook-config-title">📌 钩子概述</div>
+                                    <div class="hook-config-content">
+                                        <p>SessionStart 在 Claude Code 会话开始时触发一次，适合用于<strong>初始化和欢迎信息</strong>。</p>
+                                    </div>
+                                </div>
+
+                                <div class="hook-config-section">
+                                    <div class="hook-config-title">⚡ 触发时机</div>
+                                    <div class="hook-config-content">
+                                        <ul>
+                                            <li>✅ 会话开始时触发一次</li>
+                                            <li>✅ 在任何用户交互之前</li>
+                                        </ul>
+                                    </div>
+                                </div>
+
+                                <div class="hook-config-section">
+                                    <div class="hook-config-title">💡 典型用途</div>
+                                    <div class="hook-config-content">
+                                        <ul>
+                                            <li>显示欢迎信息</li>
+                                            <li>加载项目配置</li>
+                                            <li>检查环境依赖</li>
+                                            <li>显示项目状态摘要</li>
+                                        </ul>
+                                        <div class="config-code">
+{
+  "hooks": {
+    "SessionStart": [{
+      "type": "command",
+      "command": "echo '🎉 欢迎使用 Claude Code！当前项目: $(basename $PWD)'"
+    }]
+  }
+}</div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- SessionEnd 钩子 -->
+                        <div class="hook-detail-card">
+                            <div class="hook-card-header" onclick="toggleHookCard(this)">
+                                <div class="hook-card-header-left">
+                                    <div class="hook-card-icon">👋</div>
+                                    <div class="hook-card-title-group">
+                                        <div class="hook-card-title">SessionEnd <span class="hook-type-tag session">会话结束</span></div>
+                                        <div class="hook-card-subtitle">会话结束时触发一次</div>
+                                    </div>
+                                </div>
+                                <span class="hook-card-toggle">▼</span>
+                            </div>
+                            <div class="hook-card-body">
+                                <div class="hook-config-section">
+                                    <div class="hook-config-title">📌 钩子概述</div>
+                                    <div class="hook-config-content">
+                                        <p>SessionEnd 在会话结束时触发一次，适合用于<strong>清理和总结</strong>。</p>
+                                    </div>
+                                </div>
+
+                                <div class="hook-config-section">
+                                    <div class="hook-config-title">⚡ 触发时机</div>
+                                    <div class="hook-config-content">
+                                        <ul>
+                                            <li>✅ 会话结束时触发一次</li>
+                                            <li>✅ 在 Claude Code 退出前</li>
+                                        </ul>
+                                    </div>
+                                </div>
+
+                                <div class="hook-config-section">
+                                    <div class="hook-config-title">💡 典型用途</div>
+                                    <div class="hook-config-content">
+                                        <ul>
+                                            <li>保存会话状态</li>
+                                            <li>生成会话报告</li>
+                                            <li>清理临时文件</li>
+                                            <li>记录工作日志</li>
+                                        </ul>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- PreCompact 钩子 -->
+                        <div class="hook-detail-card">
+                            <div class="hook-card-header" onclick="toggleHookCard(this)">
+                                <div class="hook-card-header-left">
+                                    <div class="hook-card-icon">📦</div>
+                                    <div class="hook-card-title-group">
+                                        <div class="hook-card-title">PreCompact <span class="hook-type-tag session">压缩前</span></div>
+                                        <div class="hook-card-subtitle">上下文压缩前触发</div>
+                                    </div>
+                                </div>
+                                <span class="hook-card-toggle">▼</span>
+                            </div>
+                            <div class="hook-card-body">
+                                <div class="hook-config-section">
+                                    <div class="hook-config-title">📌 钩子概述</div>
+                                    <div class="hook-config-content">
+                                        <p>PreCompact 在上下文压缩前触发，用于<strong>保存重要信息到外部存储</strong>，防止关键信息在压缩时丢失。</p>
+                                    </div>
+                                </div>
+
+                                <div class="hook-config-section">
+                                    <div class="hook-config-title">⚡ 触发时机</div>
+                                    <div class="hook-config-content">
+                                        <ul>
+                                            <li>✅ 上下文即将被压缩时</li>
+                                            <li>✅ 在删除旧消息之前</li>
+                                        </ul>
+                                    </div>
+                                </div>
+
+                                <div class="hook-config-section">
+                                    <div class="hook-config-title">💡 典型用途</div>
+                                    <div class="hook-config-content">
+                                        <ul>
+                                            <li>保存重要决策到项目文档</li>
+                                            <li>记录学习到的项目模式</li>
+                                            <li>保存用户偏好设置</li>
+                                        </ul>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </section>
+
+                    <!-- PreToolUse 实例 -->
+                    <section id="pre-examples" class="ecc-section">
+                        <h2>⚠️ PreToolUse 实战实例</h2>
+                        <p>下面是常用的 PreToolUse 钩子配置，<strong>点击卡片</strong>查看详细说明和配置代码。</p>
+
+                        <!-- 开发服务器阻止器 -->
+                        <div class="hook-detail-card" id="dev-server">
+                            <div class="hook-card-header" onclick="toggleHookCard(this)">
+                                <div class="hook-card-header-left">
+                                    <div class="hook-card-icon">🚫</div>
+                                    <div class="hook-card-title-group">
+                                        <div class="hook-card-title">开发服务器阻止器</div>
+                                        <div class="hook-card-subtitle">阻止在 tmux 外运行开发服务器</div>
+                                    </div>
+                                </div>
+                                <span class="hook-card-toggle">▼</span>
+                            </div>
+                            <div class="hook-card-body">
+                                <div class="hook-config-section">
+                                    <div class="hook-config-title">📌 功能说明</div>
+                                    <div class="hook-config-content">
+                                        <p>开发服务器（如 <code>npm run dev</code>）会长期占用终端，导致无法执行其他命令。这个钩子强制使用 tmux，确保开发服务器在独立会话中运行。</p>
+                                        <div class="config-highlight">
+                                            <strong>为什么需要 tmux？</strong>
+                                            <ul>
+                                                <li>开发服务器会一直运行，占用终端</li>
+                                                <li>没有 tmux，你无法同时做其他事情</li>
+                                                <li>tmux 可以让服务器在后台运行</li>
+                                                <li>断开 SSH 也不会停止服务器</li>
+                                            </ul>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="hook-config-section">
+                                    <div class="hook-config-title">⚙️ 配置示例</div>
+                                    <div class="hook-config-content">
+                                        <div class="config-code">
+{
+  "hooks": {
+    "PreToolUse": [
+      {
+        "matcher": "Bash",
+        "hooks": [{
+          "type": "command",
+          "command": "if [ \"$TMUX\" = \"\" ]; then case \"$(echo $TOOL_INPUT | jq -r '.command // empty')\" in npm*run*dev|python*-m*http*|php*-S) echo \"[Hook] 阻止: 开发服务器必须在 tmux 中运行\"; exit 2;; esac; fi",
+          "description": "阻止 tmux 外运行开发服务器"
+        }]
+      }
+    ]
+  }
+}</div>
+                                    </div>
+                                </div>
+
+                                <div class="hook-config-section">
+                                    <div class="hook-config-title">💡 工作原理</div>
+                                    <div class="hook-config-content">
+                                        <ol>
+                                            <li>检查环境变量 <code>$TMUX</code> 是否为空</li>
+                                            <li>如果不在 tmux 中，检查命令是否匹配开发服务器</li>
+                                            <li>匹配到开发服务器命令时，输出警告并返回退出码 2</li>
+                                            <li>工具执行被阻止，用户看到提示信息</li>
+                                        </ol>
+                                    </div>
+                                </div>
+
+                                <div class="hook-config-section">
+                                    <div class="hook-config-title">✅ 正确用法</div>
+                                    <div class="hook-config-content">
+                                        <div class="config-code">
+# 1. 先创建 tmux 会话
+tmux new -s dev
+
+# 2. 在 tmux 会话中运行开发服务器
+npm run dev
+
+# 3. 按下 Ctrl+B 然后按 D 断开会话
+# 服务器继续在后台运行
+
+# 4. 需要时重新连接
+tmux attach -t dev</div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Tmux 提醒 -->
+                        <div class="hook-detail-card" id="tmux">
+                            <div class="hook-card-header" onclick="toggleHookCard(this)">
+                                <div class="hook-card-header-left">
+                                    <div class="hook-card-icon">💡</div>
+                                    <div class="hook-card-title-group">
+                                        <div class="hook-card-title">Tmux 提醒</div>
+                                        <div class="hook-card-subtitle">建议对长时间命令使用 tmux</div>
+                                    </div>
+                                </div>
+                                <span class="hook-card-toggle">▼</span>
+                            </div>
+                            <div class="hook-card-body">
+                                <div class="hook-config-section">
+                                    <div class="hook-config-title">📌 功能说明</div>
+                                    <div class="hook-config-content">
+                                        <p>对于预计运行时间较长的命令（如测试、构建），这个钩子会友好地提醒你使用 tmux，但不会阻止命令执行。</p>
+                                        <div class="config-info">
+                                            <strong>与开发服务器阻止器的区别</strong>：
+                                            <ul>
+                                                <li>开发服务器阻止器：<strong>强制</strong>使用 tmux（exit 2）</li>
+                                                <li>Tmux 提醒：<strong>建议</strong>使用 tmux（不阻止）</li>
+                                            </ul>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="hook-config-section">
+                                    <div class="hook-config-title">⚙️ 配置示例</div>
+                                    <div class="hook-config-content">
+                                        <div class="config-code">
+{
+  "hooks": {
+    "PreToolUse": [
+      {
+        "matcher": "Bash",
+        "hooks": [{
+          "type": "command",
+          "command": "if [ \"$TMUX\" = \"\" ]; then case \"$(echo $TOOL_INPUT | jq -r '.command // empty')\" in npm*test|npm*build|pytest|cargo*test) echo \"[Hook] 提醒: 长时间命令建议在 tmux 中运行\";; esac; fi",
+          "description": "提醒长时间命令使用 tmux"
+        }]
+      }
+    ]
+  }
+}</div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Git push 提醒 -->
+                        <div class="hook-detail-card">
+                            <div class="hook-card-header" onclick="toggleHookCard(this)">
+                                <div class="hook-card-header-left">
+                                    <div class="hook-card-icon">🔔</div>
+                                    <div class="hook-card-title-group">
+                                        <div class="hook-card-title">Git push 提醒</div>
+                                        <div class="hook-card-subtitle">推送前提醒审查代码变更</div>
+                                    </div>
+                                </div>
+                                <span class="hook-card-toggle">▼</span>
+                            </div>
+                            <div class="hook-card-body">
+                                <div class="hook-config-section">
+                                    <div class="hook-config-title">📌 功能说明</div>
+                                    <div class="hook-config-content">
+                                        <p>在执行 git push 前，提醒你先审查代码变更，避免推送未经检查的代码。</p>
+                                    </div>
+                                </div>
+
+                                <div class="hook-config-section">
+                                    <div class="hook-config-title">⚙️ 配置示例</div>
+                                    <div class="hook-config-content">
+                                        <div class="config-code">
+{
+  "hooks": {
+    "PreToolUse": [
+      {
+        "matcher": "Bash",
+        "hooks": [{
+          "type": "command",
+          "command": "if echo \"$TOOL_INPUT\" | jq -r '.command // empty' | grep -q \"git push\"; then echo \"[Hook] 提醒: 推送前请先审查代码变更\"; fi",
+          "description": "git push 前提醒审查代码"
+        }]
+      }
+    ]
+  }
+}</div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- 文档文件阻止器 -->
+                        <div class="hook-detail-card">
+                            <div class="hook-card-header" onclick="toggleHookCard(this)">
+                                <div class="hook-card-header-left">
+                                    <div class="hook-card-icon">📄</div>
+                                    <div class="hook-card-title-group">
+                                        <div class="hook-card-title">文档文件阻止器</div>
+                                        <div class="hook-card-subtitle">阻止创建随意的文档文件</div>
+                                    </div>
+                                </div>
+                                <span class="hook-card-toggle">▼</span>
+                            </div>
+                            <div class="hook-card-body">
+                                <div class="hook-config-section">
+                                    <div class="hook-config-title">📌 功能说明</div>
+                                    <div class="hook-config-content">
+                                        <p>阻止在项目根目录随意创建 .md、.txt 等文档文件，避免项目目录混乱。</p>
+                                        <div class="config-highlight">
+                                            <strong>为什么需要？</strong>
+                                            <ul>
+                                                <li>防止随意创建 README.md 以外的文档</li>
+                                                <li>避免创建临时 .txt 文件污染项目</li>
+                                                <li>引导用户使用规范的文档目录</li>
+                                            </ul>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="hook-config-section">
+                                    <div class="hook-config-title">⚙️ 配置示例</div>
+                                    <div class="hook-config-content">
+                                        <div class="config-code">
+{
+  "hooks": {
+    "PreToolUse": [
+      {
+        "matcher": "Write",
+        "hooks": [{
+          "type": "command",
+          "command": "file=$(echo \"$TOOL_INPUT\" | jq -r '.tool_input.file_path // empty'); if [[ \"$file\" =~ ^[^/]+\.(md|txt|json)$ ]]; then echo \"[Hook] 阻止: 不允许在根目录创建 $file\"; exit 2; fi",
+          "description": "阻止根目录创建文档文件"
+        }]
+      }
+    ]
+  }
+}</div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- 大文件阻止器 -->
+                        <div class="hook-detail-card" id="large-file">
+                            <div class="hook-card-header" onclick="toggleHookCard(this)">
+                                <div class="hook-card-header-left">
+                                    <div class="hook-card-icon">📏</div>
+                                    <div class="hook-card-title-group">
+                                        <div class="hook-card-title">大文件阻止器</div>
+                                        <div class="hook-card-subtitle">阻止创建超过 800 行的文件</div>
+                                    </div>
+                                </div>
+                                <span class="hook-card-toggle">▼</span>
+                            </div>
+                            <div class="hook-card-body">
+                                <div class="hook-config-section">
+                                    <div class="hook-config-title">📌 功能说明</div>
+                                    <div class="hook-config-content">
+                                        <p>阻止创建超过 800 行的文件，鼓励将大文件拆分成多个小模块，提高代码可维护性。</p>
+                                        <div class="config-highlight">
+                                            <strong>为什么限制文件大小？</strong>
+                                            <ul>
+                                                <li>大文件难以理解和维护</li>
+                                                <li>违反单一职责原则</li>
+                                                <li>增加代码审查难度</li>
+                                                <li>容易产生 bug</li>
+                                            </ul>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="hook-config-section">
+                                    <div class="hook-config-title">⚙️ 配置示例</div>
+                                    <div class="hook-config-content">
+                                        <div class="config-code">
+{
+  "hooks": {
+    "PreToolUse": [
+      {
+        "matcher": "Write",
+        "hooks": [{
+          "type": "command",
+          "command": "node -e \"let d='';process.stdin.on('data',c=>d+=c);process.stdin.on('end',()=>{const i=JSON.parse(d);const c=i.tool_input?.content||'';const lines=c.split('\\n').length;if(lines>800){console.error('[Hook] 已阻止: 文件超过800行 ('+lines+'行)');process.exit(2)}console.log(d)})\"",
+          "description": "阻止创建超过800行的文件"
+        }]
+      }
+    ]
+  }
+}</div>
+                                    </div>
+                                </div>
+
+                                <div class="hook-config-section">
+                                    <div class="hook-config-title">💡 处理建议</div>
+                                    <div class="hook-config-content">
+                                        <div class="config-success">
+                                            <strong>遇到阻止时，应该：</strong>
+                                            <ul>
+                                                <li>将大文件拆分成多个小模块</li>
+                                                <li>按功能职责划分文件</li>
+                                                <li>提取公共逻辑到独立文件</li>
+                                                <li>考虑使用目录组织相关文件</li>
+                                            </ul>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </section>
+
+                    <!-- PostToolUse 实例 -->
+                    <section id="post-examples" class="ecc-section">
+                        <h2>✅ PostToolUse 实战实例</h2>
+                        <p>下面是常用的 PostToolUse 钩子配置，用于自动化后续处理。</p>
+
+                        <!-- 自动格式化 -->
+                        <div class="hook-detail-card" id="auto-format">
+                            <div class="hook-card-header" onclick="toggleHookCard(this)">
+                                <div class="hook-card-header-left">
+                                    <div class="hook-card-icon">🎨</div>
+                                    <div class="hook-card-title-group">
+                                        <div class="hook-card-title">自动格式化</div>
+                                        <div class="hook-card-subtitle">编辑后自动运行 Prettier</div>
+                                    </div>
+                                </div>
+                                <span class="hook-card-toggle">▼</span>
+                            </div>
+                            <div class="hook-card-body">
+                                <div class="hook-config-section">
+                                    <div class="hook-config-title">📌 功能说明</div>
+                                    <div class="hook-config-content">
+                                        <p>每次编辑 JavaScript/TypeScript 文件后，自动运行 Prettier 格式化代码，保持代码风格一致。</p>
+                                        <div class="config-success">
+                                            <strong>好处</strong>：
+                                            <ul>
+                                                <li>不需要手动运行格式化命令</li>
+                                                <li>代码始终保持统一风格</li>
+                                                <li>减少代码审查时的格式问题</li>
+                                            </ul>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="hook-config-section">
+                                    <div class="hook-config-title">⚙️ 配置示例</div>
+                                    <div class="hook-config-content">
+                                        <div class="config-code">
+{
+  "hooks": {
+    "PostToolUse": [
+      {
+        "matcher": "Edit",
+        "hooks": [{
+          "type": "command",
+          "command": "node -e \"let d='';process.stdin.on('data',c=>d+=c);process.stdin.on('end',()=>{const i=JSON.parse(d);const f=i.tool_input?.file_path||'';if(/\\.(ts|tsx|js|jsx)$/.test(f)){console.log('[Hook] 对 ' + f + ' 运行 prettier');require('child_process').exec('npx prettier --write ' + f)}console.log(d)})\"",
+          "description": "编辑 JS/TS 文件后自动格式化"
+        }]
+      }
+    ]
+  }
+}</div>
+                                    </div>
+                                </div>
+
+                                <div class="hook-config-section">
+                                    <div class="hook-config-title">📋 前置要求</div>
+                                    <div class="hook-config-content">
+                                        <div class="config-info">
+                                            <strong>需要先安装 Prettier</strong>：
+                                            <div class="config-code">
+npm install --save-dev prettier
+
+# 创建配置文件
+echo '{"semi": true, "singleQuote": true}' > .prettierrc</div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- TypeScript 检查 -->
+                        <div class="hook-detail-card">
+                            <div class="hook-card-header" onclick="toggleHookCard(this)">
+                                <div class="hook-card-header-left">
+                                    <div class="hook-card-icon">📘</div>
+                                    <div class="hook-card-title-group">
+                                        <div class="hook-card-title">TypeScript 检查</div>
+                                        <div class="hook-card-subtitle">编辑 TS 文件后运行类型检查</div>
+                                    </div>
+                                </div>
+                                <span class="hook-card-toggle">▼</span>
+                            </div>
+                            <div class="hook-card-body">
+                                <div class="hook-config-section">
+                                    <div class="hook-config-title">📌 功能说明</div>
+                                    <div class="hook-config-content">
+                                        <p>每次编辑 TypeScript 文件后，自动运行 <code>tsc --noEmit</code> 检查类型错误，提前发现类型问题。</p>
+                                    </div>
+                                </div>
+
+                                <div class="hook-config-section">
+                                    <div class="hook-config-title">⚙️ 配置示例</div>
+                                    <div class="hook-config-content">
+                                        <div class="config-code">
+{
+  "hooks": {
+    "PostToolUse": [
+      {
+        "matcher": "Edit",
+        "hooks": [{
+          "type": "command",
+          "command": "node -e \"let d='';process.stdin.on('data',c=>d+=c);process.stdin.on('end',()=>{const i=JSON.parse(d);const f=i.tool_input?.file_path||'';if(/\\.tsx?$/.test(f)){console.log('[Hook] 检查 TypeScript 类型');require('child_process').spawn('npx',['tsc','--noEmit'],{stdio:'inherit'})}console.log(d)})\"",
+          "description": "编辑 TS 文件后运行类型检查"
+        }]
+      }
+    ]
+  }
+}</div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- console.log 检测 -->
+                        <div class="hook-detail-card" id="console-detect">
+                            <div class="hook-card-header" onclick="toggleHookCard(this)">
+                                <div class="hook-card-header-left">
+                                    <div class="hook-card-icon">🔍</div>
+                                    <div class="hook-card-title-group">
+                                        <div class="hook-card-title">console.log 检测</div>
+                                        <div class="hook-card-subtitle">警告添加了 console.log</div>
+                                    </div>
+                                </div>
+                                <span class="hook-card-toggle">▼</span>
+                            </div>
+                            <div class="hook-card-body">
+                                <div class="hook-config-section">
+                                    <div class="hook-config-title">📌 功能说明</div>
+                                    <div class="hook-config-content">
+                                        <p>检测代码中添加的 console.log，提醒你在上线前删除调试代码。</p>
+                                        <div class="config-highlight">
+                                            <strong>为什么要检测？</strong>
+                                            <ul>
+                                                <li>console.log 会暴露敏感信息</li>
+                                                <li>影响生产环境性能</li>
+                                                <li>可能泄露调试信息给用户</li>
+                                                <li>容易被遗漏在代码中</li>
+                                            </ul>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="hook-config-section">
+                                    <div class="hook-config-title">⚙️ 配置示例</div>
+                                    <div class="hook-config-content">
+                                        <div class="config-code">
+{
+  "hooks": {
+    "PostToolUse": [
+      {
+        "matcher": "Edit",
+        "hooks": [{
+          "type": "command",
+          "command": "node -e \"let d='';process.stdin.on('data',c=>d+=c);process.stdin.on('end',()=>{const i=JSON.parse(d);const ns=i.tool_input?.new_string||'';if(/console\\.log/.test(ns)){console.error('[Hook] 警告: 添加了 console.log，记得上线前删除')}console.log(d)})\"",
+          "description": "检测并警告 console.log"
+        }]
+      }
+    ]
+  }
+}</div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- TODO/FIXME 检测 -->
+                        <div class="hook-detail-card">
+                            <div class="hook-card-header" onclick="toggleHookCard(this)">
+                                <div class="hook-card-header-left">
+                                    <div class="hook-card-icon">📝</div>
+                                    <div class="hook-card-title-group">
+                                        <div class="hook-card-title">TODO/FIXME 检测</div>
+                                        <div class="hook-card-subtitle">警告添加了 TODO/FIXME 注释</div>
+                                    </div>
+                                </div>
+                                <span class="hook-card-toggle">▼</span>
+                            </div>
+                            <div class="hook-card-body">
+                                <div class="hook-config-section">
+                                    <div class="hook-config-title">📌 功能说明</div>
+                                    <div class="hook-config-content">
+                                        <p>检测代码中添加的 TODO、FIXME、HACK 等注释，建议创建 Issue 跟踪这些待办事项。</p>
+                                        <div class="config-info">
+                                            <strong>最佳实践</strong>：
+                                            <ul>
+                                                <li>不要在代码中留 TODO</li>
+                                                <li>创建 Issue 跟踪待办事项</li>
+                                                <li>或者立即完成，不要拖延</li>
+                                                <li>FIXME 表示需要修复的已知问题</li>
+                                            </ul>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="hook-config-section">
+                                    <div class="hook-config-title">⚙️ 配置示例</div>
+                                    <div class="hook-config-content">
+                                        <div class="config-code">
+{
+  "hooks": {
+    "PostToolUse": [
+      {
+        "matcher": "Edit",
+        "hooks": [{
+          "type": "command",
+          "command": "node -e \"let d='';process.stdin.on('data',c=>d+=c);process.stdin.on('end',()=>{const i=JSON.parse(d);const ns=i.tool_input?.new_string||'';if(/TODO|FIXME|HACK/.test(ns)){console.error('[Hook] 添加了新的 TODO/FIXME - 考虑创建 issue')}console.log(d)})\"",
+          "description": "添加 TODO/FIXME 注释时警告"
+        }]
+      }
+    ]
+  }
+}</div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- PR 记录器 -->
+                        <div class="hook-detail-card">
+                            <div class="hook-card-header" onclick="toggleHookCard(this)">
+                                <div class="hook-card-header-left">
+                                    <div class="hook-card-icon">🔗</div>
+                                    <div class="hook-card-title-group">
+                                        <div class="hook-card-title">PR 记录器</div>
+                                        <div class="hook-card-subtitle">创建 PR 后自动记录 URL</div>
+                                    </div>
+                                </div>
+                                <span class="hook-card-toggle">▼</span>
+                            </div>
+                            <div class="hook-card-body">
+                                <div class="hook-config-section">
+                                    <div class="hook-config-title">📌 功能说明</div>
+                                    <div class="hook-config-content">
+                                        <p>创建 PR 后，自动将 PR URL 记录到文件中，方便后续跟踪。</p>
+                                    </div>
+                                </div>
+
+                                <div class="hook-config-section">
+                                    <div class="hook-config-title">⚙️ 配置示例</div>
+                                    <div class="hook-config-content">
+                                        <div class="config-code">
+{
+  "hooks": {
+    "PostToolUse": [
+      {
+        "matcher": "Bash",
+        "hooks": [{
+          "type": "command",
+          "command": "if echo \"$TOOL_INPUT\" | jq -r '.command // empty' | grep -q \"gh pr create\"; then echo \"$(date): $(gh pr view --json url -q .url)\" >> .claude/prs.log; fi",
+          "description": "记录创建的 PR URL"
+        }]
+      }
+    ]
+  }
+}</div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </section>
+
+                    <!-- 退出码说明 -->
+                    <section id="exit-code" class="ecc-section">
+                        <h2>🔢 钩子退出码说明</h2>
+                        <p>钩子脚本的退出码决定了 Claude Code 的行为，特别是对于 PreToolUse 钩子。</p>
+
+                        <table class="styled-table">
+                            <thead>
+                                <tr>
+                                    <th>退出码</th>
+                                    <th>含义</th>
+                                    <th>效果</th>
+                                    <th>使用场景</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td><code>0</code></td>
+                                    <td>成功</td>
+                                    <td>继续执行工具</td>
+                                    <td>检查通过，允许操作</td>
+                                </tr>
+                                <tr>
+                                    <td><code>2</code></td>
+                                    <td>阻止</td>
+                                    <td><strong>阻止工具调用</strong></td>
+                                    <td>检测到危险操作，需要阻止</td>
+                                </tr>
+                                <tr>
+                                    <td>其他非零</td>
+                                    <td>错误</td>
+                                    <td>记录错误但不阻止</td>
+                                    <td>钩子脚本执行出错</td>
+                                </tr>
+                            </tbody>
+                        </table>
+
+                        <div class="hook-detail-card">
+                            <div class="hook-card-header" onclick="toggleHookCard(this)">
+                                <div class="hook-card-header-left">
+                                    <div class="hook-card-icon">💡</div>
+                                    <div class="hook-card-title-group">
+                                        <div class="hook-card-title">退出码示例</div>
+                                        <div class="hook-card-subtitle">如何在钩子中使用退出码</div>
+                                    </div>
+                                </div>
+                                <span class="hook-card-toggle">▼</span>
+                            </div>
+                            <div class="hook-card-body">
+                                <div class="hook-config-section">
+                                    <div class="hook-config-title">示例 1：允许操作（退出码 0）</div>
+                                    <div class="hook-config-content">
+                                        <div class="config-code">
+#!/bin/bash
+# 检查文件大小
+file_size=$(stat -f%z "$filename" 2>/dev/null || stat -c%s "$filename")
+
+if [ $file_size -lt 1000000 ]; then
+    echo "[Hook] 文件大小正常"
+    exit 0  # 允许操作
+fi</div>
+                                    </div>
+                                </div>
+
+                                <div class="hook-config-section">
+                                    <div class="hook-config-title">示例 2：阻止操作（退出码 2）</div>
+                                    <div class="hook-config-content">
+                                        <div class="config-code">
+#!/bin/bash
+# 检查文件大小
+file_size=$(stat -f%z "$filename" 2>/dev/null || stat -c%s "$filename")
+
+if [ $file_size -gt 1000000 ]; then
+    echo "[Hook] 阻止: 文件过大 ($file_size 字节)"
+    exit 2  # 阻止操作
+fi</div>
+                                    </div>
+                                </div>
+
+                                <div class="hook-config-section">
+                                    <div class="hook-config-title">示例 3：错误但继续（其他非零）</div>
+                                    <div class="hook-config-content">
+                                        <div class="config-code">
+#!/bin/bash
+# 尝试检查但失败了
+if ! command -v jq &> /dev/null; then
+    echo "[Hook] 警告: jq 未安装，无法解析输入"
+    exit 1  # 记录错误但不阻止
+fi</div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="alert alert-warning">
+                            <div class="alert-title">⚠️ 重要提示</div>
+                            <ul>
+                                <li>只有 <strong>PreToolUse</strong> 钩子可以阻止工具执行（使用 exit 2）</li>
+                                <li>PostToolUse 钩子的退出码不影响已执行的操作</li>
+                                <li>钩子脚本必须正确处理 stdin/stdout，传递原始输入</li>
+                                <li>退出码 2 是特殊的"阻止"码，其他非零码只记录错误</li>
+                            </ul>
+                        </div>
+                    </section>
+
+                    <!-- 自定义钩子 -->
+                    <section id="custom" class="ecc-section">
+                        <h2>🔧 自定义钩子</h2>
+
+                        <h3>钩子配置位置</h3>
+                        <div class="hook-detail-card">
+                            <div class="hook-card-header" onclick="toggleHookCard(this)">
+                                <div class="hook-card-header-left">
+                                    <div class="hook-card-icon">📁</div>
+                                    <div class="hook-card-title-group">
+                                        <div class="hook-card-title">配置文件位置</div>
+                                        <div class="hook-card-subtitle">项目级 vs 全局配置</div>
+                                    </div>
+                                </div>
+                                <span class="hook-card-toggle">▼</span>
+                            </div>
+                            <div class="hook-card-body">
+                                <div class="hook-config-section">
+                                    <div class="hook-config-title">项目级钩子</div>
+                                    <div class="hook-config-content">
+                                        <p>配置文件：<code>.claude/settings.json</code></p>
+                                        <div class="config-info">
+                                            <strong>特点</strong>：
+                                            <ul>
+                                                <li>仅对当前项目有效</li>
+                                                <li>可以提交到 Git 仓库</li>
+                                                <li>团队成员共享配置</li>
+                                                <li>适合项目特定的钩子</li>
+                                            </ul>
+                                        </div>
+                                        <div class="config-code">
+# 项目级配置文件路径
+your-project/.claude/settings.json</div>
+                                    </div>
+                                </div>
+
+                                <div class="hook-config-section">
+                                    <div class="hook-config-title">全局钩子</div>
+                                    <div class="hook-config-content">
+                                        <p>配置文件：<code>~/.claude/settings.json</code></p>
+                                        <div class="config-highlight">
+                                            <strong>特点</strong>：
+                                            <ul>
+                                                <li>对所有项目有效</li>
+                                                <li>适合通用性强的钩子</li>
+                                                <li>不提交到 Git 仓库</li>
+                                                <li>个人偏好设置</li>
+                                            </ul>
+                                        </div>
+                                        <div class="config-code">
+# 全局配置文件路径
+# Windows
+C:\Users\YourName\.claude\settings.json
+
+# macOS/Linux
+~/.claude/settings.json</div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <h3>钩子配置结构</h3>
+                        <div class="hook-detail-card">
+                            <div class="hook-card-header" onclick="toggleHookCard(this)">
+                                <div class="hook-card-header-left">
+                                    <div class="hook-card-icon">📝</div>
+                                    <div class="hook-card-title-group">
+                                        <div class="hook-card-title">配置结构模板</div>
+                                        <div class="hook-card-subtitle">完整的钩子配置结构</div>
+                                    </div>
+                                </div>
+                                <span class="hook-card-toggle">▼</span>
+                            </div>
+                            <div class="hook-card-body">
+                                <div class="hook-config-section">
+                                    <div class="hook-config-title">完整配置示例</div>
+                                    <div class="hook-config-content">
+                                        <div class="config-code">
+{
+  "hooks": {
+    "PreToolUse": [
+      {
+        "matcher": "Bash",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "your-hook-command-here",
+            "description": "钩子描述"
+          }
+        ]
+      }
+    ],
+    "PostToolUse": [
+      {
+        "matcher": "Edit",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "your-hook-command-here"
+          }
+        ]
+      }
+    ],
+    "SessionStart": [
+      {
+        "type": "command",
+        "command": "echo '会话开始'"
+      }
+    ]
+  }
+}</div>
+                                    </div>
+                                </div>
+
+                                <div class="hook-config-section">
+                                    <div class="hook-config-title">配置项说明</div>
+                                    <div class="hook-config-content">
+                                        <table class="styled-table">
+                                            <tr><th>字段</th><th>类型</th><th>说明</th></tr>
+                                            <tr><td>hooks</td><td>对象</td><td>顶层钩子配置对象</td></tr>
+                                            <tr><td>PreToolUse/PostToolUse</td><td>数组</td><td>钩子类型列表</td></tr>
+                                            <tr><td>matcher</td><td>字符串</td><td>匹配的工具名称</td></tr>
+                                            <tr><td>hooks</td><td>数组</td><td>具体的钩子命令列表</td></tr>
+                                            <tr><td>type</td><td>字符串</td><td>钩子类型（通常为 "command"）</td></tr>
+                                            <tr><td>command</td><td>字符串</td><td>要执行的命令</td></tr>
+                                            <tr><td>description</td><td>字符串</td><td>钩子描述（可选）</td></tr>
+                                        </table>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <h3>匹配器类型</h3>
+                        <div class="hook-detail-card">
+                            <div class="hook-card-header" onclick="toggleHookCard(this)">
+                                <div class="hook-card-header-left">
+                                    <div class="hook-card-icon">🎯</div>
+                                    <div class="hook-card-title-group">
+                                        <div class="hook-card-title">可用匹配器</div>
+                                        <div class="hook-card-subtitle">匹配不同的工具类型</div>
+                                    </div>
+                                </div>
+                                <span class="hook-card-toggle">▼</span>
+                            </div>
+                            <div class="hook-card-body">
+                                <div class="hook-config-content">
+                                    <table class="styled-table">
+                                        <thead>
+                                            <tr>
+                                                <th>匹配器</th>
+                                                <th>匹配的工具</th>
+                                                <th>典型用途</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            <tr>
+                                                <td><code>Bash</code></td>
+                                                <td>终端命令执行</td>
+                                                <td>开发服务器阻止、命令检查</td>
+                                            </tr>
+                                            <tr>
+                                                <td><code>Read</code></td>
+                                                <td>读取文件</td>
+                                                <td>日志记录、访问统计</td>
+                                            </tr>
+                                            <tr>
+                                                <td><code>Edit</code></td>
+                                                <td>编辑文件</td>
+                                                <td>自动格式化、类型检查</td>
+                                            </tr>
+                                            <tr>
+                                                <td><code>Write</code></td>
+                                                <td>创建/写入文件</td>
+                                                <td>大文件阻止、类型检查</td>
+                                            </tr>
+                                            <tr>
+                                                <td><code>Grep</code></td>
+                                                <td>搜索内容</td>
+                                                <td>搜索日志、统计</td>
+                                            </tr>
+                                            <tr>
+                                                <td><code>Glob</code></td>
+                                                <td>查找文件</td>
+                                                <td>文件操作日志</td>
+                                            </tr>
+                                            <tr>
+                                                <td><code>*</code></td>
+                                                <td>所有工具</td>
+                                                <td>全局钩子、通用检查</td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+
+                        <h3>编写钩子脚本</h3>
+                        <div class="hook-detail-card">
+                            <div class="hook-card-header" onclick="toggleHookCard(this)">
+                                <div class="hook-card-header-left">
+                                    <div class="hook-card-icon">📜</div>
+                                    <div class="hook-card-title-group">
+                                        <div class="hook-card-title">钩子脚本编写指南</div>
+                                        <div class="hook-card-subtitle">如何编写自己的钩子脚本</div>
+                                    </div>
+                                </div>
+                                <span class="hook-card-toggle">▼</span>
+                            </div>
+                            <div class="hook-card-body">
+                                <div class="hook-config-section">
+                                    <div class="hook-config-title">基本模板</div>
+                                    <div class="hook-config-content">
+                                        <div class="config-code">
+#!/bin/bash
+# 钩子脚本基本模板
+
+# 1. 读取 stdin（工具输入数据）
+input=$(cat)
+
+# 2. 解析输入（通常使用 jq）
+command=$(echo "$input" | jq -r '.command // empty')
+file_path=$(echo "$input" | jq -r '.tool_input.file_path // empty')
+
+# 3. 执行检查逻辑
+if [ 检查条件 ]; then
+    echo "[Hook] 检查失败"
+    exit 2  # 阻止操作
+fi
+
+# 4. 输出原始数据（必须！）
+echo "$input"</div>
+                                        <div class="config-info">
+                                            <strong>重要</strong>：钩子脚本必须输出原始输入数据（最后的 echo "$input"），否则 Claude Code 无法继续处理。
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="hook-config-section">
+                                    <div class="hook-config-title">示例：阻止删除 node_modules</div>
+                                    <div class="hook-config-content">
+                                        <div class="config-code">
+#!/bin/bash
+input=$(cat)
+
+# 解析命令
+command=$(echo "$input" | jq -r '.command // empty')
+
+# 检查是否是删除 node_modules 的命令
+if echo "$command" | grep -q "rm -rf node_modules"; then
+    echo "[Hook] 阻止: 不允许删除 node_modules"
+    echo "[Hook] 如果确实需要，请使用：npm install 或 npm ci"
+    exit 2
+fi
+
+# 输出原始数据
+echo "$input"</div>
+                                    </div>
+                                </div>
+
+                                <div class="hook-config-section">
+                                    <div class="hook-config-title">调试技巧</div>
+                                    <div class="hook-config-content">
+                                        <div class="config-highlight">
+                                            <strong>如何调试钩子</strong>：
+                                            <ol>
+                                                <li>在脚本中添加 <code>set -x</code> 查看执行过程</li>
+                                                <li>将输入写入临时文件：<code>echo "$input" > /tmp/hook-debug.json</code></li>
+                                                <li>手动测试脚本：<code>echo '{}' | your-hook-script</code></li>
+                                                <li>查看 Claude Code 日志获取错误信息</li>
+                                            </ol>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </section>
+
+                    <!-- 子页面导航 -->
+                    <div class="subpage-nav">
+                        <a href="appendix-ecc-rules.html" class="subpage-nav-link">
+                            <svg class="icon icon-xs"><use href="../images/icons.svg#icon-arrow-left"></use></svg>
+                            上一节：Rules 规范
+                        </a>
+                        <a href="appendix-ecc.html" class="subpage-nav-link">
+                            返回 ECC 参考大全
+                        </a>
+                        <a href="appendix-ecc-workflow.html" class="subpage-nav-link">
+                            下一节：工作流
+                            <svg class="icon icon-xs"><use href="../images/icons.svg#icon-arrow-right"></use></svg>
+                        </a>
+                    </div>
+
+                    <!-- 章节导航 -->
+                    <nav class="chapter-nav">
+                        <a href="appendix-ecc-rules.html" class="chapter-nav-card">
+                            <svg class="icon" aria-hidden="true"><use href="../images/icons.svg#icon-arrow-left"></use></svg>
+                            <div class="content">
+                                <div class="label">上一节</div>
+                                <div class="title">Rules 规范详解</div>
+                            </div>
+                        </a>
+                        <a href="appendix-ecc-workflow.html" class="chapter-nav-card next">
+                            <svg class="icon" aria-hidden="true"><use href="../images/icons.svg#icon-arrow-right"></use></svg>
+                            <div class="content">
+                                <div class="label">下一节</div>
+                                <div class="title">企业级工作流详解</div>
+                            </div>
+                        </a>
+                    </nav>
+                </article>
+            </div>
+
+            <footer class="footer">
+                <div class="footer-links">
+                    <a href="https://www.tumuai.net/" target="_blank">土木AI官网</a>
+                    <a href="https://fv2fbshiww0.feishu.cn/wiki/QFcFwHXxLiyVT7kRMAWcRtmXn0I" target="_blank">知识库</a>
+                    <a href="https://github.com/anthropics/claude-code" target="_blank">GitHub</a>
+                    <a href="https://docs.anthropic.com/en/docs/claude-code/overview" target="_blank">官方文档</a>
+                    <a href="appendix.html">速查手册</a>
+                </div>
+                <div class="footer-copyright">&copy; 2025 Claude Code 教程网站</div>
+            </footer>
+        </main>
+
+        <div class="overlay" id="overlay"></div>
+    </div>
+
+    <script src="../js/main.js"></script>
+    <script>
+        // Hook 卡片展开/收起功能
+        function toggleHookCard(header) {
+            header.classList.toggle('active');
+            const body = header.nextElementSibling;
+            body.classList.toggle('active');
+        }
+
+        // 页面加载时，如果有 hash，自动展开对应卡片
+        document.addEventListener('DOMContentLoaded', function() {
+            const hash = window.location.hash;
+            if (hash) {
+                const card = document.querySelector(hash);
+                if (card && card.classList.contains('hook-detail-card')) {
+                    const header = card.querySelector('.hook-card-header');
+                    toggleHookCard(header);
+                    // 滚动到卡片位置
+                    setTimeout(() => {
+                        card.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                    }, 100);
+                }
+            }
+        });
+    </script>
+</body>
+</html>

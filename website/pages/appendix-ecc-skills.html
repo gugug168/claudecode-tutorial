@@ -1,0 +1,1602 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>A4-2: Skills 技能模板详解 - Claude Code 教程</title>
+    <link rel="stylesheet" href="../css/style.css">
+    <style>
+        /* 继承 ECC 页面样式 */
+        .ecc-toc {
+            position: sticky;
+            top: 80px;
+            background: var(--bg-card);
+            border: 1px solid var(--border-color);
+            border-radius: var(--radius-md);
+            padding: 20px;
+            margin-bottom: 24px;
+            z-index: 100;
+        }
+        .ecc-toc-title { font-size: 1.1rem; font-weight: 600; margin-bottom: 12px; color: var(--text-primary); }
+        .ecc-toc-nav { display: flex; flex-wrap: wrap; gap: 8px; }
+        .ecc-toc-link {
+            display: inline-flex; align-items: center; gap: 6px;
+            padding: 6px 12px; background: var(--bg-secondary);
+            border-radius: var(--radius-sm); color: var(--text-secondary);
+            text-decoration: none; font-size: 0.9rem; transition: all 0.2s;
+        }
+        .ecc-toc-link:hover { background: var(--primary-color); color: white; }
+        .ecc-section { border-top: 2px solid var(--border-color); padding-top: 40px; margin-top: 40px; }
+        .section-intro {
+            display: flex; align-items: flex-start; gap: 16px;
+            padding: 16px 20px; background: var(--bg-secondary);
+            border-radius: var(--radius-md); border-left: 4px solid var(--primary-color); margin-bottom: 20px;
+        }
+        .section-intro-icon { font-size: 2rem; flex-shrink: 0; }
+        .section-intro-content h4 { margin: 0 0 8px 0; color: var(--text-primary); }
+        .section-intro-content p { margin: 0; color: var(--text-secondary); font-size: 0.95rem; }
+        .styled-table { width: 100%; border-collapse: collapse; margin: 20px 0; font-size: 0.95rem; border-radius: var(--radius-sm); overflow: hidden; border: 1px solid var(--border-color); }
+        .styled-table th { background: var(--bg-secondary); font-weight: 600; text-align: left; padding: 12px 16px; border-bottom: 2px solid var(--primary-color); }
+        .styled-table td { padding: 12px 16px; border-bottom: 1px solid var(--border-color); }
+        .styled-table tr:nth-child(even) { background: var(--bg-secondary); }
+        .styled-table tr:hover { background: var(--primary-light); }
+        .styled-table code { background: var(--bg-tertiary); padding: 2px 6px; border-radius: var(--radius-sm); font-size: 0.9em; }
+        .subpage-nav { display: flex; justify-content: space-between; align-items: center; gap: 16px; margin: 40px 0; padding: 20px; background: var(--bg-secondary); border-radius: var(--radius-md); }
+        .subpage-nav-link { display: flex; align-items: center; gap: 8px; padding: 10px 16px; background: var(--bg-card); border: 1px solid var(--border-color); border-radius: var(--radius-sm); color: var(--text-primary); text-decoration: none; transition: all 0.2s; }
+        .subpage-nav-link:hover { border-color: var(--primary-color); color: var(--primary-color); }
+        .example-box { background: linear-gradient(135deg, #f0f4ff 0%, #e8f5e9 100%); border: 1px solid var(--border-color); border-radius: var(--radius-md); padding: 20px; margin: 24px 0; }
+        .example-box-title { font-weight: 600; color: var(--primary-color); margin-bottom: 12px; display: flex; align-items: center; gap: 8px; }
+
+        /* 技能详细卡片 - 可展开 */
+        .skill-detail-card {
+            background: var(--bg-card);
+            border: 1px solid var(--border-color);
+            border-radius: var(--radius-md);
+            margin-bottom: 16px;
+            overflow: hidden;
+            transition: all 0.3s;
+        }
+        .skill-detail-card:hover {
+            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+        }
+        .skill-card-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 16px 20px;
+            cursor: pointer;
+            background: linear-gradient(135deg, var(--bg-card) 0%, var(--bg-secondary) 100%);
+            border-bottom: 1px solid transparent;
+            transition: all 0.2s;
+        }
+        .skill-card-header:hover {
+            background: var(--bg-secondary);
+        }
+        .skill-card-header.active {
+            border-bottom-color: var(--border-color);
+            background: var(--bg-secondary);
+        }
+        .skill-card-header-left {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+        }
+        .skill-card-icon {
+            font-size: 2rem;
+            width: 48px;
+            height: 48px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: var(--bg-tertiary);
+            border-radius: var(--radius-sm);
+        }
+        .skill-card-title-group {
+            display: flex;
+            flex-direction: column;
+            gap: 4px;
+        }
+        .skill-card-title {
+            font-weight: 600;
+            font-size: 1.1rem;
+            color: var(--text-primary);
+        }
+        .skill-card-subtitle {
+            font-size: 0.85rem;
+            color: var(--text-secondary);
+        }
+        .skill-card-toggle {
+            font-size: 1.5rem;
+            color: var(--text-muted);
+            transition: transform 0.3s;
+        }
+        .skill-card-header.active .skill-card-toggle {
+            transform: rotate(180deg);
+        }
+        .skill-card-body {
+            display: none;
+            padding: 20px;
+            background: var(--bg-card);
+        }
+        .skill-card-body.active {
+            display: block;
+        }
+        .skill-config-section {
+            margin-bottom: 20px;
+            padding-bottom: 20px;
+            border-bottom: 1px solid var(--border-color);
+        }
+        .skill-config-section:last-child {
+            margin-bottom: 0;
+            padding-bottom: 0;
+            border-bottom: none;
+        }
+        .skill-config-title {
+            font-weight: 600;
+            color: var(--text-primary);
+            margin-bottom: 12px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        .skill-config-content {
+            color: var(--text-secondary);
+            font-size: 0.95rem;
+        }
+        .skill-config-content ul {
+            margin: 8px 0;
+            padding-left: 20px;
+        }
+        .skill-config-content li {
+            margin-bottom: 6px;
+        }
+        .config-code {
+            background: var(--bg-tertiary);
+            padding: 12px 16px;
+            border-radius: var(--radius-sm);
+            font-family: monospace;
+            font-size: 0.9rem;
+            overflow-x: auto;
+            margin: 12px 0;
+        }
+        .config-highlight {
+            background: linear-gradient(135deg, #fff3e0 0%, #ffe0b2 100%);
+            padding: 12px 16px;
+            border-radius: var(--radius-sm);
+            border-left: 4px solid #ff9800;
+            margin: 12px 0;
+        }
+        .config-info {
+            background: linear-gradient(135deg, #e3f2fd 0%, #bbdefb 100%);
+            padding: 12px 16px;
+            border-radius: var(--radius-sm);
+            border-left: 4px solid #2196f3;
+            margin: 12px 0;
+        }
+
+        /* 快速跳转导航 */
+        .quick-nav {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+            margin-bottom: 24px;
+        }
+        .quick-nav-btn {
+            padding: 8px 16px;
+            background: var(--bg-secondary);
+            border: 1px solid var(--border-color);
+            border-radius: var(--radius-sm);
+            color: var(--text-secondary);
+            text-decoration: none;
+            font-size: 0.9rem;
+            transition: all 0.2s;
+        }
+        .quick-nav-btn:hover {
+            background: var(--primary-color);
+            color: white;
+            border-color: var(--primary-color);
+        }
+
+        /* 技能标签颜色 */
+        .skill-tag { display: inline-block; padding: 2px 8px; background: var(--primary-light); color: var(--primary-color); border-radius: var(--radius-sm); font-size: 0.8rem; margin-right: 4px; }
+
+        @media (max-width: 768px) {
+            .ecc-toc { position: relative; top: 0; }
+            .subpage-nav { flex-direction: column; }
+            .skill-card-header-left { flex-direction: column; align-items: flex-start; gap: 8px; }
+        }
+    </style>
+</head>
+<body data-page-id="appendix-ecc-skills">
+    <div class="app-container">
+        <aside class="sidebar" id="sidebar">
+            <div class="sidebar-header">
+                <a href="../index.html" style="display: flex; align-items: center; gap: 12px; text-decoration: none;">
+                    <div class="logo">C</div>
+                    <span class="logo-text">Claude Code 教程</span>
+                </a>
+            </div>
+            <div class="sidebar-search">
+                <div class="search-box">
+                    <span class="search-icon" aria-hidden="true">
+                        <svg class="icon icon-xs"><use href="../images/icons.svg#icon-search"></use></svg>
+                    </span>
+                    <input type="text" placeholder="搜索章节...">
+                </div>
+            </div>
+            <nav class="sidebar-nav" id="sidebarNav"></nav>
+        </aside>
+
+        <main class="main-content">
+            <header class="top-nav">
+                <div class="top-nav-left">
+                    <button class="menu-toggle" id="menuToggle" aria-label="打开目录">
+                        <svg class="icon icon-sm" aria-hidden="true"><use href="../images/icons.svg#icon-menu"></use></svg>
+                    </button>
+                    <nav class="breadcrumb">
+                        <a href="../index.html">首页</a>
+                        <span class="separator">/</span>
+                        <a href="appendix-ecc.html">ECC参考大全</a>
+                        <span class="separator">/</span>
+                        <span class="current">Skills 技能</span>
+                    </nav>
+                </div>
+                <div class="top-nav-right">
+                    <div class="progress-indicator">
+                        <span>学习进度</span>
+                        <div class="progress-bar">
+                            <div class="progress-fill" id="progressFill" style="width: 0%"></div>
+                        </div>
+                        <span class="progress-text" id="progressText">0%</span>
+                    </div>
+                </div>
+            </header>
+
+            <div class="content-wrapper">
+                <header class="article-header">
+                    <div class="article-breadcrumb">
+                        <a href="../index.html">首页</a> / <a href="appendix-ecc.html">A4: ECC参考大全</a> / <span>A4-2: Skills 技能模板详解</span>
+                    </div>
+                    <h1 class="article-title">A4-2: Skills 技能模板详解</h1>
+                    <div class="article-meta">
+                        <span class="article-meta-item">
+                            <svg class="icon icon-xs" aria-hidden="true"><use href="../images/icons.svg#icon-clock"></use></svg>
+                            预计 35 分钟
+                        </span>
+                        <span class="article-meta-item">
+                            <svg class="icon icon-xs" aria-hidden="true"><use href="../images/icons.svg#icon-tag"></use></svg>
+                            类别：进阶 · 核心
+                        </span>
+                    </div>
+                </header>
+
+                <article class="article-content">
+                    <!-- 返回上级 -->
+                    <div style="margin-bottom: 24px;">
+                        <a href="appendix-ecc.html" style="display: inline-flex; align-items: center; gap: 6px; color: var(--primary-color); text-decoration: none;">
+                            <svg class="icon icon-xs"><use href="../images/icons.svg#icon-arrow-left"></use></svg>
+                            返回 ECC 参考大全
+                        </a>
+                    </div>
+
+                    <!-- 本页目录 -->
+                    <div class="ecc-toc">
+                        <div class="ecc-toc-title">📑 本页目录</div>
+                        <nav class="ecc-toc-nav">
+                            <a href="#intro" class="ecc-toc-link">📌 概念介绍</a>
+                            <a href="#execution-modes" class="ecc-toc-link">🚀 执行模式类</a>
+                            <a href="#planning" class="ecc-toc-link">📋 规划类</a>
+                            <a href="#search" class="ecc-toc-link">🔍 搜索研究类</a>
+                            <a href="#quality" class="ecc-toc-link">✅ 质量审查类</a>
+                            <a href="#silent" class="ecc-toc-link">🤫 静默激活类</a>
+                            <a href="#utilities" class="ecc-toc-link">🛠️ 工具类</a>
+                            <a href="#setup" class="ecc-toc-link">⚙️ 设置类</a>
+                            <a href="#usage" class="ecc-toc-link">⚡ 使用方法</a>
+                        </nav>
+                    </div>
+
+                    <!-- 快速跳转 -->
+                    <div class="quick-nav">
+                        <span style="color: var(--text-secondary); font-size: 0.9rem;">快速跳转：</span>
+                        <a href="#autopilot" class="quick-nav-btn">autopilot</a>
+                        <a href="#ralph" class="quick-nav-btn">ralph</a>
+                        <a href="#ultrawork" class="quick-nav-btn">ultrawork</a>
+                        <a href="#plan" class="quick-nav-btn">plan</a>
+                        <a href="#tdd" class="quick-nav-btn">tdd</a>
+                        <a href="#code-review" class="quick-nav-btn">code-review</a>
+                    </div>
+
+                    <!-- 概念介绍 -->
+                    <section id="intro">
+                        <div class="section-intro">
+                            <span class="section-intro-icon">📚</span>
+                            <div class="section-intro-content">
+                                <h4>什么是 Skills？</h4>
+                                <p>Skills（技能模板）是预定义的工作流程，告诉 Claude "如何"完成某类任务。它们包含特定领域的知识、最佳实践和具体实现模式。<strong>点击下方卡片展开查看每个技能的详细配置</strong>。</p>
+                            </div>
+                        </div>
+
+                        <div class="alert alert-info">
+                            <div class="alert-title">🎯 如何使用本页</div>
+                            <ul>
+                                <li>点击任意<strong>技能卡片</strong>展开查看详细配置</li>
+                                <li>每个技能包含：<strong>触发关键词</strong>、<strong>自动激活时机</strong>、<strong>包含内容</strong>、<strong>使用示例</strong></li>
+                                <li>使用<strong>快速跳转</strong>按钮直达特定技能</li>
+                            </ul>
+                        </div>
+
+                        <h2>三者关系比喻</h2>
+                        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 16px; margin: 20px 0;">
+                            <div style="background: var(--bg-card); border: 1px solid var(--border-color); border-radius: var(--radius-md); padding: 16px;">
+                                <div style="display: flex; align-items: center; gap: 12px;">
+                                    <span style="font-size: 1.5rem;">👥</span>
+                                    <div>
+                                        <div style="font-weight: 600; color: var(--text-primary);">Agents = 各部门专家</div>
+                                        <div style="font-size: 0.9rem; color: var(--text-secondary);">谁来做 - 有专业能力的"人"</div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div style="background: var(--bg-card); border: 1px solid var(--border-color); border-radius: var(--radius-md); padding: 16px;">
+                                <div style="display: flex; align-items: center; gap: 12px;">
+                                    <span style="font-size: 1.5rem;">⌨️</span>
+                                    <div>
+                                        <div style="font-weight: 600; color: var(--text-primary);">Commands = 快捷键</div>
+                                        <div style="font-size: 0.9rem; color: var(--text-secondary);">快速执行 - 一键触发</div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div style="background: var(--bg-card); border: 1px solid var(--border-color); border-radius: var(--radius-md); padding: 16px;">
+                                <div style="display: flex; align-items: center; gap: 12px;">
+                                    <span style="font-size: 1.5rem;">📖</span>
+                                    <div>
+                                        <div style="font-weight: 600; color: var(--text-primary);">Skills = 操作指南</div>
+                                        <div style="font-size: 0.9rem; color: var(--text-secondary);">怎么做 - 详细的"操作手册"</div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </section>
+
+                    <!-- 执行模式类 -->
+                    <section id="execution-modes" class="ecc-section">
+                        <h2>🚀 执行模式类技能</h2>
+                        <p>这些技能定义了 Claude Code 的工作模式，控制任务如何被执行和协调。</p>
+
+                        <!-- autopilot 技能 -->
+                        <div class="skill-detail-card" id="autopilot">
+                            <div class="skill-card-header" onclick="toggleSkillCard(this)">
+                                <div class="skill-card-header-left">
+                                    <div class="skill-card-icon">🚀</div>
+                                    <div class="skill-card-title-group">
+                                        <div class="skill-card-title">autopilot <span class="skill-tag">执行模式</span></div>
+                                        <div class="skill-card-subtitle">全自动执行模式 - 从想法到代码的完整实现</div>
+                                    </div>
+                                </div>
+                                <span class="skill-card-toggle">▼</span>
+                            </div>
+                            <div class="skill-card-body">
+                                <div class="skill-config-section">
+                                    <div class="skill-config-title">📌 技能概述</div>
+                                    <div class="skill-config-content">
+                                        <p>autopilot 是 Claude Code 的核心执行模式。当你说出想要构建什么时，它会自动完成从需求分析到代码实现的全过程。就像雇了一个全能的程序员，你只需要说出想法，剩下的都交给它。</p>
+                                        <div class="config-highlight">
+                                            <strong>适合人群</strong>：
+                                            <ul>
+                                                <li>编程新手 - 不懂具体实现，只知道自己想要什么功能</li>
+                                                <li>快速原型 - 需要快速验证想法，不关心具体代码</li>
+                                                <li>全栈开发 - 需要同时处理前端、后端、数据库多个领域</li>
+                                            </ul>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="skill-config-section">
+                                    <div class="skill-config-title">⚡ 触发关键词</div>
+                                    <div class="skill-config-content">
+                                        <div class="config-code">
+# 以下关键词会自动激活 autopilot：
+
+"build me a ..."
+"帮我做一个..."
+"create a ..."
+"创建一个..."
+"I want to build ..."
+"我想开发..."
+"make a ..."
+"做一个..."</div>
+                                        <div class="config-info">
+                                            <strong>自动激活时机</strong>：当你说出想"创建"或"构建"某个完整功能时
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="skill-config-section">
+                                    <div class="skill-config-title">🔧 工作流程</div>
+                                    <div class="skill-config-content">
+                                        <div class="config-code">
+# autopilot 执行流程
+
+1. 需求理解 → 分析你的想法，确认需求
+2. 技术选型 → 选择合适的技术栈
+3. 架构设计 → 规划文件结构和代码组织
+4. 代码实现 → 编写具体代码
+5. 测试验证 → 运行测试，确保功能正常
+6. 文档更新 → 更新相关文档
+
+整个过程中，遇到决策点会停下来询问你</div>
+                                    </div>
+                                </div>
+
+                                <div class="skill-config-section">
+                                    <div class="skill-config-title">💡 使用示例</div>
+                                    <div class="skill-config-content">
+                                        <div class="example-box">
+                                            <div class="example-box-title">场景：创建用户登录系统</div>
+                                            <div class="config-code">
+# 你说：
+"build me a user login system with email and password"
+
+# autopilot 自动执行：
+
+## 1. 需求确认
+"我将创建一个用户登录系统，包含：
+- 用户注册（邮箱+密码）
+- 用户登录
+- 密码加密存储
+- Session 管理
+技术栈：后端 Node.js + Express，前端 React
+是否继续？"
+
+## 2. 创建后端 API
+[自动生成 auth.js, users.js 等文件]
+
+## 3. 创建前端登录页
+[自动生成 LoginForm.tsx 等组件]
+
+## 4. 集成测试
+[运行测试，验证功能]</div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- ralph 技能 -->
+                        <div class="skill-detail-card" id="ralph">
+                            <div class="skill-card-header" onclick="toggleSkillCard(this)">
+                                <div class="skill-card-header-left">
+                                    <div class="skill-card-icon">🔄</div>
+                                    <div class="skill-card-title-group">
+                                        <div class="skill-card-title">ralph <span class="skill-tag">执行模式</span></div>
+                                        <div class="skill-card-subtitle">持久执行模式 - 不完成不停止的循环</div>
+                                    </div>
+                                </div>
+                                <span class="skill-card-toggle">▼</span>
+                            </div>
+                            <div class="skill-card-body">
+                                <div class="skill-config-section">
+                                    <div class="skill-config-title">📌 技能概述</div>
+                                    <div class="skill-config-content">
+                                        <p>ralph（得名于希腊神话中的西西弗斯）是<strong>最顽固</strong>的执行模式。它会不断尝试，直到任务完全完成。如果遇到错误，它会自动修复、重试，永不停歇。</p>
+                                        <div class="config-highlight">
+                                            <strong>核心理念</strong>："The boulder never stops"（巨石永不停歇）
+                                            <ul>
+                                                <li>遇到构建错误 → 自动修复</li>
+                                                <li>测试失败 → 修复并重跑</li>
+                                                <li>直到所有检查通过才停止</li>
+                                            </ul>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="skill-config-section">
+                                    <div class="skill-config-title">⚡ 触发关键词</div>
+                                    <div class="skill-config-content">
+                                        <div class="config-code">
+# 触发关键词：
+"ralph"
+"don't stop until it works"
+"必须完成"
+"持续直到成功"</div>
+                                    </div>
+                                </div>
+
+                                <div class="skill-config-section">
+                                    <div class="skill-config-title">🔧 工作特性</div>
+                                    <div class="skill-config-content">
+                                        <table class="styled-table">
+                                            <tr><th>特性</th><th>说明</th></tr>
+                                            <tr><td>自动重试</td><td>遇到错误自动修复并重试</td></tr>
+                                            <tr><td>包含 ultrawork</td><td>ralph 内部使用 ultrawork 的并行能力</td></tr>
+                                            <tr><td>验证循环</td><td>完成后自动调用 architect 验证</td></tr>
+                                            <tr><td>持久化</td><td>状态保存，支持中断恢复</td></tr>
+                                        </table>
+                                    </div>
+                                </div>
+
+                                <div class="skill-config-section">
+                                    <div class="skill-config-title">💡 使用示例</div>
+                                    <div class="skill-config-content">
+                                        <div class="example-box">
+                                            <div class="example-box-title">场景：修复遗留代码</div>
+                                            <div class="config-code">
+# 你说：
+"ralph, fix all the TypeScript errors in this project"
+
+# ralph 执行：
+
+## 循环 1：运行类型检查
+发现 42 个 TypeScript 错误
+
+## 循环 2：批量修复
+修复了前 20 个错误...
+
+## 循环 3：继续修复
+又修复了 15 个...
+
+## 循环 4：处理顽固错误
+最后 7 个复杂错误，逐个分析并修复
+
+## 循环 5：验证
+重新运行类型检查 → ✅ 0 个错误
+
+# 任务完成！</div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- ultrawork 技能 -->
+                        <div class="skill-detail-card" id="ultrawork">
+                            <div class="skill-card-header" onclick="toggleSkillCard(this)">
+                                <div class="skill-card-header-left">
+                                    <div class="skill-card-icon">⚡</div>
+                                    <div class="skill-card-title-group">
+                                        <div class="skill-card-title">ultrawork <span class="skill-tag">执行模式</span></div>
+                                        <div class="skill-card-subtitle">最大并行模式 - 多代理协同加速</div>
+                                    </div>
+                                </div>
+                                <span class="skill-card-toggle">▼</span>
+                            </div>
+                            <div class="skill-card-body">
+                                <div class="skill-config-section">
+                                    <div class="skill-config-title">📌 技能概述</div>
+                                    <div class="skill-config-content">
+                                        <p>ultrawork 是<strong>最快</strong>的执行模式。它会同时启动多个代理并行工作，就像同时雇佣了多个程序员。</p>
+                                        <div class="config-info">
+                                            <strong>加速原理</strong>：
+                                            <ul>
+                                                <li>同时启动 2-5 个代理</li>
+                                                <li>每个代理独立工作</li>
+                                                <li>最后协调合并结果</li>
+                                            </ul>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="skill-config-section">
+                                    <div class="skill-config-title">⚡ 触发关键词</div>
+                                    <div class="skill-config-content">
+                                        <div class="config-code">
+# 触发关键词：
+"ulw" (缩写)
+"ultrawork"
+"parallel build"
+"并行开发"</div>
+                                    </div>
+                                </div>
+
+                                <div class="skill-config-section">
+                                    <div class="skill-config-title">🔧 并行策略</div>
+                                    <div class="skill-config-content">
+                                        <div class="config-code">
+# ultrawork 并行示例
+
+任务：构建全栈应用
+
+代理 1 → 设计数据库 schema
+代理 2 → 创建后端 API
+代理 3 → 构建前端组件
+代理 4 → 编写测试用例
+
+最后：协调集成，处理依赖关系</div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- ultrapilot 技能 -->
+                        <div class="skill-detail-card" id="ultrapilot">
+                            <div class="skill-card-header" onclick="toggleSkillCard(this)">
+                                <div class="skill-card-header-left">
+                                    <div class="skill-card-icon">🛸</div>
+                                    <div class="skill-card-title-group">
+                                        <div class="skill-card-title">ultrapilot <span class="skill-tag">执行模式</span></div>
+                                        <div class="skill-card-subtitle">并行自动驾驶 - 文件所有权分割的快速执行</div>
+                                    </div>
+                                </div>
+                                <span class="skill-card-toggle">▼</span>
+                            </div>
+                            <div class="skill-card-body">
+                                <div class="skill-config-section">
+                                    <div class="skill-config-title">📌 技能概述</div>
+                                    <div class="skill-config-content">
+                                        <p>ultrapilot 是 autopilot 的并行版本。它通过<strong>文件所有权分割</strong>实现真正的并行，最多可提速 5 倍。</p>
+                                        <div class="config-highlight">
+                                            <strong>与 ultrawork 的区别</strong>：
+                                            <ul>
+                                                <li>ultrawork：任务并行，多个代理做同一件事的不同部分</li>
+                                                <li>ultrapilot：文件并行，每个代理拥有不同的文件，避免冲突</li>
+                                            </ul>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="skill-config-section">
+                                    <div class="skill-config-title">⚡ 触发关键词</div>
+                                    <div class="skill-config-content">
+                                        <div class="config-code">
+# 触发关键词：
+"ultrapilot"
+"parallel build"</div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- ecomode 技能 -->
+                        <div class="skill-detail-card" id="ecomode">
+                            <div class="skill-card-header" onclick="toggleSkillCard(this)">
+                                <div class="skill-card-header-left">
+                                    <div class="skill-card-icon">🌱</div>
+                                    <div class="skill-card-title-group">
+                                        <div class="skill-card-title">ecomode <span class="skill-tag">执行模式</span></div>
+                                        <div class="skill-card-subtitle">经济模式 - 使用 Haiku 和 Sonnet 节省成本</div>
+                                    </div>
+                                </div>
+                                <span class="skill-card-toggle">▼</span>
+                            </div>
+                            <div class="skill-card-body">
+                                <div class="skill-config-section">
+                                    <div class="skill-config-title">📌 技能概述</div>
+                                    <div class="skill-config-content">
+                                        <p>ecomode 是<strong>最省钱</strong>的执行模式。它只使用 Haiku（最便宜）和 Sonnet（中等价格）模型，避免使用昂贵的 Opus。</p>
+                                        <div class="config-info">
+                                            <strong>省钱策略</strong>：
+                                            <ul>
+                                                <li>简单任务 → Haiku（成本最低）</li>
+                                                <li>中等任务 → Sonnet（性价比高）</li>
+                                                <li>避免 Opus（除非必须）</li>
+                                            </ul>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="skill-config-section">
+                                    <div class="skill-config-title">⚡ 触发关键词</div>
+                                    <div class="skill-config-content">
+                                        <div class="config-code">
+# 触发关键词：
+"eco"
+"ecomode"
+"efficient"
+"budget"
+"节省成本"</div>
+                                    </div>
+                                </div>
+
+                                <div class="skill-config-section">
+                                    <div class="skill-config-title">💰 成本对比</div>
+                                    <div class="skill-config-content">
+                                        <table class="styled-table">
+                                            <tr><th>模式</th><th>模型使用</th><th>成本</th></tr>
+                                            <tr><td>普通模式</td><td>Sonnet + Opus 混合</td><td>💰💰💰</td></tr>
+                                            <tr><td><strong>ecomode</strong></td><td><strong>Haiku + Sonnet</strong></td><td><strong>💰💰</strong></td></tr>
+                                        </table>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- swarm 技能 -->
+                        <div class="skill-detail-card" id="swarm">
+                            <div class="skill-card-header" onclick="toggleSkillCard(this)">
+                                <div class="skill-card-header-left">
+                                    <div class="skill-card-icon">🐝</div>
+                                    <div class="skill-card-title-group">
+                                        <div class="skill-card-title">swarm <span class="skill-tag">执行模式</span></div>
+                                        <div class="skill-card-subtitle">群体智能 - N 个代理协同完成任务列表</div>
+                                    </div>
+                                </div>
+                                <span class="skill-card-toggle">▼</span>
+                            </div>
+                            <div class="skill-card-body">
+                                <div class="skill-config-section">
+                                    <div class="skill-config-title">📌 技能概述</div>
+                                    <div class="skill-config-content">
+                                        <p>swarm 模式就像一群蜜蜂协同工作。它使用 SQLite 数据库实现任务原子的声明机制，多个代理从共享任务列表中认领任务。</p>
+                                        <div class="config-highlight">
+                                            <strong>核心特性</strong>：
+                                            <ul>
+                                                <li>SQLite 任务队列 - 持久化存储</li>
+                                                <li>原子认领 - 避免冲突</li>
+                                                <li>动态代理数量 - 根据任务量调整</li>
+                                            </ul>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="skill-config-section">
+                                    <div class="skill-config-title">⚡ 触发关键词</div>
+                                    <div class="skill-config-content">
+                                        <div class="config-code">
+# 触发关键词：
+"swarm"
+"coordinated agents"</div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- pipeline 技能 -->
+                        <div class="skill-detail-card" id="pipeline">
+                            <div class="skill-card-header" onclick="toggleSkillCard(this)">
+                                <div class="skill-card-header-left">
+                                    <div class="skill-card-icon">🔗</div>
+                                    <div class="skill-card-title-group">
+                                        <div class="skill-card-title">pipeline <span class="skill-tag">执行模式</span></div>
+                                        <div class="skill-card-subtitle">流水线模式 - 代理顺序链接</div>
+                                    </div>
+                                </div>
+                                <span class="skill-card-toggle">▼</span>
+                            </div>
+                            <div class="skill-card-body">
+                                <div class="skill-config-section">
+                                    <div class="skill-config-title">📌 技能概述</div>
+                                    <div class="skill-config-content">
+                                        <p>pipeline 模式将多个代理串联起来，前一个代理的输出作为后一个代理的输入。就像工厂流水线，每个环节完成特定工作。</p>
+                                        <div class="config-code">
+# pipeline 示例流程
+
+planner → architect → executor → code-reviewer
+
+1. planner 制定计划
+2. architect 设计架构
+3. executor 编写代码
+4. code-reviewer 审查代码</div>
+                                    </div>
+                                </div>
+
+                                <div class="skill-config-section">
+                                    <div class="skill-config-title">⚡ 触发关键词</div>
+                                    <div class="skill-config-content">
+                                        <div class="config-code">
+# 触发关键词：
+"pipeline"
+"chain agents"</div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- ultraqa 技能 -->
+                        <div class="skill-detail-card" id="ultraqa">
+                            <div class="skill-card-header" onclick="toggleSkillCard(this)">
+                                <div class="skill-card-header-left">
+                                    <div class="skill-card-icon">🧪</div>
+                                    <div class="skill-card-title-group">
+                                        <div class="skill-card-title">ultraqa <span class="skill-tag">执行模式</span></div>
+                                        <div class="skill-card-subtitle">QA 循环模式 - 测试、验证、修复直到通过</div>
+                                    </div>
+                                </div>
+                                <span class="skill-card-toggle">▼</span>
+                            </div>
+                            <div class="skill-card-body">
+                                <div class="skill-config-section">
+                                    <div class="skill-config-title">📌 技能概述</div>
+                                    <div class="skill-config-content">
+                                        <p>ultraqa 是由 autopilot 自动激活的 QA 工作流。它执行"测试 → 验证 → 修复 → 重测"循环，直到所有测试通过。</p>
+                                        <div class="config-highlight">
+                                            <strong>QA 循环流程</strong>：
+                                            <ol>
+                                                <li>运行测试套件</li>
+                                                <li>收集失败信息</li>
+                                                <li>分析失败原因</li>
+                                                <li>修复代码</li>
+                                                <li>重新运行测试</li>
+                                                <li>重复直到全部通过</li>
+                                            </ol>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </section>
+
+                    <!-- 规划类 -->
+                    <section id="planning" class="ecc-section">
+                        <h2>📋 规划类技能</h2>
+                        <p>用于项目规划和策略制定的技能。</p>
+
+                        <!-- plan 技能 -->
+                        <div class="skill-detail-card" id="plan">
+                            <div class="skill-card-header" onclick="toggleSkillCard(this)">
+                                <div class="skill-card-header-left">
+                                    <div class="skill-card-icon">📋</div>
+                                    <div class="skill-card-title-group">
+                                        <div class="skill-card-title">plan <span class="skill-tag">规划</span></div>
+                                        <div class="skill-card-subtitle">战略规划 - 制定实施计划</div>
+                                    </div>
+                                </div>
+                                <span class="skill-card-toggle">▼</span>
+                            </div>
+                            <div class="skill-card-body">
+                                <div class="skill-config-section">
+                                    <div class="skill-config-title">📌 技能概述</div>
+                                    <div class="skill-config-content">
+                                        <p>plan 技能帮助你制定详细的实施计划。它会分析需求、拆解任务、识别风险，生成可执行的计划。</p>
+                                    </div>
+                                </div>
+
+                                <div class="skill-config-section">
+                                    <div class="skill-config-title">⚡ 触发关键词</div>
+                                    <div class="skill-config-content">
+                                        <div class="config-code">
+# 触发关键词：
+"plan this"
+"plan the ..."
+"规划一下..."
+"帮我规划..."
+"分析如何实现..."</div>
+                                    </div>
+                                </div>
+
+                                <div class="skill-config-section">
+                                    <div class="skill-config-title">📄 输出内容</div>
+                                    <div class="skill-config-content">
+                                        <ul>
+                                            <li>需求重述 - 确认理解</li>
+                                            <li>任务拆解 - 分阶段计划</li>
+                                            <li>依赖关系 - 前置条件</li>
+                                            <li>风险评估 - 潜在问题</li>
+                                            <li>工作量估计 - 时间和文件数</li>
+                                        </ul>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- ralplan 技能 -->
+                        <div class="skill-detail-card" id="ralplan">
+                            <div class="skill-card-header" onclick="toggleSkillCard(this)">
+                                <div class="skill-card-header-left">
+                                    <div class="skill-card-icon">🔄</div>
+                                    <div class="skill-card-title-group">
+                                        <div class="skill-card-title">ralplan <span class="skill-tag">规划</span></div>
+                                        <div class="skill-card-subtitle">迭代规划 - Planner、Architect、Critic 达成共识</div>
+                                    </div>
+                                </div>
+                                <span class="skill-card-toggle">▼</span>
+                            </div>
+                            <div class="skill-card-body">
+                                <div class="skill-config-section">
+                                    <div class="skill-config-title">📌 技能概述</div>
+                                    <div class="skill-config-content">
+                                        <p>ralplan 结合了 ralph 的坚持和规划的专业。它协调 Planner、Architect、Critic 三个角色，直到他们对计划达成共识。</p>
+                                        <div class="config-info">
+                                            <strong>三方协作</strong>：
+                                            <ul>
+                                                <li>Planner - 制定计划</li>
+                                                <li>Architect - 审查架构</li>
+                                                <li>Critic - 提出批评</li>
+                                            </ul>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="skill-config-section">
+                                    <div class="skill-config-title">⚡ 触发关键词</div>
+                                    <div class="skill-config-content">
+                                        <div class="config-code">
+# 触发关键词：
+"ralplan"</div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- review 技能 -->
+                        <div class="skill-detail-card" id="review">
+                            <div class="skill-card-header" onclick="toggleSkillCard(this)">
+                                <div class="skill-card-header-left">
+                                    <div class="skill-card-icon">👁️</div>
+                                    <div class="skill-card-title-group">
+                                        <div class="skill-card-title">review <span class="skill-tag">规划</span></div>
+                                        <div class="skill-card-subtitle">计划审查 - 用 Critic 评审计划</div>
+                                    </div>
+                                </div>
+                                <span class="skill-card-toggle">▼</span>
+                            </div>
+                            <div class="skill-card-body">
+                                <div class="skill-config-section">
+                                    <div class="skill-config-title">⚡ 触发关键词</div>
+                                    <div class="skill-config-content">
+                                        <div class="config-code">
+# 触发关键词：
+"review plan"</div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- analyze 技能 -->
+                        <div class="skill-detail-card" id="analyze">
+                            <div class="skill-card-header" onclick="toggleSkillCard(this)">
+                                <div class="skill-card-header-left">
+                                    <div class="skill-card-icon">🔬</div>
+                                    <div class="skill-card-title-group">
+                                        <div class="skill-card-title">analyze <span class="skill-tag">规划</span></div>
+                                        <div class="skill-card-subtitle">深度分析 - 问题调查和根因分析</div>
+                                    </div>
+                                </div>
+                                <span class="skill-card-toggle">▼</span>
+                            </div>
+                            <div class="skill-card-body">
+                                <div class="skill-config-section">
+                                    <div class="skill-config-title">⚡ 触发关键词</div>
+                                    <div class="skill-config-content">
+                                        <div class="config-code">
+# 触发关键词：
+"analyze"
+"debug"
+"investigate"
+"分析..."
+"调试..."
+"调查..."</div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </section>
+
+                    <!-- 搜索研究类 -->
+                    <section id="search" class="ecc-section">
+                        <h2>🔍 搜索研究类技能</h2>
+                        <p>用于代码搜索、研究分析的技能。</p>
+
+                        <!-- deepsearch 技能 -->
+                        <div class="skill-detail-card" id="deepsearch">
+                            <div class="skill-card-header" onclick="toggleSkillCard(this)">
+                                <div class="skill-card-header-left">
+                                    <div class="skill-card-icon">🔍</div>
+                                    <div class="skill-card-title-group">
+                                        <div class="skill-card-title">deepsearch <span class="skill-tag">搜索</span></div>
+                                        <div class="skill-card-subtitle">深度搜索 - 彻底搜索代码库</div>
+                                    </div>
+                                </div>
+                                <span class="skill-card-toggle">▼</span>
+                            </div>
+                            <div class="skill-card-body">
+                                <div class="skill-config-section">
+                                    <div class="skill-config-title">📌 技能概述</div>
+                                    <div class="skill-config-content">
+                                        <p>deepsearch 执行彻底的代码库搜索，使用多种搜索模式确保找到所有相关代码。</p>
+                                    </div>
+                                </div>
+
+                                <div class="skill-config-section">
+                                    <div class="skill-config-title">⚡ 触发关键词</div>
+                                    <div class="skill-config-content">
+                                        <div class="config-code">
+# 触发关键词：
+"search"
+"find in codebase"
+"搜索..."
+"在代码库中查找..."</div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- deepinit 技能 -->
+                        <div class="skill-detail-card" id="deepinit">
+                            <div class="skill-card-header" onclick="toggleSkillCard(this)">
+                                <div class="skill-card-header-left">
+                                    <div class="skill-card-icon">🏗️</div>
+                                    <div class="skill-card-title-group">
+                                        <div class="skill-card-title">deepinit <span class="skill-tag">搜索</span></div>
+                                        <div class="skill-card-subtitle">深度初始化 - 分层级的 AGENTS.md 文档</div>
+                                    </div>
+                                </div>
+                                <span class="skill-card-toggle">▼</span>
+                            </div>
+                            <div class="skill-card-body">
+                                <div class="skill-config-section">
+                                    <div class="skill-config-title">⚡ 触发关键词</div>
+                                    <div class="skill-config-content">
+                                        <div class="config-code">
+# 触发关键词：
+"deepinit"</div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- research 技能 -->
+                        <div class="skill-detail-card" id="research">
+                            <div class="skill-card-header" onclick="toggleSkillCard(this)">
+                                <div class="skill-card-header-left">
+                                    <div class="skill-card-icon">🔬</div>
+                                    <div class="skill-card-title-group">
+                                        <div class="skill-card-title">research <span class="skill-tag">研究</span></div>
+                                        <div class="skill-card-subtitle">数据研究 - 协调多个 scientist 代理</div>
+                                    </div>
+                                </div>
+                                <span class="skill-card-toggle">▼</span>
+                            </div>
+                            <div class="skill-card-body">
+                                <div class="skill-config-section">
+                                    <div class="skill-config-title">⚡ 触发关键词</div>
+                                    <div class="skill-config-content">
+                                        <div class="config-code">
+# 触发关键词：
+"research"
+"analyze data"
+"statistics"
+"研究..."
+"数据分析..."</div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </section>
+
+                    <!-- 质量审查类 -->
+                    <section id="quality" class="ecc-section">
+                        <h2>✅ 质量审查类技能</h2>
+                        <p>用于代码质量检查、测试和安全审查。</p>
+
+                        <!-- tdd 技能 -->
+                        <div class="skill-detail-card" id="tdd">
+                            <div class="skill-card-header" onclick="toggleSkillCard(this)">
+                                <div class="skill-card-header-left">
+                                    <div class="skill-card-icon">🧪</div>
+                                    <div class="skill-card-title-group">
+                                        <div class="skill-card-title">tdd <span class="skill-tag">测试</span></div>
+                                        <div class="skill-card-subtitle">测试驱动开发 - RED→GREEN→REFACTOR</div>
+                                    </div>
+                                </div>
+                                <span class="skill-card-toggle">▼</span>
+                            </div>
+                            <div class="skill-card-body">
+                                <div class="skill-config-section">
+                                    <div class="skill-config-title">📌 技能概述</div>
+                                    <div class="skill-config-content">
+                                        <p>tdd 强制执行测试驱动开发方法论：<strong>先写测试，再写代码</strong>。</p>
+                                        <div class="config-highlight">
+                                            <strong>TDD 循环</strong>：
+                                            <ol>
+                                                <li>🔴 RED - 写一个失败的测试</li>
+                                                <li>🟢 GREEN - 写最少的代码让测试通过</li>
+                                                <li>🔵 REFACTOR - 优化代码结构</li>
+                                            </ol>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="skill-config-section">
+                                    <div class="skill-config-title">⚡ 触发关键词</div>
+                                    <div class="skill-config-content">
+                                        <div class="config-code">
+# 触发关键词：
+"tdd"
+"test first"
+"red green"
+"先写测试"</div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- build-fix 技能 -->
+                        <div class="skill-detail-card" id="build-fix">
+                            <div class="skill-card-header" onclick="toggleSkillCard(this)">
+                                <div class="skill-card-header-left">
+                                    <div class="skill-card-icon">🔧</div>
+                                    <div class="skill-card-title-group">
+                                        <div class="skill-card-title">build-fix <span class="skill-tag">修复</span></div>
+                                        <div class="skill-card-subtitle">构建修复 - TypeScript/构建错误</div>
+                                    </div>
+                                </div>
+                                <span class="skill-card-toggle">▼</span>
+                            </div>
+                            <div class="skill-card-body">
+                                <div class="skill-config-section">
+                                    <div class="skill-config-title">⚡ 触发关键词</div>
+                                    <div class="skill-config-content">
+                                        <div class="config-code">
+# 触发关键词：
+"fix build"
+"type errors"</div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- code-review 技能 -->
+                        <div class="skill-detail-card" id="code-review">
+                            <div class="skill-card-header" onclick="toggleSkillCard(this)">
+                                <div class="skill-card-header-left">
+                                    <div class="skill-card-icon">🔍</div>
+                                    <div class="skill-card-title-group">
+                                        <div class="skill-card-title">code-review <span class="skill-tag">审查</span></div>
+                                        <div class="skill-card-subtitle">代码审查 - 全面质量检查</div>
+                                    </div>
+                                </div>
+                                <span class="skill-card-toggle">▼</span>
+                            </div>
+                            <div class="skill-card-body">
+                                <div class="skill-config-section">
+                                    <div class="skill-config-title">📌 技能概述</div>
+                                    <div class="skill-config-content">
+                                        <p>code-review 执行全面的代码质量检查，包括逻辑问题、可读性、性能、安全性等。</p>
+                                    </div>
+                                </div>
+
+                                <div class="skill-config-section">
+                                    <div class="skill-config-title">⚡ 触发关键词</div>
+                                    <div class="skill-config-content">
+                                        <div class="config-code">
+# 触发关键词：
+"review code"</div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- security-review 技能 -->
+                        <div class="skill-detail-card" id="security-review">
+                            <div class="skill-card-header" onclick="toggleSkillCard(this)">
+                                <div class="skill-card-header-left">
+                                    <div class="skill-card-icon">🔒</div>
+                                    <div class="skill-card-title-group">
+                                        <div class="skill-card-title">security-review <span class="skill-tag">安全</span></div>
+                                        <div class="skill-card-subtitle">安全审查 - OWASP Top 10</div>
+                                    </div>
+                                </div>
+                                <span class="skill-card-toggle">▼</span>
+                            </div>
+                            <div class="skill-card-body">
+                                <div class="skill-config-section">
+                                    <div class="skill-config-title">📌 技能概述</div>
+                                    <div class="skill-config-content">
+                                        <p>security-review 检查 OWASP Top 10 安全漏洞，包括注入攻击、认证失效、敏感数据暴露等。</p>
+                                        <div class="config-highlight">
+                                            <strong>必须使用的场景</strong>：
+                                            <ul>
+                                                <li>用户登录、注册、密码相关</li>
+                                                <li>文件上传功能</li>
+                                                <li>数据库操作（特别是 SQL 拼接）</li>
+                                                <li>支付、订单等敏感业务</li>
+                                            </ul>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="skill-config-section">
+                                    <div class="skill-config-title">⚡ 触发关键词</div>
+                                    <div class="skill-config-content">
+                                        <div class="config-code">
+# 触发关键词：
+"security review"</div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </section>
+
+                    <!-- 静默激活类 -->
+                    <section id="silent" class="ecc-section">
+                        <h2>🤫 静默激活类技能</h2>
+                        <p>这些技能会自动检测场景并激活，无需显式调用。</p>
+
+                        <!-- frontend-ui-ux 技能 -->
+                        <div class="skill-detail-card" id="frontend-ui-ux">
+                            <div class="skill-card-header" onclick="toggleSkillCard(this)">
+                                <div class="skill-card-header-left">
+                                    <div class="skill-card-icon">🎨</div>
+                                    <div class="skill-card-title-group">
+                                        <div class="skill-card-title">frontend-ui-ux <span class="skill-tag">静默</span></div>
+                                        <div class="skill-card-subtitle">前端 UI/UX - Designer-Developer 模式</div>
+                                    </div>
+                                </div>
+                                <span class="skill-card-toggle">▼</span>
+                            </div>
+                            <div class="skill-card-body">
+                                <div class="skill-config-section">
+                                    <div class="skill-config-title">📌 技能概述</div>
+                                    <div class="skill-config-content">
+                                        <p>当检测到 UI/组件/样式相关工作时自动激活。提供设计师级别的美观界面和开发者级别的代码质量。</p>
+                                    </div>
+                                </div>
+
+                                <div class="skill-config-section">
+                                    <div class="skill-config-title">🤫 自动检测场景</div>
+                                    <div class="skill-config-content">
+                                        <ul>
+                                            <li>创建或修改组件</li>
+                                            <li>CSS 或样式相关</li>
+                                            <li>布局调整</li>
+                                            <li>响应式设计</li>
+                                            <li>动画效果</li>
+                                        </ul>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- git-master 技能 -->
+                        <div class="skill-detail-card" id="git-master">
+                            <div class="skill-card-header" onclick="toggleSkillCard(this)">
+                                <div class="skill-card-header-left">
+                                    <div class="skill-card-icon">📦</div>
+                                    <div class="skill-card-title-group">
+                                        <div class="skill-card-title">git-master <span class="skill-tag">静默</span></div>
+                                        <div class="skill-card-subtitle">Git 专家 - 提交、分支、历史管理</div>
+                                    </div>
+                                </div>
+                                <span class="skill-card-toggle">▼</span>
+                            </div>
+                            <div class="skill-card-body">
+                                <div class="skill-config-section">
+                                    <div class="skill-config-title">🤫 自动检测场景</div>
+                                    <div class="skill-config-content">
+                                        <ul>
+                                            <li>Git 提交相关请求</li>
+                                            <li>分支操作</li>
+                                            <li>合并冲突</li>
+                                            <li>历史查看</li>
+                                        </ul>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </section>
+
+                    <!-- 工具类 -->
+                    <section id="utilities" class="ecc-section">
+                        <h2>🛠️ 工具类技能</h2>
+                        <p>实用工具和辅助功能。</p>
+
+                        <!-- cancel 技能 -->
+                        <div class="skill-detail-card" id="cancel">
+                            <div class="skill-card-header" onclick="toggleSkillCard(this)">
+                                <div class="skill-card-header-left">
+                                    <div class="skill-card-icon">🛑</div>
+                                    <div class="skill-card-title-group">
+                                        <div class="skill-card-title">cancel <span class="skill-tag">工具</span></div>
+                                        <div class="skill-card-subtitle">取消模式 - 停止当前执行模式</div>
+                                    </div>
+                                </div>
+                                <span class="skill-card-toggle">▼</span>
+                            </div>
+                            <div class="skill-card-body">
+                                <div class="skill-config-section">
+                                    <div class="skill-config-title">⚡ 触发关键词</div>
+                                    <div class="skill-config-content">
+                                        <div class="config-code">
+# 触发关键词：
+/cancelomc
+/stopomc</div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- note 技能 -->
+                        <div class="skill-detail-card" id="note">
+                            <div class="skill-card-header" onclick="toggleSkillCard(this)">
+                                <div class="skill-card-header-left">
+                                    <div class="skill-card-icon">📝</div>
+                                    <div class="skill-card-title-group">
+                                        <div class="skill-card-title">note <span class="skill-tag">工具</span></div>
+                                        <div class="skill-card-subtitle">记笔记 - 保存到 notepad</div>
+                                    </div>
+                                </div>
+                                <span class="skill-card-toggle">▼</span>
+                            </div>
+                            <div class="skill-card-body">
+                                <div class="skill-config-section">
+                                    <div class="skill-config-title">⚡ 触发方式</div>
+                                    <div class="skill-config-content">
+                                        <div class="config-code">
+# 触发方式：
+/note</div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- learner 技能 -->
+                        <div class="skill-detail-card" id="learner">
+                            <div class="skill-card-header" onclick="toggleSkillCard(this)">
+                                <div class="skill-card-header-left">
+                                    <div class="skill-card-icon">🎓</div>
+                                    <div class="skill-card-title-group">
+                                        <div class="skill-card-title">learner <span class="skill-tag">工具</span></div>
+                                        <div class="skill-card-subtitle">提取技能 - 从对话中学习模式</div>
+                                    </div>
+                                </div>
+                                <span class="skill-card-toggle">▼</span>
+                            </div>
+                            <div class="skill-card-body">
+                                <div class="skill-config-section">
+                                    <div class="skill-config-title">⚡ 触发方式</div>
+                                    <div class="skill-config-content">
+                                        <div class="config-code">
+# 触发方式：
+/learner</div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </section>
+
+                    <!-- 设置类 -->
+                    <section id="setup" class="ecc-section">
+                        <h2>⚙️ 设置类技能</h2>
+                        <p>一次性设置和配置工具。</p>
+
+                        <!-- omc-setup 技能 -->
+                        <div class="skill-detail-card" id="omc-setup">
+                            <div class="skill-card-header" onclick="toggleSkillCard(this)">
+                                <div class="skill-card-header-left">
+                                    <div class="skill-card-icon">🚀</div>
+                                    <div class="skill-card-title-group">
+                                        <div class="skill-card-title">omc-setup <span class="skill-tag">设置</span></div>
+                                        <div class="skill-card-subtitle">一键设置 - 唯一需要学习的命令</div>
+                                    </div>
+                                </div>
+                                <span class="skill-card-toggle">▼</span>
+                            </div>
+                            <div class="skill-card-body">
+                                <div class="skill-config-section">
+                                    <div class="skill-config-title">📌 技能概述</div>
+                                    <div class="skill-config-content">
+                                        <p>omc-setup 是 oh-my-claudecode 的<strong>唯一</strong>设置命令。运行后自动完成所有配置，之后即可使用所有功能。</p>
+                                        <div class="config-highlight">
+                                            <strong>一键安装</strong>：说 "setup omc" 或运行 /omc-setup，一切自动完成
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="skill-config-section">
+                                    <div class="skill-config-title">⚡ 触发方式</div>
+                                    <div class="skill-config-content">
+                                        <div class="config-code">
+# 触发方式：
+"setup omc"
+/omc-setup</div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- mcp-setup 技能 -->
+                        <div class="skill-detail-card" id="mcp-setup">
+                            <div class="skill-card-header" onclick="toggleSkillCard(this)">
+                                <div class="skill-card-header-left">
+                                    <div class="skill-card-icon">🔌</div>
+                                    <div class="skill-card-title-group">
+                                        <div class="skill-card-title">mcp-setup <span class="skill-tag">设置</span></div>
+                                        <div class="skill-card-subtitle">MCP 服务器配置</div>
+                                    </div>
+                                </div>
+                                <span class="skill-card-toggle">▼</span>
+                            </div>
+                            <div class="skill-card-body">
+                                <div class="skill-config-section">
+                                    <div class="skill-config-title">⚡ 触发方式</div>
+                                    <div class="skill-config-content">
+                                        <div class="config-code">
+# 触发方式：
+/mcp-setup</div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- hud 技能 -->
+                        <div class="skill-detail-card" id="hud">
+                            <div class="skill-card-header" onclick="toggleSkillCard(this)">
+                                <div class="skill-card-header-left">
+                                    <div class="skill-card-icon">📊</div>
+                                    <div class="skill-card-title-group">
+                                        <div class="skill-card-title">hud <span class="skill-tag">设置</span></div>
+                                        <div class="skill-card-subtitle">HUD 显示配置</div>
+                                    </div>
+                                </div>
+                                <span class="skill-card-toggle">▼</span>
+                            </div>
+                            <div class="skill-card-body">
+                                <div class="skill-config-section">
+                                    <div class="skill-config-title">⚡ 触发方式</div>
+                                    <div class="skill-config-content">
+                                        <div class="config-code">
+# 触发方式：
+/hud</div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- doctor 技能 -->
+                        <div class="skill-detail-card" id="doctor">
+                            <div class="skill-card-header" onclick="toggleSkillCard(this)">
+                                <div class="skill-card-header-left">
+                                    <div class="skill-card-icon">🏥</div>
+                                    <div class="skill-card-title-group">
+                                        <div class="skill-card-title">doctor <span class="skill-tag">设置</span></div>
+                                        <div class="skill-card-subtitle">诊断修复 - 检查并修复问题</div>
+                                    </div>
+                                </div>
+                                <span class="skill-card-toggle">▼</span>
+                            </div>
+                            <div class="skill-card-body">
+                                <div class="skill-config-section">
+                                    <div class="skill-config-title">⚡ 触发方式</div>
+                                    <div class="skill-config-content">
+                                        <div class="config-code">
+# 触发方式：
+/doctor</div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- help 技能 -->
+                        <div class="skill-detail-card" id="help">
+                            <div class="skill-card-header" onclick="toggleSkillCard(this)">
+                                <div class="skill-card-header-left">
+                                    <div class="skill-card-icon">❓</div>
+                                    <div class="skill-card-title-group">
+                                        <div class="skill-card-title">help <span class="skill-tag">设置</span></div>
+                                        <div class="skill-card-subtitle">使用指南</div>
+                                    </div>
+                                </div>
+                                <span class="skill-card-toggle">▼</span>
+                            </div>
+                            <div class="skill-card-body">
+                                <div class="skill-config-section">
+                                    <div class="skill-config-title">⚡ 触发方式</div>
+                                    <div class="skill-config-content">
+                                        <div class="config-code">
+# 触发方式：
+/help</div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </section>
+
+                    <!-- 使用方法 -->
+                    <section id="usage" class="ecc-section">
+                        <h2>⚡ 技能使用方法总结</h2>
+
+                        <h3>触发方式对比</h3>
+                        <table class="styled-table">
+                            <thead>
+                                <tr><th>方式</th><th>说明</th><th>示例</th></tr>
+                            </thead>
+                            <tbody>
+                                <tr><td><strong>关键词自动激活</strong></td><td>说出关键词，技能自动激活</td><td>"build me a app" → autopilot</td></tr>
+                                <tr><td><strong>斜杠命令</strong></td><td>通过命令显式调用</td><td><code>/plan</code> <code>/tdd</code> <code>/code-review</code></td></tr>
+                                <tr><td><strong>静默检测</strong></td><td>Claude 自动检测场景</td><td>写 React 组件 → frontend-ui-ux</td></tr>
+                            </tbody>
+                        </table>
+
+                        <h3>技能选择指南</h3>
+                        <table class="styled-table">
+                            <thead>
+                                <tr><th>场景</th><th>推荐技能</th></tr>
+                            </thead>
+                            <tbody>
+                                <tr><td>从零开始构建新功能</td><td>autopilot</td></tr>
+                                <tr><td>修复顽固 bug，不放弃</td><td>ralph</td></tr>
+                                <tr><td>大量工作，需要速度</td><td>ultrawork / ultrapilot</td></tr>
+                                <tr><td>预算有限，想省钱</td><td>ecomode</td></tr>
+                                <tr><td>开始前需要规划</td><td>plan</td></tr>
+                                <tr><td>写代码需要质量保证</td><td>tdd</td></tr>
+                                <tr><td>完成后需要审查</td><td>code-review</td></tr>
+                                <tr><td>安全敏感功能</td><td>security-review</td></tr>
+                            </tbody>
+                        </table>
+
+                        <div class="alert alert-tip">
+                            <div class="alert-title">💡 最佳实践</div>
+                            <ul>
+                                <li><strong>大部分情况不需要手动选择</strong>：Claude 会根据你的请求自动激活合适的技能</li>
+                                <li><strong>了解技能名称</strong>：在特定场景下可以显式请求使用某个技能</li>
+                                <li><strong>组合使用</strong>：多个技能可以组合使用，如 "用 tdd 方式 build me a login system"</li>
+                            </ul>
+                        </div>
+                    </section>
+
+                    <!-- 子页面导航 -->
+                    <div class="subpage-nav">
+                        <a href="appendix-ecc-agents.html" class="subpage-nav-link">
+                            <svg class="icon icon-xs"><use href="../images/icons.svg#icon-arrow-left"></use></svg>
+                            上一节：Agents 代理
+                        </a>
+                        <a href="appendix-ecc.html" class="subpage-nav-link">
+                            返回 ECC 参考大全
+                        </a>
+                        <a href="appendix-ecc-commands.html" class="subpage-nav-link">
+                            下一节：Commands 命令
+                            <svg class="icon icon-xs"><use href="../images/icons.svg#icon-arrow-right"></use></svg>
+                        </a>
+                    </div>
+
+                    <!-- 章节导航 -->
+                    <nav class="chapter-nav">
+                        <a href="appendix-ecc-agents.html" class="chapter-nav-card">
+                            <svg class="icon" aria-hidden="true"><use href="../images/icons.svg#icon-arrow-left"></use></svg>
+                            <div class="content">
+                                <div class="label">上一节</div>
+                                <div class="title">Agents 子代理系统详解</div>
+                            </div>
+                        </a>
+                        <a href="appendix-ecc-commands.html" class="chapter-nav-card next">
+                            <svg class="icon" aria-hidden="true"><use href="../images/icons.svg#icon-arrow-right"></use></svg>
+                            <div class="content">
+                                <div class="label">下一节</div>
+                                <div class="title">Commands 高级命令详解</div>
+                            </div>
+                        </a>
+                    </nav>
+                </article>
+            </div>
+
+            <footer class="footer">
+                <div class="footer-links">
+                    <a href="https://www.tumuai.net/" target="_blank">土木AI官网</a>
+                    <a href="https://fv2fbshiww0.feishu.cn/wiki/QFcFwHXxLiyVT7kRMAWcRtmXn0I" target="_blank">知识库</a>
+                    <a href="https://github.com/anthropics/claude-code" target="_blank">GitHub</a>
+                    <a href="https://docs.anthropic.com/en/docs/claude-code/overview" target="_blank">官方文档</a>
+                    <a href="appendix.html">速查手册</a>
+                </div>
+                <div class="footer-copyright">&copy; 2025 Claude Code 教程网站</div>
+            </footer>
+        </main>
+
+        <div class="overlay" id="overlay"></div>
+    </div>
+
+    <script src="../js/main.js"></script>
+    <script>
+        // 技能卡片展开/收起功能
+        function toggleSkillCard(header) {
+            header.classList.toggle('active');
+            const body = header.nextElementSibling;
+            body.classList.toggle('active');
+        }
+
+        // 页面加载时，如果有 hash，自动展开对应卡片
+        document.addEventListener('DOMContentLoaded', function() {
+            const hash = window.location.hash;
+            if (hash) {
+                const card = document.querySelector(hash);
+                if (card && card.classList.contains('skill-detail-card')) {
+                    const header = card.querySelector('.skill-card-header');
+                    toggleSkillCard(header);
+                    // 滚动到卡片位置
+                    setTimeout(() => {
+                        card.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                    }, 100);
+                }
+            }
+        });
+    </script>
+</body>
+</html>
