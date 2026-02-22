@@ -443,6 +443,67 @@ const courseData = {
             difficulty: '进阶',
             category: '附录',
             path: 'pages/appendix-ecc.html'
+        },
+        // ECC 子页面（不在主导航显示，但需要路径解析支持）
+        {
+            id: 'appendix-ecc-agents',
+            number: 'A4-1',
+            title: 'Agents 子代理系统详解',
+            desc: '13个专家代理的详细介绍和使用方法',
+            time: '20分钟',
+            difficulty: '进阶',
+            category: 'ECC子页面',
+            path: 'pages/appendix-ecc-agents.html'
+        },
+        {
+            id: 'appendix-ecc-skills',
+            number: 'A4-2',
+            title: 'Skills 技能模板详解',
+            desc: '37个技能模板的分类介绍和选择指南',
+            time: '25分钟',
+            difficulty: '进阶',
+            category: 'ECC子页面',
+            path: 'pages/appendix-ecc-skills.html'
+        },
+        {
+            id: 'appendix-ecc-commands',
+            number: 'A4-3',
+            title: 'Commands 高级命令详解',
+            desc: '31个命令的详细说明和实战示例',
+            time: '20分钟',
+            difficulty: '进阶',
+            category: 'ECC子页面',
+            path: 'pages/appendix-ecc-commands.html'
+        },
+        {
+            id: 'appendix-ecc-rules',
+            number: 'A4-4',
+            title: 'Rules 规范详解',
+            desc: '编码规范的详细说明和安装方法',
+            time: '15分钟',
+            difficulty: '进阶',
+            category: 'ECC子页面',
+            path: 'pages/appendix-ecc-rules.html'
+        },
+        {
+            id: 'appendix-ecc-hooks',
+            number: 'A4-5',
+            title: 'Hooks 钩子详解',
+            desc: '钩子类型和自定义钩子的编写方法',
+            time: '20分钟',
+            difficulty: '进阶',
+            category: 'ECC子页面',
+            path: 'pages/appendix-ecc-hooks.html'
+        },
+        {
+            id: 'appendix-ecc-workflow',
+            number: 'A4-6',
+            title: '企业级工作流详解',
+            desc: '新功能开发、Bug修复、上线前的标准流程',
+            time: '25分钟',
+            difficulty: '进阶',
+            category: 'ECC子页面',
+            path: 'pages/appendix-ecc-workflow.html'
         }
     ]
 };
