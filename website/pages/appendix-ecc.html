@@ -68,6 +68,7 @@
             border-radius: var(--radius-md);
             padding: 16px;
             transition: all 0.2s;
+            position: relative;
         }
         .ecc-card:hover {
             border-color: var(--primary-color);
@@ -90,6 +91,28 @@
             border-radius: var(--radius-sm);
             font-size: 0.8rem;
             margin-right: 4px;
+        }
+        /* 可点击卡片样式 */
+        .ecc-card-link {
+            text-decoration: none;
+            display: block;
+            cursor: pointer;
+        }
+        .ecc-card-link:hover .ecc-card-title {
+            color: var(--primary-color);
+        }
+        .ecc-card-link::after {
+            content: ' →';
+            position: absolute;
+            right: 12px;
+            bottom: 12px;
+            font-size: 1.2rem;
+            color: var(--primary-color);
+            opacity: 0;
+            transition: opacity 0.2s;
+        }
+        .ecc-card-link:hover::after {
+            opacity: 1;
         }
         .collapsible-header {
             display: flex;
@@ -595,7 +618,7 @@
 
                         <h4>规划与设计</h4>
                         <div class="ecc-card-grid">
-                            <div class="ecc-card">
+                            <a href="appendix-ecc-agents.html#planner" class="ecc-card ecc-card-link">
                                 <div class="ecc-card-with-icon">
                                     <span class="ecc-card-icon">📋</span>
                                     <div>
@@ -604,8 +627,8 @@
                                         <span class="ecc-tag">opus</span>
                                     </div>
                                 </div>
-                            </div>
-                            <div class="ecc-card">
+                            </a>
+                            <a href="appendix-ecc-agents.html#architect" class="ecc-card ecc-card-link">
                                 <div class="ecc-card-with-icon">
                                     <span class="ecc-card-icon">🏗️</span>
                                     <div>
@@ -614,12 +637,12 @@
                                         <span class="ecc-tag">opus</span>
                                     </div>
                                 </div>
-                            </div>
+                            </a>
                         </div>
 
                         <h4>开发与测试</h4>
                         <div class="ecc-card-grid">
-                            <div class="ecc-card">
+                            <a href="appendix-ecc-agents.html#tdd-guide" class="ecc-card ecc-card-link">
                                 <div class="ecc-card-with-icon">
                                     <span class="ecc-card-icon">🧪</span>
                                     <div>
@@ -628,8 +651,8 @@
                                         <span class="ecc-tag">sonnet</span>
                                     </div>
                                 </div>
-                            </div>
-                            <div class="ecc-card">
+                            </a>
+                            <a href="appendix-ecc-agents.html#code-reviewer" class="ecc-card ecc-card-link">
                                 <div class="ecc-card-with-icon">
                                     <span class="ecc-card-icon">🔍</span>
                                     <div>
@@ -638,8 +661,8 @@
                                         <span class="ecc-tag">sonnet</span>
                                     </div>
                                 </div>
-                            </div>
-                            <div class="ecc-card">
+                            </a>
+                            <a href="appendix-ecc-agents.html#e2e-runner" class="ecc-card ecc-card-link">
                                 <div class="ecc-card-with-icon">
                                     <span class="ecc-card-icon">🎯</span>
                                     <div>
@@ -648,12 +671,12 @@
                                         <span class="ecc-tag">sonnet</span>
                                     </div>
                                 </div>
-                            </div>
+                            </a>
                         </div>
 
                         <h4>安全与质量</h4>
                         <div class="ecc-card-grid">
-                            <div class="ecc-card">
+                            <a href="appendix-ecc-agents.html#security-reviewer" class="ecc-card ecc-card-link">
                                 <div class="ecc-card-with-icon">
                                     <span class="ecc-card-icon">🔒</span>
                                     <div>
@@ -662,12 +685,12 @@
                                         <span class="ecc-tag">opus</span>
                                     </div>
                                 </div>
-                            </div>
+                            </a>
                         </div>
 
                         <h4>错误修复</h4>
                         <div class="ecc-card-grid">
-                            <div class="ecc-card">
+                            <a href="appendix-ecc-agents.html#build-error-resolver" class="ecc-card ecc-card-link">
                                 <div class="ecc-card-with-icon">
                                     <span class="ecc-card-icon">🔧</span>
                                     <div>
@@ -676,8 +699,8 @@
                                         <span class="ecc-tag">sonnet</span>
                                     </div>
                                 </div>
-                            </div>
-                            <div class="ecc-card">
+                            </a>
+                            <a href="appendix-ecc-agents.html#go-build-resolver" class="ecc-card ecc-card-link">
                                 <div class="ecc-card-with-icon">
                                     <span class="ecc-card-icon">🐹</span>
                                     <div>
@@ -686,12 +709,12 @@
                                         <span class="ecc-tag">sonnet</span>
                                     </div>
                                 </div>
-                            </div>
+                            </a>
                         </div>
 
                         <h4>重构与文档</h4>
                         <div class="ecc-card-grid">
-                            <div class="ecc-card">
+                            <a href="appendix-ecc-agents.html#refactor-cleaner" class="ecc-card ecc-card-link">
                                 <div class="ecc-card-with-icon">
                                     <span class="ecc-card-icon">🧹</span>
                                     <div>
@@ -700,8 +723,8 @@
                                         <span class="ecc-tag">sonnet</span>
                                     </div>
                                 </div>
-                            </div>
-                            <div class="ecc-card">
+                            </a>
+                            <a href="appendix-ecc-agents.html#doc-updater" class="ecc-card ecc-card-link">
                                 <div class="ecc-card-with-icon">
                                     <span class="ecc-card-icon">📝</span>
                                     <div>
@@ -710,12 +733,12 @@
                                         <span class="ecc-tag">haiku</span>
                                     </div>
                                 </div>
-                            </div>
+                            </a>
                         </div>
 
                         <h4>语言特定</h4>
                         <div class="ecc-card-grid">
-                            <div class="ecc-card">
+                            <a href="appendix-ecc-agents.html#go-reviewer" class="ecc-card ecc-card-link">
                                 <div class="ecc-card-with-icon">
                                     <span class="ecc-card-icon">🐹</span>
                                     <div>
@@ -724,8 +747,8 @@
                                         <span class="ecc-tag">sonnet</span>
                                     </div>
                                 </div>
-                            </div>
-                            <div class="ecc-card">
+                            </a>
+                            <a href="appendix-ecc-agents.html#python-reviewer" class="ecc-card ecc-card-link">
                                 <div class="ecc-card-with-icon">
                                     <span class="ecc-card-icon">🐍</span>
                                     <div>
@@ -734,8 +757,8 @@
                                         <span class="ecc-tag">sonnet</span>
                                     </div>
                                 </div>
-                            </div>
-                            <div class="ecc-card">
+                            </a>
+                            <a href="appendix-ecc-agents.html#database-reviewer" class="ecc-card ecc-card-link">
                                 <div class="ecc-card-with-icon">
                                     <span class="ecc-card-icon">🗄️</span>
                                     <div>
@@ -744,7 +767,7 @@
                                         <span class="ecc-tag">sonnet</span>
                                     </div>
                                 </div>
-                            </div>
+                            </a>
                         </div>
 
                         <h3>代理工作方式</h3>
