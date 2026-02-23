@@ -1,0 +1,378 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TDD-Guide - 测试驱动开发代理 | Claude Code 教程</title>
+    <link rel="stylesheet" href="../css/style.css">
+    <style>
+        .agent-page-header { background: linear-gradient(135deg, #f0f4ff 0%, #e8f5e9 100%); padding: 32px; border-radius: var(--radius-md); margin-bottom: 32px; border: 1px solid var(--border-color); }
+        .agent-page-title-group { display: flex; align-items: center; gap: 20px; margin-bottom: 16px; }
+        .agent-page-icon { font-size: 3rem; width: 72px; height: 72px; display: flex; align-items: center; justify-content: center; background: white; border-radius: var(--radius-md); box-shadow: 0 4px 12px rgba(0,0,0,0.1); }
+        .agent-page-title { font-size: 2rem; font-weight: 700; color: var(--text-primary); margin: 0; }
+        .agent-page-subtitle { font-size: 1.1rem; color: var(--text-secondary); margin-top: 4px; }
+        .model-tag { display: inline-flex; align-items: center; gap: 4px; padding: 4px 12px; border-radius: 20px; font-size: 0.85rem; font-weight: 600; }
+        .model-tag.opus { background: linear-gradient(135deg, #e8f5e9 0%, #c8e6c9 100%); color: #2e7d32; }
+        .model-tag.sonnet { background: linear-gradient(135deg, #e3f2fd 0%, #bbdefb 100%); color: #1565c0; }
+        .model-tag.haiku { background: linear-gradient(135deg, #fff3e0 0%, #ffe0b2 100%); color: #ef6c00; }
+        .agent-section { background: var(--bg-card); border: 1px solid var(--border-color); border-radius: var(--radius-md); padding: 24px; margin-bottom: 24px; }
+        .agent-section-title { font-size: 1.2rem; font-weight: 600; color: var(--text-primary); margin-bottom: 16px; display: flex; align-items: center; gap: 10px; padding-bottom: 12px; border-bottom: 2px solid var(--border-color); }
+        .agent-section-title .icon { font-size: 1.4rem; }
+        .config-code { background: var(--bg-tertiary); padding: 16px 20px; border-radius: var(--radius-sm); font-family: 'Consolas', 'Monaco', monospace; font-size: 0.9rem; overflow-x: auto; margin: 12px 0; border-left: 4px solid var(--primary-color); }
+        .config-highlight { background: linear-gradient(135deg, #fff3e0 0%, #ffe0b2 100%); padding: 16px 20px; border-radius: var(--radius-sm); border-left: 4px solid #ff9800; margin: 16px 0; }
+        .config-info { background: linear-gradient(135deg, #e3f2fd 0%, #bbdefb 100%); padding: 16px 20px; border-radius: var(--radius-sm); border-left: 4px solid #2196f3; margin: 16px 0; }
+        .collapsible-section { border: 1px solid var(--border-color); border-radius: var(--radius-sm); margin-top: 16px; }
+        .collapsible-header { display: flex; justify-content: space-between; align-items: center; padding: 14px 18px; background: var(--bg-secondary); cursor: pointer; border-radius: var(--radius-sm); transition: all 0.2s; }
+        .collapsible-header:hover { background: var(--bg-tertiary); }
+        .collapsible-header.active { border-radius: var(--radius-sm) var(--radius-sm) 0 0; }
+        .collapsible-header-title { display: flex; align-items: center; gap: 10px; font-weight: 600; color: var(--text-primary); }
+        .collapsible-toggle { font-size: 1.2rem; color: var(--text-muted); transition: transform 0.3s; }
+        .collapsible-header.active .collapsible-toggle { transform: rotate(180deg); }
+        .collapsible-content { display: none; padding: 18px; background: var(--bg-card); border-top: 1px solid var(--border-color); border-radius: 0 0 var(--radius-sm) var(--radius-sm); }
+        .collapsible-content.active { display: block; }
+        .related-agents { display: flex; flex-wrap: wrap; gap: 12px; }
+        .related-agent-card { display: flex; align-items: center; gap: 10px; padding: 12px 16px; background: var(--bg-secondary); border: 1px solid var(--border-color); border-radius: var(--radius-sm); text-decoration: none; color: var(--text-primary); transition: all 0.2s; }
+        .related-agent-card:hover { border-color: var(--primary-color); background: var(--primary-light); }
+        .related-agent-icon { font-size: 1.5rem; }
+        .agent-nav { display: flex; justify-content: space-between; align-items: stretch; gap: 16px; margin: 40px 0; }
+        .agent-nav-btn { display: flex; align-items: center; gap: 12px; padding: 16px 24px; background: var(--bg-card); border: 1px solid var(--border-color); border-radius: var(--radius-md); text-decoration: none; color: var(--text-primary); transition: all 0.2s; flex: 1; max-width: 280px; }
+        .agent-nav-btn:hover { border-color: var(--primary-color); box-shadow: 0 4px 12px rgba(0,0,0,0.1); }
+        .agent-nav-btn.center { justify-content: center; max-width: 200px; background: var(--primary-color); color: white; border-color: var(--primary-color); }
+        .agent-nav-btn.center:hover { background: var(--primary-dark); }
+        .styled-table { width: 100%; border-collapse: collapse; margin: 16px 0; font-size: 0.95rem; border-radius: var(--radius-sm); overflow: hidden; border: 1px solid var(--border-color); }
+        .styled-table th { background: var(--bg-secondary); font-weight: 600; text-align: left; padding: 12px 16px; border-bottom: 2px solid var(--primary-color); }
+        .styled-table td { padding: 12px 16px; border-bottom: 1px solid var(--border-color); }
+        .styled-table tr:nth-child(even) { background: var(--bg-secondary); }
+        .example-box { background: linear-gradient(135deg, #f0f4ff 0%, #e8f5e9 100%); border: 1px solid var(--border-color); border-radius: var(--radius-md); padding: 20px; margin: 20px 0; }
+        .example-box-title { font-weight: 600; color: var(--primary-color); margin-bottom: 12px; display: flex; align-items: center; gap: 8px; }
+        @media (max-width: 768px) { .agent-page-title-group { flex-direction: column; align-items: flex-start; } .agent-nav { flex-direction: column; } .agent-nav-btn { max-width: 100%; } }
+    </style>
+</head>
+<body data-page-id="appendix-ecc-agent-tdd-guide">
+    <div class="app-container">
+        <aside class="sidebar" id="sidebar">
+            <div class="sidebar-header">
+                <a href="../index.html" style="display: flex; align-items: center; gap: 12px; text-decoration: none;">
+                    <div class="logo">C</div>
+                    <span class="logo-text">Claude Code 教程</span>
+                </a>
+            </div>
+            <div class="sidebar-search">
+                <div class="search-box">
+                    <span class="search-icon" aria-hidden="true">
+                        <svg class="icon icon-xs"><use href="../images/icons.svg#icon-search"></use></svg>
+                    </span>
+                    <input type="text" placeholder="搜索章节...">
+                </div>
+            </div>
+            <nav class="sidebar-nav" id="sidebarNav"></nav>
+        </aside>
+
+        <main class="main-content">
+            <header class="top-nav">
+                <div class="top-nav-left">
+                    <button class="menu-toggle" id="menuToggle" aria-label="打开目录">
+                        <svg class="icon icon-sm" aria-hidden="true"><use href="../images/icons.svg#icon-menu"></use></svg>
+                    </button>
+                    <nav class="breadcrumb">
+                        <a href="../index.html">首页</a>
+                        <span class="separator">/</span>
+                        <a href="appendix-ecc.html">ECC参考大全</a>
+                        <span class="separator">/</span>
+                        <a href="appendix-ecc-agents.html">Agents</a>
+                        <span class="separator">/</span>
+                        <span class="current">TDD-Guide</span>
+                    </nav>
+                </div>
+                <div class="top-nav-right">
+                    <div class="progress-indicator">
+                        <span>学习进度</span>
+                        <div class="progress-bar">
+                            <div class="progress-fill" id="progressFill" style="width: 0%"></div>
+                        </div>
+                        <span class="progress-text" id="progressText">0%</span>
+                    </div>
+                </div>
+            </header>
+
+            <div class="content-wrapper">
+                <header class="article-header">
+                    <div class="article-breadcrumb">
+                        <a href="../index.html">首页</a> / <a href="appendix-ecc.html">ECC参考大全</a> / <a href="appendix-ecc-agents.html">Agents</a> / <span>TDD-Guide</span>
+                    </div>
+                </header>
+
+                <article class="article-content">
+                    <div class="agent-page-header">
+                        <div class="agent-page-title-group">
+                            <div class="agent-page-icon">🧪</div>
+                            <div>
+                                <h1 class="agent-page-title">TDD-Guide</h1>
+                                <p class="agent-page-subtitle">测试驱动开发指导 - 强制先写测试再写代码</p>
+                                <span class="model-tag sonnet">⚡ sonnet</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <section class="agent-section">
+                        <h2 class="agent-section-title">
+                            <span class="icon">📌</span>
+                            中文概述
+                        </h2>
+                        <div class="agent-section-content">
+                            <p>TDD-Guide 是你的<strong>"质量教练"</strong>，强制执行测试驱动开发（TDD）方法论。它会确保你<strong>先写测试，再写代码</strong>。</p>
+                            <div class="config-highlight">
+                                <strong>🔴 RED → 🟢 GREEN → 🔵 REFACTOR</strong> TDD 核心理念：
+                                <ul>
+                                    <li><strong>RED</strong>：先写一个失败的测试</li>
+                                    <li><strong>GREEN</strong>：写最少的代码让测试通过</li>
+                                    <li><strong>REFACTOR</strong>：优化代码结构</li>
+                                </ul>
+                            </div>
+                            <div class="config-info">
+                                <strong>🏢 用公司比喻：</strong>TDD-Guide 就像是公司的"质量保证主管"，确保每个功能都有测试覆盖，不会写出没有测试的代码。
+                            </div>
+                        </div>
+                    </section>
+
+                    <section class="agent-section">
+                        <h2 class="agent-section-title">
+                            <span class="icon">⚡</span>
+                            触发方式
+                        </h2>
+                        <div class="agent-section-content">
+                            <p><strong>方式1：通过命令触发</strong></p>
+                            <div class="config-code">
+/tdd
+/tdd "实现一个计算器功能"</div>
+
+                            <p><strong>方式2：开始新功能时指定 TDD</strong></p>
+                            <div class="config-code">
+"用 TDD 方式帮我写一个用户登录功能"
+"用测试驱动的方式实现购物车"</div>
+
+                            <p><strong>方式3：修复 bug 时</strong></p>
+                            <div class="config-code">
+"用 TDD 方式修复这个 bug，先写个测试复现"</div>
+                        </div>
+                    </section>
+
+                    <section class="agent-section">
+                        <h2 class="agent-section-title">
+                            <span class="icon">📖</span>
+                            原作者定义
+                        </h2>
+                        <div class="collapsible-section">
+                            <div class="collapsible-header" onclick="toggleCollapsible(this)">
+                                <span class="collapsible-header-title">
+                                    <span>📄</span>
+                                    点击展开查看英文原文定义
+                                </span>
+                                <span class="collapsible-toggle">▼</span>
+                            </div>
+                            <div class="collapsible-content">
+                                <p><strong>TDD-Guide Agent</strong></p>
+                                <p>Enforces Test-Driven Development (TDD) methodology by requiring tests to be written before implementation code. This agent guides developers through the RED-GREEN-REFACTOR cycle.</p>
+                                <p><strong>Key Responsibilities:</strong></p>
+                                <ul>
+                                    <li>Write failing tests first (RED)</li>
+                                    <li>Write minimal implementation (GREEN)</li>
+                                    <li>Refactor and optimize (REFACTOR)</li>
+                                    <li>Maintain 80%+ test coverage</li>
+                                </ul>
+                                <p><strong>Model:</strong> sonnet (balance of speed and quality)</p>
+                                <p><strong>Tools:</strong> Read, Write, Edit, Bash (full access for running tests)</p>
+                            </div>
+                        </div>
+                    </section>
+
+                    <section class="agent-section">
+                        <h2 class="agent-section-title">
+                            <span class="icon">🔧</span>
+                            工具权限
+                        </h2>
+                        <div class="agent-section-content">
+                            <table class="styled-table">
+                                <thead>
+                                    <tr>
+                                        <th>工具</th>
+                                        <th>权限</th>
+                                        <th>用途</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <td>Read</td>
+                                        <td>✅</td>
+                                        <td>读取现有代码</td>
+                                    </tr>
+                                    <tr>
+                                        <td>Write</td>
+                                        <td>✅</td>
+                                        <td>创建测试文件</td>
+                                    </tr>
+                                    <tr>
+                                        <td>Edit</td>
+                                        <td>✅</td>
+                                        <td>修改代码实现</td>
+                                    </tr>
+                                    <tr>
+                                        <td>Bash</td>
+                                        <td>✅</td>
+                                        <td>运行测试命令</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                            <div class="config-info">
+                                <strong>💡 为什么有写入权限？</strong><br>
+                                TDD-Guide 需要实际编写测试代码和实现代码，所以有完整的读写权限。
+                            </div>
+                        </div>
+                    </section>
+
+                    <section class="agent-section">
+                        <h2 class="agent-section-title">
+                            <span class="icon">💡</span>
+                            使用场景
+                        </h2>
+                        <div class="agent-section-content">
+                            <p><strong>✅ 适合使用 TDD-Guide 的场景：</strong></p>
+                            <ul>
+                                <li>开发新功能，想确保质量</li>
+                                <li>修复 bug，想先写测试复现</li>
+                                <li>重构代码，需要测试保护</li>
+                                <li>学习 TDD 方法论</li>
+                            </ul>
+
+                            <div class="example-box">
+                                <div class="example-box-title">📝 实战示例：用 TDD 实现计算器</div>
+                                <div class="config-code">
+# 你输入：
+/tdd 实现一个简单的计算器，支持加减乘除
+
+# TDD-Guide 会引导你：
+
+## 🔴 RED：先写第一个测试
+def test_add():
+    calc = Calculator()
+    assert calc.add(2, 3) == 5
+
+运行测试 → ❌ 失败（Calculator 类不存在）
+
+## 🟢 GREEN：最小实现
+class Calculator:
+    def add(self, a, b):
+        return a + b
+
+运行测试 → ✅ 通过
+
+## 继续下一个功能...
+def test_subtract():
+    calc = Calculator()
+    assert calc.subtract(5, 3) == 2
+
+# 重复直到所有功能完成</div>
+                            </div>
+                        </div>
+                    </section>
+
+                    <section class="agent-section">
+                        <h2 class="agent-section-title">
+                            <span class="icon">🔗</span>
+                            相关 Agent
+                        </h2>
+                        <div class="agent-section-content">
+                            <div class="related-agents">
+                                <a href="appendix-ecc-agent-planner.html" class="related-agent-card">
+                                    <span class="related-agent-icon">📋</span>
+                                    <div>
+                                        <strong>Planner</strong>
+                                        <p style="font-size: 0.85rem; color: var(--text-secondary); margin: 0;">TDD 前先规划功能</p>
+                                    </div>
+                                </a>
+                                <a href="appendix-ecc-agent-code-reviewer.html" class="related-agent-card">
+                                    <span class="related-agent-icon">🔍</span>
+                                    <div>
+                                        <strong>Code-Reviewer</strong>
+                                        <p style="font-size: 0.85rem; color: var(--text-secondary); margin: 0;">实现后进行代码审查</p>
+                                    </div>
+                                </a>
+                                <a href="appendix-ecc-agent-e2e-runner.html" class="related-agent-card">
+                                    <span class="related-agent-icon">🎭</span>
+                                    <div>
+                                        <strong>E2E-Runner</strong>
+                                        <p style="font-size: 0.85rem; color: var(--text-secondary); margin: 0;">端到端测试</p>
+                                    </div>
+                                </a>
+                            </div>
+                        </div>
+                    </section>
+
+                    <nav class="agent-nav">
+                        <a href="appendix-ecc-agent-architect.html" class="agent-nav-btn">
+                            <span class="agent-nav-arrow">←</span>
+                            <div class="agent-nav-content">
+                                <span class="agent-nav-label">上一个</span>
+                                <span class="agent-nav-name">Architect</span>
+                            </div>
+                        </a>
+                        <a href="appendix-ecc-agents.html" class="agent-nav-btn center">
+                            <span class="agent-nav-arrow">📋</span>
+                            <div class="agent-nav-content">
+                                <span class="agent-nav-label">返回</span>
+                                <span class="agent-nav-name">Agent 列表</span>
+                            </div>
+                        </a>
+                        <a href="appendix-ecc-agent-code-reviewer.html" class="agent-nav-btn" style="flex-direction: row-reverse;">
+                            <span class="agent-nav-arrow">→</span>
+                            <div class="agent-nav-content" style="text-align: right;">
+                                <span class="agent-nav-label">下一个</span>
+                                <span class="agent-nav-name">Code-Reviewer</span>
+                            </div>
+                        </a>
+                    </nav>
+
+                    <nav class="chapter-nav">
+                        <a href="appendix-ecc-agent-architect.html" class="chapter-nav-card">
+                            <svg class="icon" aria-hidden="true"><use href="../images/icons.svg#icon-arrow-left"></use></svg>
+                            <div class="content">
+                                <div class="label">上一个 Agent</div>
+                                <div class="title">Architect 架构设计</div>
+                            </div>
+                        </a>
+                        <a href="appendix-ecc-agent-code-reviewer.html" class="chapter-nav-card next">
+                            <svg class="icon" aria-hidden="true"><use href="../images/icons.svg#icon-arrow-right"></use></svg>
+                            <div class="content">
+                                <div class="label">下一个 Agent</div>
+                                <div class="title">Code-Reviewer 代码审查</div>
+                            </div>
+                        </a>
+                    </nav>
+                </article>
+            </div>
+
+            <footer class="footer">
+                <div class="footer-links">
+                    <a href="https://www.tumuai.net/" target="_blank">土木AI官网</a>
+                    <a href="https://fv2fbshiww0.feishu.cn/wiki/QFcFwHXxLiyVT7kRMAWcRtmXn0I" target="_blank">知识库</a>
+                    <a href="https://github.com/anthropics/claude-code" target="_blank">GitHub</a>
+                    <a href="https://docs.anthropic.com/en/docs/claude-code/overview" target="_blank">官方文档</a>
+                    <a href="appendix.html">速查手册</a>
+                </div>
+                <div class="footer-copyright">&copy; 2025 Claude Code 教程网站</div>
+            </footer>
+        </main>
+
+        <div class="overlay" id="overlay"></div>
+    </div>
+
+    <script src="../js/main.js"></script>
+    <script>
+        function toggleCollapsible(header) {
+            header.classList.toggle('active');
+            const content = header.nextElementSibling;
+            content.classList.toggle('active');
+        }
+    </script>
+</body>
+</html>
