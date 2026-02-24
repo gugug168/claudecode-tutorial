@@ -1,0 +1,2252 @@
+<!DOCTYPE html>
+<html lang="zh-CN" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Claude Code 教程 - 小白工程入门手册</title>
+    <meta name="description" content="Claude Code 交互式教程 - 从零基础到实战应用的完整学习指南">
+
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+
+    <!-- Marked.js for Markdown rendering -->
+    <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+
+    <!-- Highlight.js for code highlighting -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/github-dark.min.css" id="hljs-theme">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js"></script>
+
+    <!-- Alpine.js for interactions -->
+    <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
+
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    colors: {
+                        primary: {
+                            DEFAULT: '#3b82f6',
+                            50: '#eff6ff',
+                            100: '#dbeafe',
+                            200: '#bfdbfe',
+                            300: '#93c5fd',
+                            400: '#60a5fa',
+                            500: '#3b82f6',
+                            600: '#2563eb',
+                            700: '#1d4ed8',
+                            800: '#1e40af',
+                            900: '#1e3a8a',
+                        },
+                        slate: {
+                            850: '#151f2e',
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Noto+Sans+SC:wght@400;500;600;700&display=swap');
+
+        * {
+            font-family: 'Noto Sans SC', 'Inter', system-ui, sans-serif;
+        }
+
+        /* Custom scrollbar */
+        ::-webkit-scrollbar {
+            width: 6px;
+            height: 6px;
+        }
+        ::-webkit-scrollbar-track {
+            background: transparent;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #cbd5e1;
+            border-radius: 3px;
+        }
+        .dark ::-webkit-scrollbar-thumb {
+            background: #475569;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: #94a3b8;
+        }
+
+        /* Markdown content styling */
+        .markdown-content {
+            line-height: 1.75;
+        }
+        .markdown-content h1 {
+            font-size: 2rem;
+            font-weight: 700;
+            margin-top: 2rem;
+            margin-bottom: 1rem;
+            padding-bottom: 0.5rem;
+            border-bottom: 2px solid #e2e8f0;
+        }
+        .dark .markdown-content h1 {
+            border-color: #334155;
+        }
+        .markdown-content h2 {
+            font-size: 1.5rem;
+            font-weight: 600;
+            margin-top: 1.75rem;
+            margin-bottom: 0.75rem;
+        }
+        .markdown-content h3 {
+            font-size: 1.25rem;
+            font-weight: 600;
+            margin-top: 1.5rem;
+            margin-bottom: 0.5rem;
+        }
+        .markdown-content h4 {
+            font-size: 1.1rem;
+            font-weight: 600;
+            margin-top: 1.25rem;
+            margin-bottom: 0.5rem;
+        }
+        .markdown-content p {
+            margin-bottom: 1rem;
+        }
+        .markdown-content ul, .markdown-content ol {
+            margin-left: 1.5rem;
+            margin-bottom: 1rem;
+        }
+        .markdown-content li {
+            margin-bottom: 0.375rem;
+        }
+        .markdown-content code:not(pre code) {
+            background: #f1f5f9;
+            padding: 0.125rem 0.375rem;
+            border-radius: 0.25rem;
+            font-family: 'Consolas', 'Monaco', monospace;
+            font-size: 0.875rem;
+            color: #dc2626;
+        }
+        .dark .markdown-content code:not(pre code) {
+            background: #1e293b;
+            color: #f87171;
+        }
+        .markdown-content pre {
+            background: #1e293b;
+            border-radius: 0.5rem;
+            padding: 1rem;
+            overflow-x: auto;
+            margin-bottom: 1rem;
+        }
+        .markdown-content pre code {
+            background: transparent;
+            padding: 0;
+            color: #e2e8f0;
+        }
+        .markdown-content blockquote {
+            border-left: 4px solid #3b82f6;
+            padding-left: 1rem;
+            margin: 1rem 0;
+            color: #64748b;
+        }
+        .dark .markdown-content blockquote {
+            color: #94a3b8;
+        }
+        .markdown-content table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 1rem 0;
+        }
+        .markdown-content th, .markdown-content td {
+            border: 1px solid #e2e8f0;
+            padding: 0.5rem;
+            text-align: left;
+        }
+        .dark .markdown-content th, .dark .markdown-content td {
+            border-color: #334155;
+        }
+        .markdown-content th {
+            background: #f8fafc;
+            font-weight: 600;
+        }
+        .dark .markdown-content th {
+            background: #1e293b;
+        }
+        .markdown-content hr {
+            border: none;
+            border-top: 1px solid #e2e8f0;
+            margin: 2rem 0;
+        }
+        .dark .markdown-content hr {
+            border-color: #334155;
+        }
+        .markdown-content a {
+            color: #3b82f6;
+            text-decoration: underline;
+        }
+        .markdown-content a:hover {
+            color: #2563eb;
+        }
+
+        /* Search highlight */
+        .search-highlight {
+            background: #fef08a;
+            padding: 0 2px;
+            border-radius: 2px;
+        }
+        .dark .search-highlight {
+            background: #854d0e;
+        }
+
+        /* Animations */
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        .fade-in {
+            animation: fadeIn 0.3s ease-out;
+        }
+
+        /* Sidebar transition */
+        .sidebar-item {
+            transition: all 0.15s ease;
+        }
+    </style>
+</head>
+
+<body class="bg-gray-50 text-gray-900 dark:bg-slate-900 dark:text-gray-100"
+      x-data="tutorialApp()" x-init="initApp()" :class="{ 'dark': darkMode }">
+
+    <!-- Header -->
+    <header class="fixed top-0 left-0 right-0 z-50 bg-white dark:bg-slate-850 border-b border-gray-200 dark:border-slate-700">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex items-center justify-between h-16">
+                <!-- Logo -->
+                <div class="flex items-center gap-3 cursor-pointer" @click="goHome()">
+                    <div class="w-8 h-8 bg-gradient-to-br from-blue-500 to-purple-600 rounded-lg flex items-center justify-center">
+                        <span class="text-white font-bold text-sm">CC</span>
+                    </div>
+                    <span class="font-bold text-lg hidden sm:block">Claude Code 教程</span>
+                </div>
+
+                <!-- Desktop Nav -->
+                <nav class="hidden md:flex items-center gap-6">
+                    <button @click="filter = 'all'"
+                            :class="filter === 'all' ? 'text-blue-600 dark:text-blue-400 font-medium' : 'text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-gray-200'"
+                            class="text-sm transition-colors">
+                        全部内容
+                    </button>
+                    <button @click="filter = 'required'"
+                            :class="filter === 'required' ? 'text-blue-600 dark:text-blue-400 font-medium' : 'text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-gray-200'"
+                            class="text-sm transition-colors">
+                        必修课程
+                    </button>
+                    <button @click="filter = 'optional'"
+                            :class="filter === 'optional' ? 'text-blue-600 dark:text-blue-400 font-medium' : 'text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-gray-200'"
+                            class="text-sm transition-colors">
+                        选修课程
+                    </button>
+                    <button @click="filter = 'appendix'"
+                            :class="filter === 'appendix' ? 'text-blue-600 dark:text-blue-400 font-medium' : 'text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-gray-200'"
+                            class="text-sm transition-colors">
+                        附录资料
+                    </button>
+                </nav>
+
+                <!-- Right side -->
+                <div class="flex items-center gap-3">
+                    <!-- Search -->
+                    <div class="relative hidden sm:block" @click.outside="showSearch = false">
+                        <input type="text"
+                               x-model="searchQuery"
+                               @focus="showSearch = true"
+                               @keydown.window.prevent.ctrl.k="showSearch = true; $el.focus()"
+                               placeholder="搜索文档... (⌘K)"
+                               class="w-48 lg:w-64 h-9 px-3 pr-10 text-sm bg-gray-100 dark:bg-slate-800 border-0 rounded-lg focus:ring-2 focus:ring-blue-500 dark:text-gray-200 placeholder-gray-500 dark:placeholder-gray-500">
+                        <svg class="absolute right-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/>
+                        </svg>
+
+                        <!-- Search results dropdown -->
+                        <div x-show="showSearch && searchQuery.length > 0"
+                             x-transition
+                             class="absolute top-full left-0 right-0 mt-2 bg-white dark:bg-slate-800 rounded-lg shadow-lg border border-gray-200 dark:border-slate-700 max-h-80 overflow-hidden z-50">
+                            <template x-for="result in searchResults" :key="result.chapterId">
+                                <button @click="goToChapter(result.chapterId); showSearch = false"
+                                        class="w-full px-4 py-3 text-left hover:bg-gray-100 dark:hover:bg-slate-700 transition-colors border-b border-gray-100 dark:border-slate-700 last:border-0">
+                                    <div class="font-medium text-sm dark:text-gray-200" x-text="result.title"></div>
+                                    <div class="text-xs text-gray-500 dark:text-gray-400 mt-1 truncate" x-text="result.preview"></div>
+                                </button>
+                            </template>
+                            <div x-show="searchResults.length === 0"
+                                 class="px-4 py-3 text-sm text-gray-500 dark:text-gray-400">
+                                未找到匹配内容
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Progress -->
+                    <div class="hidden sm:flex items-center gap-2 text-sm">
+                        <span class="text-gray-600 dark:text-gray-400">进度:</span>
+                        <span class="font-medium text-blue-600 dark:text-blue-400" x-text="progressText"></span>
+                    </div>
+
+                    <!-- Dark mode toggle -->
+                    <button @click="toggleDarkMode()"
+                            class="p-2 rounded-lg hover:bg-gray-100 dark:hover:bg-slate-800 transition-colors"
+                            title="切换深色模式">
+                        <svg x-show="!darkMode" class="w-5 h-5 text-gray-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z"/>
+                        </svg>
+                        <svg x-show="darkMode" class="w-5 h-5 text-yellow-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364 6.364l-.707-.707M6.343 6.343l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707M16 12a4 4 0 11-8 0 4 4 0 018 0z"/>
+                        </svg>
+                    </button>
+
+                    <!-- Mobile menu button -->
+                    <button @click="mobileMenuOpen = !mobileMenuOpen"
+                            class="md:hidden p-2 rounded-lg hover:bg-gray-100 dark:hover:bg-slate-800">
+                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"/>
+                        </svg>
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Mobile menu -->
+        <div x-show="mobileMenuOpen"
+             x-transition
+             class="md:hidden border-t border-gray-200 dark:border-slate-700 bg-white dark:bg-slate-850">
+            <div class="px-4 py-3 space-y-2">
+                <button @click="filter = 'all'; mobileMenuOpen = false"
+                        :class="filter === 'all' ? 'text-blue-600 dark:text-blue-400' : 'text-gray-600 dark:text-gray-400'"
+                        class="block w-full text-left px-3 py-2 rounded-lg hover:bg-gray-100 dark:hover:bg-slate-800">
+                    全部内容
+                </button>
+                <button @click="filter = 'required'; mobileMenuOpen = false"
+                        :class="filter === 'required' ? 'text-blue-600 dark:text-blue-400' : 'text-gray-600 dark:text-gray-400'"
+                        class="block w-full text-left px-3 py-2 rounded-lg hover:bg-gray-100 dark:hover:bg-slate-800">
+                    必修课程
+                </button>
+                <button @click="filter = 'optional'; mobileMenuOpen = false"
+                        :class="filter === 'optional' ? 'text-blue-600 dark:text-blue-400' : 'text-gray-600 dark:text-gray-400'"
+                        class="block w-full text-left px-3 py-2 rounded-lg hover:bg-gray-100 dark:hover:bg-slate-800">
+                    选修课程
+                </button>
+                <button @click="filter = 'appendix'; mobileMenuOpen = false"
+                        :class="filter === 'appendix' ? 'text-blue-600 dark:text-blue-400' : 'text-gray-600 dark:text-gray-400'"
+                        class="block w-full text-left px-3 py-2 rounded-lg hover:bg-gray-100 dark:hover:bg-slate-800">
+                    附录资料
+                </button>
+            </div>
+        </div>
+    </header>
+
+    <!-- Hero Section - Show when no chapter selected -->
+    <div x-show="!currentChapter" class="pt-16">
+        <div class="bg-gradient-to-br from-blue-600 via-purple-600 to-indigo-700 text-white">
+            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16 md:py-24">
+                <div class="text-center">
+                    <span class="inline-block px-4 py-1.5 bg-white/20 rounded-full text-sm font-medium mb-6">
+                        开发者专属 • 100% 免费教程
+                    </span>
+                    <h1 class="text-4xl md:text-5xl lg:text-6xl font-bold mb-6">
+                        Claude Code 免费从入门到精通
+                    </h1>
+                    <p class="text-lg md:text-xl text-blue-100 max-w-3xl mx-auto mb-8">
+                        专为开发者打造的实战教程。从环境配置到团队协作，从 CLI 高级用法到自动化脚本，
+                        这套教程将帮助你掌握下一代 AI 辅助编程工具。
+                    </p>
+                    <div class="flex flex-col sm:flex-row gap-4 justify-center">
+                        <button @click="startLearning()"
+                                class="px-8 py-3 bg-white text-blue-600 font-semibold rounded-lg hover:bg-blue-50 transition-colors shadow-lg">
+                            开始免费学习
+                        </button>
+                        <button @click="filter = 'required'"
+                                class="px-8 py-3 bg-blue-700 text-white font-semibold rounded-lg hover:bg-blue-800 transition-colors">
+                            必修学习路径
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Features -->
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
+            <div class="text-center mb-12">
+                <h2 class="text-2xl md:text-3xl font-bold mb-4">你将学到什么</h2>
+                <p class="text-gray-600 dark:text-gray-400 max-w-2xl mx-auto">
+                    完整的 Claude Code 学习体系，从基础使用到高级技巧
+                </p>
+            </div>
+            <div class="grid md:grid-cols-3 gap-8">
+                <div class="p-6 bg-white dark:bg-slate-800 rounded-xl shadow-sm border border-gray-100 dark:border-slate-700">
+                    <div class="w-12 h-12 bg-blue-100 dark:bg-blue-900/30 rounded-lg flex items-center justify-center mb-4">
+                        <svg class="w-6 h-6 text-blue-600 dark:text-blue-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/>
+                        </svg>
+                    </div>
+                    <h3 class="text-lg font-semibold mb-2">90分钟快速上手</h3>
+                    <p class="text-gray-600 dark:text-gray-400 text-sm">
+                        零基础入门，从安装配置到第一次成功完成代码修复，快速建立信心
+                    </p>
+                </div>
+                <div class="p-6 bg-white dark:bg-slate-800 rounded-xl shadow-sm border border-gray-100 dark:border-slate-700">
+                    <div class="w-12 h-12 bg-purple-100 dark:bg-purple-900/30 rounded-lg flex items-center justify-center mb-4">
+                        <svg class="w-6 h-6 text-purple-600 dark:text-purple-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 20l4-16m4 4l4 4-4 4M6 16l-4-4 4-4"/>
+                        </svg>
+                    </div>
+                    <h3 class="text-lg font-semibold mb-2">完整开发闭环</h3>
+                    <p class="text-gray-600 dark:text-gray-400 text-sm">
+                        掌握读代码→改代码→测试→交付的完整工作流，让 AI 辅助编程真正落地
+                    </p>
+                </div>
+                <div class="p-6 bg-white dark:bg-slate-800 rounded-xl shadow-sm border border-gray-100 dark:border-slate-700">
+                    <div class="w-12 h-12 bg-green-100 dark:bg-green-900/30 rounded-lg flex items-center justify-center mb-4">
+                        <svg class="w-6 h-6 text-green-600 dark:text-green-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"/>
+                        </svg>
+                    </div>
+                    <h3 class="text-lg font-semibold mb-2">CLI 进阶与自动化</h3>
+                    <p class="text-gray-600 dark:text-gray-400 text-sm">
+                        学习命令行高级用法、批量操作、可复用模板和自动化脚本
+                    </p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Course Catalog -->
+        <div class="bg-gray-100 dark:bg-slate-800/50 py-16">
+            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+                <div class="text-center mb-12">
+                    <h2 class="text-2xl md:text-3xl font-bold mb-4">教程目录</h2>
+                    <p class="text-gray-600 dark:text-gray-400" x-text="totalChapters + ' 个章节 • ' + totalEstimatedTime"></p>
+                </div>
+
+                <div class="space-y-6">
+                    <template x-for="category in courseData.categories" :key="category.id">
+                        <div class="bg-white dark:bg-slate-800 rounded-xl shadow-sm border border-gray-200 dark:border-slate-700 overflow-hidden"
+                             x-show="filter === 'all' || filter === category.id">
+                            <button @click="toggleCategory(category.id)"
+                                    class="w-full px-6 py-4 flex items-center justify-between hover:bg-gray-50 dark:hover:bg-slate-700/50 transition-colors">
+                                <div class="flex items-center gap-3">
+                                    <span class="text-2xl" x-text="category.icon"></span>
+                                    <span class="font-semibold text-lg" x-text="category.name"></span>
+                                    <span class="text-sm text-gray-500 dark:text-gray-400" x-text="'(' + category.chapters.length + ' 章)'"></span>
+                                </div>
+                                <svg :class="expandedCategories.includes(category.id) ? 'rotate-180' : ''"
+                                     class="w-5 h-5 text-gray-500 transition-transform"
+                                     fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/>
+                                </svg>
+                            </button>
+
+                            <div x-show="expandedCategories.includes(category.id)"
+                                 x-collapse
+                                 class="border-t border-gray-200 dark:border-slate-700">
+                                <div class="divide-y divide-gray-100 dark:divide-slate-700">
+                                    <template x-for="chapter in category.chapters" :key="chapter.id">
+                                        <button @click="goToChapter(chapter.id)"
+                                                class="w-full px-6 py-3 flex items-center justify-between hover:bg-blue-50 dark:hover:bg-slate-700/50 transition-colors group">
+                                            <div class="flex items-center gap-3">
+                                                <span class="w-6 h-6 rounded-full flex items-center justify-center text-xs"
+                                                      :class="completedChapters.includes(chapter.id) ? 'bg-green-500 text-white' : 'bg-gray-200 dark:bg-slate-700 text-gray-500 dark:text-gray-400'">
+                                                    <svg x-show="completedChapters.includes(chapter.id)" class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M5 13l4 4L19 7"/>
+                                                    </svg>
+                                                    <span x-show="!completedChapters.includes(chapter.id)" x-text="chapter.index"></span>
+                                                </span>
+                                                <span class="text-gray-700 dark:text-gray-300 group-hover:text-blue-600 dark:group-hover:text-blue-400"
+                                                      x-text="chapter.title"></span>
+                                            </div>
+                                            <svg class="w-4 h-4 text-gray-400 group-hover:text-blue-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/>
+                                            </svg>
+                                        </button>
+                                    </template>
+                                </div>
+                            </div>
+                        </div>
+                    </template>
+                </div>
+            </div>
+        </div>
+
+        <!-- Stats -->
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
+            <div class="grid grid-cols-2 md:grid-cols-4 gap-6 text-center">
+                <div class="p-4">
+                    <div class="text-3xl font-bold text-blue-600 dark:text-blue-400 mb-1">9</div>
+                    <div class="text-sm text-gray-600 dark:text-gray-400">完整章节</div>
+                </div>
+                <div class="p-4">
+                    <div class="text-3xl font-bold text-purple-600 dark:text-purple-400 mb-1">4-6h</div>
+                    <div class="text-sm text-gray-600 dark:text-gray-400">学习时长</div>
+                </div>
+                <div class="p-4">
+                    <div class="text-3xl font-bold text-green-600 dark:text-green-400 mb-1">6+</div>
+                    <div class="text-sm text-gray-600 dark:text-gray-400">提示词模板</div>
+                </div>
+                <div class="p-4">
+                    <div class="text-3xl font-bold text-orange-600 dark:text-orange-400 mb-1">100%</div>
+                    <div class="text-sm text-gray-600 dark:text-gray-400">免费访问</div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Main Content Area - Show when chapter is selected -->
+    <div x-show="currentChapter" class="pt-16 flex">
+        <!-- Sidebar TOC -->
+        <aside x-show="sidebarOpen"
+               :class="sidebarOpen ? 'lg:block' : 'hidden'"
+               class="fixed lg:sticky top-16 left-0 w-72 h-[calc(100vh-4rem)] overflow-y-auto bg-white dark:bg-slate-850 border-r border-gray-200 dark:border-slate-700 z-40 lg:z-30 transition-transform"
+               :class="sidebarOpen ? 'translate-x-0' : '-translate-x-full'">
+            <div class="p-4">
+                <div class="flex items-center justify-between mb-4">
+                    <h2 class="font-semibold text-gray-900 dark:text-gray-100">目录结构</h2>
+                    <button @click="sidebarOpen = false" class="lg:hidden p-1 hover:bg-gray-100 dark:hover:bg-slate-800 rounded">
+                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/>
+                        </svg>
+                    </button>
+                </div>
+
+                <div class="space-y-4">
+                    <template x-for="category in courseData.categories" :key="category.id">
+                        <div>
+                            <button @click="toggleCategory(category.id)"
+                                    class="flex items-center gap-2 text-sm font-medium text-gray-700 dark:text-gray-300 mb-2 hover:text-blue-600 dark:hover:text-blue-400">
+                                <svg :class="expandedCategories.includes(category.id) ? 'rotate-90' : ''"
+                                     class="w-4 h-4 transition-transform"
+                                     fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/>
+                                </svg>
+                                <span x-text="category.name"></span>
+                            </button>
+
+                            <div x-show="expandedCategories.includes(category.id)" x-collapse>
+                                <div class="space-y-1 ml-6">
+                                    <template x-for="chapter in category.chapters" :key="chapter.id">
+                                        <button @click="goToChapter(chapter.id)"
+                                                class="sidebar-item w-full text-left px-2 py-1.5 rounded text-sm flex items-center gap-2"
+                                                :class="currentChapter === chapter.id ? 'bg-blue-100 dark:bg-blue-900/30 text-blue-700 dark:text-blue-300' : 'text-gray-600 dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-slate-800'">
+                                            <span class="w-4 h-4 rounded-full flex items-center justify-center text-xs flex-shrink-0"
+                                                  :class="completedChapters.includes(chapter.id) ? 'bg-green-500 text-white' : 'bg-gray-200 dark:bg-slate-700 text-gray-500'">
+                                                <svg x-show="completedChapters.includes(chapter.id)" class="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M5 13l4 4L19 7"/>
+                                                </svg>
+                                            </span>
+                                            <span class="truncate" x-text="chapter.title"></span>
+                                        </button>
+                                    </template>
+                                </div>
+                            </div>
+                        </div>
+                    </template>
+                </div>
+            </div>
+        </aside>
+
+        <!-- Content Area -->
+        <main class="flex-1 min-w-0">
+            <!-- Mobile sidebar toggle -->
+            <div class="lg:hidden sticky top-16 z-30 bg-white dark:bg-slate-850 border-b border-gray-200 dark:border-slate-700 px-4 py-2">
+                <button @click="sidebarOpen = !sidebarOpen"
+                        class="flex items-center gap-2 text-sm text-gray-600 dark:text-gray-400">
+                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"/>
+                    </svg>
+                    <span x-text="currentChapterTitle"></span>
+                </button>
+            </div>
+
+            <!-- Chapter content -->
+            <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-8 fade-in">
+                <!-- Chapter header -->
+                <div class="mb-8 pb-6 border-b border-gray-200 dark:border-slate-700">
+                    <div class="flex items-center gap-2 text-sm text-blue-600 dark:text-blue-400 mb-2">
+                        <span x-text="getCategoryName(currentChapter)"></span>
+                    </div>
+                    <h1 class="text-2xl md:text-3xl font-bold mb-4" x-text="currentChapterTitle"></h1>
+                    <div class="flex items-center gap-4">
+                        <label class="flex items-center gap-2 cursor-pointer">
+                            <input type="checkbox"
+                                   :checked="completedChapters.includes(currentChapter)"
+                                   @change="toggleComplete(currentChapter)"
+                                   class="w-5 h-5 rounded border-gray-300 text-blue-600 focus:ring-blue-500 dark:border-slate-600">
+                            <span class="text-sm text-gray-600 dark:text-gray-400">标记为已读</span>
+                        </label>
+                    </div>
+                </div>
+
+                <!-- Content -->
+                <div class="markdown-content" id="chapter-content"></div>
+
+                <!-- Navigation -->
+                <div class="mt-12 pt-8 border-t border-gray-200 dark:border-slate-700">
+                    <div class="flex justify-between">
+                        <button x-show="prevChapter"
+                                @click="goToChapter(prevChapter)"
+                                class="flex items-center gap-2 px-4 py-2 rounded-lg hover:bg-gray-100 dark:hover:bg-slate-800 transition-colors">
+                            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"/>
+                            </svg>
+                            <span class="text-sm">上一章</span>
+                        </button>
+                        <button x-show="nextChapter"
+                                @click="goToChapter(nextChapter)"
+                                class="flex items-center gap-2 px-4 py-2 rounded-lg hover:bg-gray-100 dark:hover:bg-slate-800 transition-colors">
+                            <span class="text-sm">下一章</span>
+                            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/>
+                            </svg>
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <!-- Footer -->
+    <footer class="bg-white dark:bg-slate-850 border-t border-gray-200 dark:border-slate-700 py-8">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="text-center text-sm text-gray-500 dark:text-gray-400">
+                <p>Claude Code 教程 - 帮助开发者快速掌握 AI 辅助编程工具</p>
+                <p class="mt-2">© 2025 非 Anthropic 附属机构 • 保留所有权利</p>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Back to top button -->
+    <button x-show="showBackToTop"
+            @click="scrollToTop()"
+            x-transition
+            class="fixed bottom-6 right-6 p-3 bg-blue-600 text-white rounded-full shadow-lg hover:bg-blue-700 transition-colors z-50">
+        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 10l7-7m0 0l7 7m-7-7v18"/>
+        </svg>
+    </button>
+
+    <script>
+        // Course content data
+        const chapterContent = {
+            "00": `# 00 必修：90 分钟上手
+
+> 学习目标：在 90-120 分钟内完成"能用起来"的首次成功，并掌握最常用的 6 类指令模板与快速排障方法。
+
+> 适用对象：零 Claude Code 经验的工程开发者/小白。
+
+> ⏱️ **时间预估**：
+> - 有编程经验：约 90 分钟
+> - 完全新手：约 2-3 小时（第一次安装配置需要更多时间）
+
+> 默认路径：使用 VS Code 插件；CLI 在进阶章节再讲。
+
+---
+
+## 15 分钟快通道（已配好环境的同学）
+
+> 适用：你已经装好 VS Code + Python，并且已经拿到可用的模型 Key（GLM/团队网关等），想先拿到一个"第一次成功"。
+
+### 你将完成什么
+
+- 在 \`training-pack/sample-repo/\` 修复 1 个 bug，并用命令验证通过（得到一个可复用的最小闭环）。
+
+### 步骤（按顺序做）
+
+1. **打开练习项目**：\`claude-code-training/training-pack/sample-repo/\`
+   - VS Code：\`File → Open Folder\` → 选择该目录
+2. **安装 Claude Code 插件**（已安装可跳过）：跳到「第一步：安装 VS Code 插件」
+3. **配置模型与 Key**：跳到「第二步：获取 GLM API Key」和「第二步（续）：配置 GLM 模型」
+4. **快速自检（2 分钟）**：在 Claude Code 面板输入 \`当前项目目录下有哪些文件？\`，能列出文件即 OK
+5. **首次成功任务（8 分钟）**：修复 \`src/calc.py\` 的 \`absolute_value()\` bug
+   - 复制提示词（推荐）：
+     \`\`\`
+     请先读取 src/calc.py，分析 absolute_value 函数的 bug 原因与修复方案，但先不要修改文件。
+     我确认后你再执行修改，并给出验证命令。
+     \`\`\`
+   - 验收命令（任意一种即可）：
+     \`\`\`bash
+     python -c "from src.calc import absolute_value; print(absolute_value(-5))"
+     # 期望输出：5
+     \`\`\`
+6. **如果卡住**：直接跳到本章的「排障决策树」或打开 \`08_附录_速查与排障.md\`
+
+> 完成快通道后，建议继续完成本章剩余内容：把"能用"升级为"用得稳"（包含 5 分钟自检、排障与提示词模板）。
+
+## 零基础认知：什么是 AI？（5 分钟）
+
+> 如果你从来没使用过任何 AI 工具（比如 ChatGPT、文心一言、豆包等），请先花 5 分钟了解基本概念。如果你已经用过 AI 工具，可以跳过这一节。
+
+### AI 是什么？
+
+AI（人工智能）就像一个**非常聪明的助手**：
+
+\`\`\`
+┌─────────────────────────────────────────────────────────────┐
+│                                                              │
+│      你（用文字表达需求）                                   │
+│            ↓                                                │
+│    "帮我写一段计算器代码"                                    │
+│            ↓                                                │
+│    ═════════════════════════════                             │
+│            ↓                                                │
+│         AI 助手                                             │
+│    "好的，这是你要的代码..."                                 │
+│            ↓                                                │
+│      你得到结果                                             │
+│                                                              │
+└─────────────────────────────────────────────────────────────┘
+\`\`\`
+
+**简单来说**：
+- 你用文字跟 AI "聊天"
+- AI 能理解你说的话，帮你完成各种任务
+- 它会学习，越来越懂你的需求
+
+### 你能用 AI 做什么？
+
+| 任务 | 传统方式 | 用 AI |
+|------|----------|-------|
+| 写代码 | 自己慢慢写，查文档 | 告诉 AI 需求，它帮你写 |
+| 改 bug | 搜半天解决方案，问论坛 | 把错误信息给 AI，它告诉你怎么修 |
+| 写文档 | 自己憋半天，不知道怎么写 | 给 AI 内容，它帮你整理成文档 |
+| 学新东西 | 看大量教程，读很多书 | 让 AI 用简单的话解释 |
+| 翻译 | 用翻译软件，意思经常不准 | 让 AI 翻译并解释术语 |
+
+### 本教程用的 AI 工具
+
+本教程教的是 **Claude Code** — 一个专门为写代码设计的 AI 工具。
+
+**它和其他 AI 的区别**：
+
+\`\`\`
+┌─────────────────────┬─────────────────────┬─────────────────────┐
+│      ChatGPT        │       Claude        │    Claude Code      │
+├─────────────────────┼─────────────────────┼─────────────────────┤
+│ 聊天型 AI           │ 聊天型 AI           │ 结对编程 AI         │
+│ 只能看到你发的文字  │ 只能看到你发的文字  │ 能"看到"你的代码文件 │
+│ 不能直接改文件      │ 不能直接改文件      │ 能直接帮你修改代码   │
+│ 适合日常问答        │ 适合日常问答        │ 专为编程设计         │
+└─────────────────────┴─────────────────────┴─────────────────────┘
+\`\`\`
+
+**Claude Code 的核心能力**：
+- 📖 **能读你的代码**：不需要手动复制粘贴
+- ✏️ **能改你的代码**：按照你的要求修改文件
+- 🏃 **能跑命令**：执行测试、检查代码质量
+- 🧠 **记住上下文**：理解整个项目结构
+
+> 💡 **第一次用 AI 没关系**！教程会一步步教你，就像第一次学骑自行车一样，开始可能会觉得不熟悉，多练几次就自然了。
+
+### 一句话总结
+
+**AI 不是用来取代你的，而是来帮你提高效率的助手。**
+
+就像有了一个经验丰富的同事坐在你旁边，随时可以问问题、请帮忙。
+
+---
+
+## 背景知识
+
+### 什么是 Claude Code？
+
+Claude Code 是 Anthropic 推出的**AI 结对编程工具**。与传统的聊天机器人不同，它能：
+
+- **读取你项目里的代码**：不需要手动复制粘贴
+- **直接修改文件**：按照你的要求改代码、写测试
+- **运行命令**：执行测试、打包、部署等操作
+- **记住上下文**：在整个对话过程中理解项目结构
+
+### 为什么要学？
+
+| 传统方式 | 用 Claude Code |
+|----------|----------------|
+| 自己逐行读代码理解 | 让 AI 总结代码逻辑和数据流 |
+| 手动写重复代码 | 让 AI 生成脚手架和模板 |
+| 遇到报错到处搜解决方案 | 直接把错误信息抛给它 |
+| 写文档/注释很痛苦 | 让 AI 根据代码自动生成 |
+
+### 核心观念
+
+> **先让它成功一次，再谈更复杂的用法。**
+
+本章只追求一件事：跑通一次闭环，拿到可验证的成果。
+
+---
+
+## 操作步骤
+
+### 第零步：下载和安装 VS Code（10-15 分钟）
+
+> 🎯 **这一节的目标**：在你的电脑上安装 VS Code 代码编辑器。
+>
+> 如果你的电脑上已经安装了 VS Code，可以跳过这一步，直接进入"第一步"。
+
+#### 0.1 什么是 VS Code？
+
+想象一下：
+- 📝 **Word** 用来写文档
+- 🎨 **Photoshop** 用来修图
+- 💻 **VS Code** 用来写代码
+
+VS Code（全称 Visual Studio Code）是微软开发的**免费代码编辑器**，支持各种编程语言（Python、JavaScript、Java 等），是目前最受欢迎的编程工具。
+
+\`\`\`
+┌─────────────────────────────────────────────────────────┐
+│  为什么选择 VS Code？                                    │
+├─────────────────────────────────────────────────────────┤
+│  ✅ 完全免费                                             │
+│  ✅ 支持各种编程语言                                     │
+│  ✅ 可以安装各种插件（就像给手机装 App）                 │
+│  ✅ 界面友好，新手容易上手                               │
+│  ✅ 有强大的 AI 辅助功能（本教程的主角）                 │
+└─────────────────────────────────────────────────────────┘
+\`\`\`
+
+#### 0.2 下载 VS Code（详细步骤）
+
+**第一步：打开浏览器**
+
+1. 找到桌面上的浏览器图标
+   - **Windows**：Edge（蓝色 e 图标）或 Chrome（彩色圆圈图标）
+   - **Mac**：Safari（蓝色指南针图标）或 Chrome
+
+2. **双击图标**打开浏览器
+
+**第二步：访问 VS Code 官网**
+
+1. 在浏览器窗口顶部的**地址栏**里点击一下
+2. 输入以下地址：\`code.visualstudio.com\`
+3. 按**回车键**
+
+**第三步：下载安装包**
+
+1. 网页加载后，找一个**大的蓝色按钮**
+   - Windows 用户显示："Download for Windows"
+   - Mac 用户显示："Download for Mac"
+2. 点击这个按钮
+3. 浏览器会开始下载一个文件
+
+**第四步：找到下载的文件**
+
+1. 下载完成后，点击浏览器左下角的文件名
+   - Windows 文件名类似：\`VSCodeUserSetup-x64.exe\`
+   - Mac 文件名类似：\`VSCode-darwin.zip\`
+
+#### 0.3 安装 VS Code
+
+**Windows 系统：**
+
+1. **双击**下载的 \`.exe\` 文件
+2. 可能会弹出"是否允许此应用更改设备？"的提示
+   - 点击"**是**"
+3. 等待安装程序打开
+4. 一路点击"**下一步**"（Next）
+5. 最后点击"**完成**"（Finish）
+
+**Mac 系统：**
+
+1. 双击下载的 \`.zip\` 文件解压
+2. 把 VS Code 图标拖到"应用程序"文件夹
+3. 在 Launchpad 或应用程序文件夹中找到 VS Code
+4. 右键点击 → "打开"（首次打开需要这样操作）
+
+#### 0.4 验证安装是否成功
+
+请确认以下检查项：
+
+| 检查项 | 操作方法 | 预期结果 | 状态 |
+|--------|----------|----------|------|
+| **能找到图标** | 桌面或开始菜单查找 | 有蓝色 \`><\` 图标 | ☐ |
+| **能打开 VS Code** | 双击图标 | 能看到界面 | ☐ |
+| **界面正常** | 观察界面 | 能看到菜单栏和活动栏 | ☐ |
+
+**✅ 全部打钩后，继续下一步！**
+
+---
+
+### 第一步：安装 VS Code 插件（5 分钟）
+
+> 在这一步，我们要在 VS Code 中安装 Claude Code 插件。
+
+#### 1.1 什么是"插件"或"扩展"？
+
+**插件**（也叫扩展）就像是给软件"加装新功能"：
+
+\`\`\`
+VS Code（基础功能）
+    ↓
+    + 安装 Claude Code 插件
+    ↓
+VS Code（新增 AI 助手功能）
+
+就像手机安装 App 一样：
+- 手机本身可以打电话、发短信
+- 安装微信后，可以聊天
+- 安装地图后，可以导航
+\`\`\`
+
+#### 1.2 安装 Claude Code 插件
+
+1. 点击 VS Code 左侧的**扩展**图标（或按 \`Ctrl+Shift+X\`）
+2. 搜索 \`Claude Code\`
+3. 找到由 **Anthropic** 发布的插件，点击**安装**
+
+\`\`\`
+图标：紫色四边形图案
+发布者：Anthropic
+\`\`\`
+
+#### 1.3 登录授权
+
+1. 安装完成后，侧边栏会出现 Claude Code 图标
+2. 点击图标，选择**Sign in**
+3. 浏览器会打开 Anthropic 登录页面
+4. 登录完成后，VS Code 会显示已连接状态
+
+#### 1.4 验证安装是否成功
+
+| 检查项 | 操作方法 | 预期结果 | 状态 |
+|--------|----------|----------|------|
+| **VS Code** | 打开 VS Code | 能看到界面 | ☐ |
+| **插件图标** | 看左侧边栏 | 能看到 Claude Code 紫色图标 | ☐ |
+| **能打开面板** | 点击 Claude Code 图标 | 右侧出现 Claude Code 面板 | ☐ |
+| **能登录** | 点击面板中的 Sign in | 浏览器打开登录页面 | ☐ |
+| **登录成功** | 完成登录 | VS Code 显示已连接 | ☐ |
+
+**全部打勾 ✅ 后再继续下一步！**
+
+---
+
+### 第二步：获取 GLM API Key（10 分钟）
+
+> **如果你已经有团队提供的 API Key，直接跳到"配置 GLM 模型"**
+
+#### 2.1 获取 API Key 详细步骤
+
+**方式一：智谱 AI（推荐新手使用）**
+
+\`\`\`
+┌─────────────────────────────────────────────────────────┐
+│  获取智谱 AI API Key 的 5 个步骤                          │
+├─────────────────────────────────────────────────────────┤
+│                                                         │
+│  ① 打开浏览器，访问：https://open.bigmodel.cn/          │
+│                                                         │
+│  ② 点击右上角"注册/登录"（支持手机号注册）              │
+│                                                         │
+│  ③ 登录后，点击右上角头像 → "API Key 管理"              │
+│                                                         │
+│  ④ 点击"创建 API Key"按钮                               │
+│                                                         │
+│  ⑤ 复制生成的 Key（格式：xxxxxxxx.xxxxxx）              │
+│      ⚠️ 立即保存好！关闭页面后无法再次查看完整内容        │
+│                                                         │
+└─────────────────────────────────────────────────────────┘
+\`\`\`
+
+---
+
+### 第二步（续）：配置 GLM 模型（5 分钟）
+
+> 有了 API Key 后，现在把它配置到 Claude Code 中。
+
+#### 2.2 打开设置
+
+在 VS Code 中：
+- 按 \`Ctrl+,\` 打开设置
+- 搜索 \`Claude Code\`
+- 找到 \`Model Provider\` 配置项
+
+#### 2.2 添加自定义模型
+
+1. 在设置中找到 \`Claude Code: Model Configurations\`
+2. 点击「添加项目」
+3. 填写以下信息：
+
+\`\`\`json
+{
+  "provider": "openai-compatible",
+  "apiKey": "你的GLM_API_KEY",
+  "baseUrl": "https://open.bigmodel.cn/api/paas/v4/",
+  "model": "glm-4.7"
+}
+\`\`\`
+
+> ⚡ **直接用最强模型**：学习时效果最好，节省时间比节省费用更重要。
+
+4. 保存设置，Claude Code 会使用新配置
+
+#### 2.3 验证配置
+
+在 Claude Code 面板中发送一条测试消息：
+
+\`\`\`
+你好，请回复"配置成功"
+\`\`\`
+
+如果收到回复，说明配置正常。
+
+---
+
+### 第三步：5 分钟自检（必做）
+
+在继续之前，请确认以下四点都能完成：
+
+| 自检项 | 操作 | 预期结果 |
+|--------|------|----------|
+| 能打开面板 | 点击侧边栏 Claude 图标 | 面板正常显示 |
+| 能发送消息 | 输入文字回车 | 能收到回复 |
+| 能读取文件 | 打开一个项目，问"当前目录有什么" | 能列出文件 |
+| 能看到代码 | 问"读取 main.py" | 能显示文件内容 |
+
+**如果任何一项失败**，请查看本章末尾的「常见问题」部分。
+
+---
+
+### 第四步：第一次成功（30 分钟）
+
+> 🎯 学完本章，你能做什么
+> **学之前**：不知道怎么让 AI 帮忙写代码
+> **学之后**：能让 Claude Code 帮你定位、分析、修复 bug
+
+#### 4.1 打开练习项目
+
+\`\`\`bash
+# 第1步：在终端中输入以下命令，按回车
+pwd
+
+# 第2步：进入教程目录
+cd claude-code-training/training-pack/sample-repo
+
+# 第3步：用 VS Code 打开这个项目
+code .
+\`\`\`
+
+**解释**：
+- \`pwd\` = print working directory（显示我在哪）
+- \`cd\` = change directory（进入文件夹）
+- \`code .\` = 用 VS Code 打开当前目录（\`.\` 表示当前文件夹）
+
+#### 4.2 理解项目结构
+
+在 Claude Code 面板中输入：
+
+\`\`\`
+请帮我分析一下这个项目的结构：
+1. 项目入口在哪里？
+2. 主要有哪些模块？
+3. 数据是怎么流转的？
+\`\`\`
+
+#### 4.3 完成第一个任务
+
+在 Claude Code 面板中输入：
+
+\`\`\`
+任务：修复 calc.py 中的 bug
+
+问题描述：
+当输入负数时，calc.py 中的 absolute_value 函数返回了错误的结果。
+
+要求：
+1. 先读取 calc.py 文件，找到问题
+2. 修复这个 bug
+3. 不要修改其他代码
+\`\`\`
+
+#### 4.4 验证结果
+
+在终端中运行：
+
+\`\`\`bash
+python -c "from calc import absolute_value; print(absolute_value(-5))"
+\`\`\`
+
+应该输出 \`5\` 而不是 \`-5\`。
+
+---
+
+### 第五步：6 个高频提示词模板（20 分钟）
+
+> 这些模板覆盖了 80% 的日常使用场景，建议收藏或打印。
+
+#### 模板 1：读代码 - 快速理解
+
+\`\`\`
+请帮我理解 [文件名/模块名]：
+1. 这个模块是做什么的？
+2. 主要的函数/类有哪些？
+3. 数据是如何流动的？
+\`\`\`
+
+#### 模板 2：改代码 - 按约束修改
+
+\`\`\`
+请修改 [文件名] 中的 [具体位置]：
+- 目标：[你想达成的效果]
+- 约束：[不要修改的内容/注意事项]
+- 请只展示改动部分，并说明改动原因
+\`\`\`
+
+#### 模板 3：测代码 - 补充测试
+
+\`\`\`
+请为 [文件名/函数名] 编写单元测试：
+- 覆盖正常情况和边界情况
+- 使用 pytest 框架
+- 每个测试要有清晰的描述
+\`\`\`
+
+#### 模板 4：搜代码 - 全局定位
+
+\`\`\`
+请帮我在项目中找到 [函数名/变量名/错误信息]：
+1. 在哪些文件中被定义/调用？
+2. 调用链是什么？
+3. 数据从哪里来、到哪里去？
+\`\`\`
+
+#### 模板 5：写文档 - 生成说明
+
+\`\`\`
+请根据 [文件名/项目] 的代码，生成：
+1. 模块功能说明
+2. 主要接口和使用示例
+3. 注意事项
+\`\`\`
+
+#### 模板 6：总结 - 沉淀经验
+
+\`\`\`
+请把我们刚才完成的工作总结成一份 SOP：
+1. 问题描述是什么
+2. 采取的解决方案
+3. 关键步骤和命令
+4. 以后类似问题的处理流程
+\`\`\`
+
+---
+
+### 第六步：排障决策树（5 分钟）
+
+\`\`\`
+┌─────────────────────────────────────┐
+│         Claude Code 没反应？         │
+└─────────────────┬───────────────────┘
+                  │
+    ┌─────────────┼─────────────┐
+    │             │             │
+ 登录失败       没有回复      读取失败
+    │             │             │
+    ▼             ▼             ▼
+检查账号      检查模型      检查工作区
+检查网络      检查 Key      检查权限
+重新登录      切换模型      重新打开
+\`\`\`
+
+快速诊断表：
+
+| 症状 | 可能原因 | 快速解决 |
+|------|----------|----------|
+| 提示未登录 | 会话过期 | 点击 Sign in 重新登录 |
+| 一直转圈 | 网络问题 | 检查网络/切换模型 |
+| 说看不到文件 | 工作区问题 | 用 VS Code 打开项目文件夹 |
+| 报错 API Key | 配置问题 | 重新填写 API Key |
+| 输出中断 | 上下文太长 | 清空对话重新开始 |
+
+---
+
+## 实战任务
+
+### 任务目标
+
+在 \`training-pack/sample-repo/\` 中完成一次完整的"读→改→验收"闭环。
+
+### 时间预估
+
+30-45 分钟
+
+### 任务卡（复制即可）
+
+**输入**
+- 项目：\`training-pack/sample-repo/\`
+- 重点文件：\`src/calc.py\`
+
+**步骤**
+1. 读：让 Claude Code 先解释项目结构与 \`absolute_value()\` 的当前逻辑（不要直接改）
+2. 改：先给修复方案，再按方案只修改 \`absolute_value()\`（小步改动）
+3. 验收：用命令验证 \`absolute_value(-5)\` 输出正确
+4. 交付：生成 8-12 行变更说明（改了什么/为什么/怎么验证/怎么回滚）
+
+**验收命令**
+\`\`\`bash
+python -c "from src.calc import absolute_value; print(absolute_value(-5))"
+# 期望输出：5
+\`\`\`
+
+---
+
+## 小结
+
+### 要点回顾
+
+本章我们完成了：
+
+1. **安装配置**：VS Code 插件 + GLM 模型接入
+2. **首次成功**：跑通了一次代码修复闭环
+3. **掌握模板**：6 个高频提示词模板
+4. **排障能力**：能快速定位常见问题
+
+### 速查表
+
+| 场景 | 提示词关键词 |
+|------|-------------|
+| 快速理解代码 | "请帮我理解... 结构/数据流" |
+| 修改代码 | "请修改... 目标... 约束..." |
+| 补充测试 | "请编写单元测试... 覆盖..." |
+| 全局搜索 | "请帮我在项目中找到..." |
+| 生成文档 | "请生成... 功能说明/使用示例" |
+| 总结沉淀 | "请总结成 SOP... 步骤/流程" |
+
+---
+
+## 常见问题
+
+### Q1：VS Code 插件安装后找不到图标？
+
+**A**：尝试以下方法：
+1. 重启 VS Code
+2. 检查左侧活动栏是否有 Claude 图标
+3. 如果还没有，按 \`Ctrl+Shift+P\`，输入 "Claude Code: Focus"
+
+### Q2：登录时浏览器打不开？
+
+**A**：
+1. 检查网络是否正常
+2. 检查是否有防火墙/代理拦截
+3. 尝试手动复制 VS Code 显示的授权 URL 到浏览器
+
+### Q3：配置 GLM 后连接失败？
+
+**A**：
+1. 检查 API Key 是否正确复制（没有多余空格）
+2. 检查 baseUrl 是否完整（末尾有 \`/\`）
+3. 在 Claude Code 设置中确认选择了正确的模型配置
+
+---
+
+## 下一步
+
+完成本章后，你已经掌握了：
+- ✅ Claude Code 的基本使用
+- ✅ 6 个高频提示词模板
+- ✅ 常见问题排障能力
+
+**下一章（01）**，我们将学习：
+- 如何让 Claude Code 正确"看见"你的项目
+- 哪些信息不能给它（安全边界）
+- 精准指定文件的操作技巧
+`,
+
+            "01": `# 01 必修：在项目里工作（工作区与文件）
+
+> 学习目标：让 Claude Code "看见并理解"你的项目；学会在安全边界内指定文件/目录，并把改动落到真实文件中。
+
+---
+
+## 章节定位
+
+**前置知识**：已完成 00 章，能启动 Claude Code 并完成基本对话。
+
+**本章价值**：00 章让你"能用"，本章让你"用对"——学会如何在真实项目中与 Claude Code 协作。
+
+---
+
+## 背景知识
+
+### 为什么"工作区"很重要？
+
+Claude Code 的强大之处在于它能**理解整个项目上下文**，但前提是你要让它"看见"你的代码。
+
+\`\`\`
+错误方式 ❌                      正确方式 ✅
+────────────────────────────────────────────────
+手动复制代码片段                 用 VS Code 打开项目文件夹
+贴到对话框里问问题               Claude Code 自动读取所有文件
+没有上下文，只能瞎猜             理解项目结构，给出精准建议
+\`\`\`
+
+### 核心概念：工作区（Workspace）
+
+**工作区** = 你用 VS Code 打开的**项目根文件夹**
+
+\`\`\`
+示例项目结构：
+my-project/           ← 这是工作区根目录
+├── src/
+│   ├── main.py
+│   └── utils.py
+├── tests/
+└── config.json
+\`\`\`
+
+---
+
+## 操作步骤
+
+### 第一步：正确打开工作区（5 分钟）
+
+#### 1.1 用 VS Code 打开项目文件夹
+
+\`\`\`bash
+# 在终端中执行
+cd your-project-path
+code .
+\`\`\`
+
+或者：
+1. 打开 VS Code
+2. \`Ctrl+Shift+P\` → 输入 "Open Folder"
+3. 选择你的项目文件夹
+
+---
+
+### 第二步：指定文件的三种方式（10 分钟）
+
+#### 方式 1：直接指定文件名
+
+\`\`\`
+读取 src/main.py 文件
+\`\`\`
+
+#### 方式 2：描述功能让它自己找
+
+\`\`\`
+找到包含 "calculate" 函数的文件
+\`\`\`
+
+#### 方式 3：指定目录范围
+
+\`\`\`
+分析 src/ 目录下的所有 Python 文件
+\`\`\`
+
+---
+
+### 第三步：安全边界与脱敏（10 分钟）
+
+#### 🔴 绝对不能给的信息
+
+| 信息类型 | 示例 | 风险 |
+|----------|------|------|
+| API 密钥 | \`sk-xxxxx\`, \`AKIAxxxxx\` | 账号被盗用 |
+| 密码 | \`password = "xxxx"\` | 系统被入侵 |
+| 内网地址 | \`192.168.x.x\`, 内部域名 | 暴露内网结构 |
+| 客户数据 | 真实姓名、手机号、身份证 | 隐私泄露 |
+| 生产配置 | 生产数据库连接串 | 生产环境风险 |
+
+#### ✅ 需要脱敏的处理方式
+
+**原始日志**：
+\`\`\`
+ERROR: Connection failed for user=admin@prod-db.internal
+Password: MySecret123
+\`\`\`
+
+**脱敏后**：
+\`\`\`
+ERROR: Connection failed for user=<用户名>@<数据库地址>
+Password: <密码>
+\`\`\`
+
+---
+
+### 第四步：让改动可控的三条规矩（15 分钟）
+
+#### 规矩 1：先看方案，再动手
+
+\`\`\`
+❌ 错误：直接改文件
+"帮我优化 src/calc.py"
+
+✅ 正确：先要方案
+"请分析 src/calc.py，告诉我哪些地方可以优化，
+并说明原因，但先不要修改任何文件"
+\`\`\`
+
+#### 规矩 2：小步改动，逐步验证
+
+\`\`\`
+❌ 错误：一次改太多
+"帮我重构整个项目的代码"
+
+✅ 正确：分步骤来
+"第一步：先改 src/calc.py 中的 absolute_value 函数
+改完后告诉我改了什么，我再决定是否继续"
+\`\`\`
+
+#### 规矩 3：改动必须能验证
+
+\`\`\`
+❌ 错误：没有验收标准
+"帮我修复这个 bug"
+
+✅ 正确：明确验收方式
+"帮我修复这个 bug：
+1. 先说明问题原因
+2. 修复后告诉我改了哪些文件
+3. 给出验证命令，我执行确认没问题"
+\`\`\`
+
+---
+
+## 实战任务
+
+在 \`training-pack/sample-repo/\` 中完成一次"指定文件→理解→改动→验证"的完整闭环。
+
+---
+
+## 小结
+
+本章我们学习了：
+
+1. **工作区概念**：用 VS Code 打开项目文件夹，Claude Code 才能看见你的代码
+2. **指定文件**：三种方式（直接文件名、功能描述、指定目录）
+3. **安全边界**：绝对不给 API Key、密码、客户数据等敏感信息
+4. **可控改动**：先看方案→小步改动→验证确认
+`,
+
+            "02": `# 02 必修：开发闭环（读→改→测→交付）
+
+> 学习目标：掌握用 Claude Code 辅助开发的最小闭环：读代码 → 设计改动 → 实现 → 测试/验证 → 交付说明。
+
+---
+
+## 背景知识
+
+### 为什么"闭环"很重要？
+
+很多新手用 Claude Code 的问题是：**只让 AI 写代码，不管后续**。
+
+\`\`\`
+错误方式 ❌                      正确方式 ✅
+────────────────────────────────────────────────
+"帮我写个函数"                   "读一下这个文件，理解它的逻辑"
+AI 生成代码                      "告诉我这段代码在做什么"
+复制粘贴，不管了                 "我需要修改 xxx 功能，先分析怎么改"
+                                "按方案修改，然后给我测试命令"
+                                "生成一份变更说明"
+\`\`\`
+
+### 开发闭环的四个环节
+
+\`\`\`
+┌─────────────────────────────────────────────────────────┐
+│                    开发闭环                              │
+├──────────┬──────────┬──────────┬────────────────────────┤
+│   读     │   改     │   测     │        交付             │
+│  Read    │ Modify   │  Test    │      Deliver           │
+├──────────┼──────────┼──────────┼────────────────────────┤
+│理解现有  │设计改动  │验证结果  │文档化+可审查            │
+│代码逻辑  │明确边界  │确保正确  │风险点+回滚方案          │
+│建立心智  │带约束    │可重复    │让同事能接手            │
+│模型      │可实现    │自动化    │让未来能追溯            │
+└──────────┴──────────┴──────────┴────────────────────────┘
+\`\`\`
+
+---
+
+## 操作步骤
+
+### 第一步：读 — 快速建立心智模型（10 分钟）
+
+#### 1.1 让 AI 解释代码结构
+
+\`\`\`
+请读取 src/calc.py 文件，告诉我：
+1. 这个文件有哪些函数？
+2. 每个函数的作用是什么？
+3. 函数之间有调用关系吗？
+4. 代码的整体结构是什么？
+\`\`\`
+
+#### 1.2 理解数据流
+
+\`\`\`
+这个项目的数据是怎么流动的？
+从输入到输出，经过了哪些文件和函数？
+\`\`\`
+
+---
+
+### 第二步：改 — 先方案后实现（15 分钟）
+
+#### 2.1 明确改动目标
+
+\`\`\`
+我要修复 absolute_value 函数的 bug：
+目标：让 absolute_value(-5) 返回 5
+非目标：不改动其他函数
+\`\`\`
+
+#### 2.2 让 AI 先分析，不要直接改
+
+\`\`\`
+❌ 错误：直接要求修改
+"帮我修复 absolute_value 函数"
+
+✅ 正确：先要分析和方案
+"分析 src/calc.py 中的 absolute_value 函数：
+1. 当前逻辑是什么？
+2. bug 在哪里？
+3. 应该怎么修复？
+请先分析，但不要修改任何文件"
+\`\`\`
+
+---
+
+### 第三步：测 — 验证结果（15 分钟）
+
+#### 3.1 让 AI 生成测试
+
+\`\`\`
+请为 absolute_value 函数生成测试用例，
+覆盖以下场景：
+1. 正数输入
+2. 负数输入
+3. 零
+4. 边界值
+\`\`\`
+
+#### 3.2 运行测试验证
+
+\`\`\`bash
+# 方法 1：只跑当前函数相关测试
+pytest tests/test_calc.py::TestAbsoluteValue -v
+
+# 方法 2：手动验证
+python -c "from src.calc import absolute_value; print(absolute_value(-5))"
+\`\`\`
+
+---
+
+### 第四步：交付 — 产出可审查的交付物（10 分钟）
+
+#### 4.1 让 AI 生成变更说明
+
+\`\`\`
+请生成一份变更说明，包含：
+1. 改动了哪些文件
+2. 每个 file 改了什么（diff 格式）
+3. 为什么这样改
+4. 有没有风险点
+5. 如果出问题怎么回滚
+\`\`\`
+
+---
+
+## 小结
+
+本章我们学习了：
+
+1. **开发闭环**：读 → 改 → 测 → 交付，缺一不可
+2. **读代码**：先理解现有逻辑，建立心智模型
+3. **改代码**：先方案后实现，带约束条件
+4. **测代码**：用测试或脚本验证结果
+5. **交付**：生成可审查的变更说明
+`,
+
+            "03": `# 03 必修：高质量提问与迭代（让输出可控）
+
+> 学习目标：学会给上下文、给约束、要验证；把一次性对话变成可复用的工作流。
+
+---
+
+## 背景知识
+
+### 为什么"高质量提问"很重要？
+
+同样的需求，不同的提问方式，效果天差地别：
+
+\`\`\`
+低质量提问 ❌                    高质量提问 ✅
+─────────────────────────────────────────────────────
+"帮我优化这段代码"               "这是 xxx 函数，用于处理 xxx 场景：
+                                 当前问题：性能慢，输入 1000 条
+                                 数据需要 5 秒
+                                 目标：优化到 1 秒以内
+                                 约束：不能改动函数签名，
+                                 要兼容现有调用
+                                 请先分析瓶颈，给出优化方案"
+\`\`\`
+
+### 提问质量的四个维度
+
+\`\`\`
+┌─────────────────────────────────────────────────────────────┐
+│                   高质量提问的四个维度                        │
+├────────────┬────────────┬────────────┬─────────────────────┤
+│   目标     │   约束     │   输入     │       输出           │
+│   Goal     │ Constraint │   Input    │      Output         │
+├────────────┼────────────┼────────────┼─────────────────────┤
+│要解决什么  │边界条件    │现有文件    │代码/表格/清单        │
+│要达成什么  │技术限制    │日志/错误   │脚本/命令/文档        │
+│成功标准    │资源限制    │复现步骤    │验收标准              │
+└────────────┴────────────┴────────────┴─────────────────────┘
+\`\`\`
+
+---
+
+## 操作步骤
+
+### 第一步：上下文四要素（10 分钟）
+
+#### 1.1 目标 — 我要解决什么
+
+\`\`\`
+❌ 模糊目标：
+"这段代码有问题，帮我看看"
+
+✅ 明确目标：
+"src/calc.py 中的 is_prime 函数判断合数时返回了错误的结果，
+例如 is_prime(4) 返回 True 而非 False。
+请帮我定位并修复这个 bug。"
+\`\`\`
+
+#### 1.2 约束 — 不能做什么/必须满足什么
+
+\`\`\`
+常见的约束类型：
+
+技术约束：
+- 使用 Python 3.8+ 语法
+- 不能引入新的第三方库
+- 要兼容现有的函数签名
+
+业务约束：
+- 不能改动数据结构
+- 要保持向后兼容
+- 不能影响其他功能
+\`\`\`
+
+#### 1.3 输入 — 现有文件/日志/数据/复现步骤
+
+\`\`\`
+❌ 糟糕输入：
+"有个报错，帮我看看"
+
+✅ 完整输入：
+"运行测试时出现以下错误：
+--------------------
+Traceback (most recent call last):
+  File "tests/test_calc.py", line 25, in <test_is_prime>
+    assert is_prime(4) == False
+AssertionError: assert True == False
+--------------------
+\`\`\`
+
+#### 1.4 输出 — 我希望你交付什么
+
+\`\`\`
+❌ 模糊输出：
+"帮我分析一下"
+
+✅ 明确输出：
+"请：
+1. 分析错误原因
+2. 给出修复方案（但先不要修改）
+3. 说明修复后如何验证
+4. 生成一份变更说明模板"
+\`\`\`
+
+---
+
+### 第二步：迭代三步法（20 分钟）
+
+#### 2.1 第一步：先要方案，不要实现
+
+\`\`\`
+❌ 直接要实现：
+"帮我修复 is_prime 函数"
+
+✅ 先要方案：
+"分析 is_prime 函数的问题，告诉我：
+1. 问题在哪一行
+2. 为什么会导致错误结果
+3. 应该如何修复
+4. 修复后如何验证
+但先不要修改任何文件"
+\`\`\`
+
+#### 2.2 第二步：小步改动，边改边验证
+
+每一步都要确认：
+
+第 1 轮：
+"按方案修改第 71 行，修改后告诉我改了什么"
+
+第 2 轮：
+"生成测试用例，验证修复是否正确"
+
+第 3 轮：
+"运行测试，确认没有引入新问题"
+
+#### 2.3 第三步：总结沉淀，形成模板
+
+\`\`\`
+让 AI 帮你沉淀经验：
+
+"这次修复很成功，请帮我：
+1. 总结 bug 修复的步骤
+2. 生成一个通用模板，下次遇到类似问题可以直接套用
+3. 列出这次用到的有效提示词"
+\`\`\`
+
+---
+
+## 小结
+
+本章我们学习了：
+
+1. **上下文四要素**：目标、约束、输入、输出
+2. **迭代三步法**：先方案 → 再实现 → 后沉淀
+3. **质量杠杆**：验收标准、回滚方案、多方案对比
+4. **提示词模板**：5 个通用模板覆盖常见场景
+`,
+
+            "04": `# 04 选修：CLI 进阶与效率提升
+
+> 学习目标：掌握命令行模式下的高效工作流，包括批量操作、脚本化、管道处理等高级技巧。
+
+---
+
+## 背景知识
+
+### 为什么需要学习 CLI？
+
+VS Code 插件适合日常开发，但 CLI 模式有以下优势：
+
+| 场景 | VS Code 插件 | CLI |
+|------|--------------|-----|
+| 日常开发 | ✅ 推荐 | ⚠️ 可用 |
+| 批量操作 | ⚠️ 较慢 | ✅ 高效 |
+| 脚本集成 | ❌ 困难 | ✅ 轻松 |
+| CI/CD | ❌ 不支持 | ✅ 原生支持 |
+| SSH 远程 | ❌ 不方便 | ✅ 完美 |
+
+---
+
+## 操作步骤
+
+### 第一步：CLI 基础命令（10 分钟）
+
+#### 1.1 启动 REPL
+
+\`\`\`bash
+# 启动交互式对话
+claude
+
+# 带初始问题启动
+claude "帮我分析这个项目"
+
+# 查看帮助
+claude --help
+\`\`\`
+
+#### 1.2 基本对话
+
+\`\`\`
+# 在 REPL 中直接输入问题
+> 请列出当前目录的 Python 文件
+
+> 读取 main.py 并解释它的功能
+\`\`\`
+
+---
+
+### 第二步：批量操作技巧（15 分钟）
+
+#### 2.1 处理管道输入
+
+\`\`\`bash
+# 将文件内容传递给 Claude
+cat large-file.txt | claude -p "请总结这份文件的内容"
+
+# 将 git diff 传递给 Claude
+git diff HEAD~1 | claude -p "请帮我 review 这次的代码改动"
+\`\`\`
+
+#### 2.2 批量处理文件
+
+\`\`\`bash
+# 分析多个文件
+claude -c "
+请分析以下文件中的问题：
+1. src/auth.py
+2. src/database.py
+3. src/api.py
+重点关注安全问题。"
+\`\`\`
+
+---
+
+## 小结
+
+本章我们学习了 CLI 高级用法：
+1. 基本命令和 REPL 模式
+2. 管道处理和批量操作
+3. 脚本集成技巧
+`,
+
+            "05": `# 05 选修：团队协作 SOP
+
+> 学习目标：掌握团队环境下的 Claude Code 配置规范、代码审查流程和安全最佳实践。
+
+---
+
+## 背景知识
+
+### 团队协作的挑战
+
+| 问题 | 解决方案 |
+|------|----------|
+| 配置不统一 | 统一 .claude 配置文件 |
+| 代码风格不一致 | 添加 .clauderc 规范 |
+| 敏感信息泄露 | .claudeignore + 团队培训 |
+| 审查标准不一 | PR 模板 + 检查清单 |
+
+---
+
+## 操作步骤
+
+### 第一步：统一配置（10 分钟）
+
+#### 1.1 项目级配置文件
+
+创建项目根目录的 \`.claude\` 文件夹：
+
+\`\`\`
+.claude/
+├── config.json       # 项目配置
+├── .claudeignore      # 忽略文件
+├── CLAUDE.md          # 项目记忆
+└── prompts/          # 团队提示词库
+    ├── code-review.md
+    └── bugfix.md
+\`\`\`
+
+---
+
+## 小结
+
+团队协作关键点：
+1. 统一配置管理
+2. 安全规范制定
+3. Code Review 流程
+`,
+
+            "06": `# 06 选修：非编程高频场景
+
+> 学习目标：让 Claude Code 帮你完成更多"工程工作"：整理信息、写文档、处理 Excel、做周报复盘。
+
+---
+
+## 背景知识
+
+### 非编程场景的价值
+
+\`\`\`
+开发者的日常工作分布：
+┌────────────────────────────────────────────────┐
+│                                                │
+│   ████████████████ 编写代码 (40%)              │
+│   ██████ 文档与沟通 (25%)                      │
+│   ████ 数据处理 (15%)                          │
+│   ███ 会议与汇报 (12%)                         │
+│   ██ 其他 (8%)                                 │
+│                                                │
+└────────────────────────────────────────────────┘
+\`\`\`
+
+---
+
+## 操作步骤
+
+### 第一步：文档类场景（20 分钟）
+
+#### 1.1 会议纪要 → 待办清单
+
+\`\`\`
+请整理以下会议记录，输出：
+1. 会议摘要（3-5 句话）
+2. 参会人员与角色
+3. 讨论的主要议题
+4. **待办清单**（格式：- [ ] 任务 | 负责人 | 截止日期）
+5. 需要跟进的问题
+
+会议记录：
+<粘贴会议记录>
+\`\`\`
+
+---
+
+## 小结
+
+非编程场景核心能力：
+1. 会议纪要整理
+2. 数据处理与分析
+3. 周报与复盘生成
+`,
+
+            "07": `# 07 选修：自动化与可复用资产
+
+> 学习目标：沉淀提示词模板库、脚本化工作流、创建自定义 Skills。
+
+---
+
+## 背景知识
+
+### 可复用资产的价值
+
+\`\`\`
+把"一次性沟通"变成"可复用资产"
+
+原始状态                        优化后
+────────────────────────────────────────────
+会议录音一堆，没人整理          → 自动纪要 + 待办清单
+数据表格杂乱，分析困难          → 自动清洗 + 可视化
+周报流水账，没有重点            → 结构化 + 风险点
+复盘凭记忆，经验没沉淀          → 模板化 + 知识库
+\`\`\`
+
+---
+
+## 小结
+
+自动化资产类型：
+1. 提示词模板库
+2. 自定义 Skills
+3. 自动化脚本
+`,
+
+            "08": `# 08 附录：速查与排障
+
+> Claude Code 快速参考手册，包含常用命令、提示词模板和常见问题解决方案。
+
+---
+
+## 自检清单
+
+### 环境检查
+
+| 检查项 | 命令/方法 | 预期结果 |
+|--------|-----------|----------|
+| VS Code 已安装 | 查看应用列表 | 有蓝色图标 |
+| Claude Code 插件已安装 | VS Code 扩展列表 | 已安装 |
+| 能打开面板 | 点击侧边栏图标 | 面板显示 |
+| 能读取文件 | 问"当前目录有什么" | 能列出文件 |
+
+---
+
+## 常用命令速查
+
+| 操作 | 提示词 |
+|------|--------|
+| 读代码 | "读取 [文件名]，解释它的功能" |
+| 改代码 | "修改 [文件名] 的 [部分]，目标是 [描述]" |
+| 找 bug | "分析这段错误，告诉我原因和修复方法" |
+| 写测试 | "为 [函数名] 写测试用例" |
+| 生成文档 | "根据代码生成 API 文档" |
+
+---
+
+## 常见问题
+
+### Q1：Claude Code 没反应？
+
+**A**：检查以下几点：
+1. 网络连接是否正常
+2. API Key 是否正确
+3. 模型配置是否正确
+4. 尝试重新登录
+
+### Q2：代码修改后想撤销？
+
+**A**：三种方式：
+1. \`Ctrl+Z\` 撤销
+2. \`git checkout -- file.py\` 回滚
+3. 关闭文件不保存
+
+### Q3：上下文太长怎么办？
+
+**A**：
+1. 点击"新对话"
+2. 使用 \`/clear\` 清空历史
+3. 分段处理任务
+`
+        };
+
+        // Course structure
+        const courseData = {
+            categories: [
+                {
+                    id: 'required',
+                    name: '📚 必修课程',
+                    icon: '📚',
+                    chapters: [
+                        { id: '00', index: '01', title: '90 分钟上手' },
+                        { id: '01', index: '02', title: '在项目里工作' },
+                        { id: '02', index: '03', title: '开发闭环' },
+                        { id: '03', index: '04', title: '高质量提问' },
+                    ]
+                },
+                {
+                    id: 'optional',
+                    name: '🎯 选修课程',
+                    icon: '🎯',
+                    chapters: [
+                        { id: '04', index: '05', title: 'CLI 进阶与效率' },
+                        { id: '05', index: '06', title: '团队协作 SOP' },
+                        { id: '06', index: '07', title: '非编程高频场景' },
+                        { id: '07', index: '08', title: '自动化与资产' },
+                    ]
+                },
+                {
+                    id: 'appendix',
+                    name: '📖 附录资料',
+                    icon: '📖',
+                    chapters: [
+                        { id: '08', index: '09', title: '速查与排障' },
+                    ]
+                }
+            ]
+        };
+
+        // All chapters flat list for navigation
+        const allChapters = courseData.categories.flatMap(c => c.chapters);
+
+        function tutorialApp() {
+            return {
+                // State
+                darkMode: false,
+                sidebarOpen: true,
+                mobileMenuOpen: false,
+                currentChapter: null,
+                filter: 'all',
+                searchQuery: '',
+                showSearch: false,
+                searchResults: [],
+                completedChapters: [],
+                expandedCategories: ['required', 'optional', 'appendix'],
+                showBackToTop: false,
+
+                // Computed
+                get progressText() {
+                    if (this.completedChapters.length === 0) return '0%';
+                    return Math.round((this.completedChapters.length / allChapters.length) * 100) + '%';
+                },
+
+                get totalChapters() {
+                    return allChapters.length;
+                },
+
+                get totalEstimatedTime() {
+                    return '4-6 小时';
+                },
+
+                get currentChapterTitle() {
+                    const ch = allChapters.find(c => c.id === this.currentChapter);
+                    return ch ? ch.title : '';
+                },
+
+                get prevChapter() {
+                    const idx = allChapters.findIndex(c => c.id === this.currentChapter);
+                    return idx > 0 ? allChapters[idx - 1].id : null;
+                },
+
+                get nextChapter() {
+                    const idx = allChapters.findIndex(c => c.id === this.currentChapter);
+                    return idx < allChapters.length - 1 ? allChapters[idx + 1].id : null;
+                },
+
+                // Methods
+                initApp() {
+                    // Load from localStorage
+                    const savedDarkMode = localStorage.getItem('claude_tutorial_darkMode');
+                    if (savedDarkMode !== null) {
+                        this.darkMode = savedDarkMode === 'true';
+                    }
+
+                    const savedCompleted = localStorage.getItem('claude_tutorial_completed');
+                    if (savedCompleted) {
+                        this.completedChapters = JSON.parse(savedCompleted);
+                    }
+
+                    const savedExpanded = localStorage.getItem('claude_tutorial_expanded');
+                    if (savedExpanded) {
+                        this.expandedCategories = JSON.parse(savedExpanded);
+                    }
+
+                    // Apply dark mode
+                    if (this.darkMode) {
+                        document.documentElement.classList.add('dark');
+                        document.getElementById('hljs-theme').href =
+                            'https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/github-dark.min.css';
+                    }
+
+                    // Check for saved current chapter
+                    const savedChapter = localStorage.getItem('claude_tutorial_current');
+                    if (savedChapter) {
+                        this.goToChapter(savedChapter, false);
+                    }
+
+                    // Scroll listener
+                    window.addEventListener('scroll', () => {
+                        this.showBackToTop = window.scrollY > 300;
+                    });
+
+                    // Search watcher
+                    this.$watch('searchQuery', (value) => {
+                        this.performSearch(value);
+                    });
+
+                    // Keyboard shortcuts
+                    document.addEventListener('keydown', (e) => {
+                        if ((e.ctrlKey || e.metaKey) && e.key === 'k') {
+                            e.preventDefault();
+                            this.showSearch = true;
+                            setTimeout(() => document.querySelector('input[placeholder*="搜索"]')?.focus(), 50);
+                        }
+                        if (e.key === 'Escape') {
+                            this.showSearch = false;
+                            this.mobileMenuOpen = false;
+                        }
+                    });
+                },
+
+                toggleDarkMode() {
+                    this.darkMode = !this.darkMode;
+                    localStorage.setItem('claude_tutorial_darkMode', this.darkMode);
+                    if (this.darkMode) {
+                        document.documentElement.classList.add('dark');
+                    } else {
+                        document.documentElement.classList.remove('dark');
+                    }
+                },
+
+                toggleCategory(catId) {
+                    if (this.expandedCategories.includes(catId)) {
+                        this.expandedCategories = this.expandedCategories.filter(id => id !== catId);
+                    } else {
+                        this.expandedCategories.push(catId);
+                    }
+                    localStorage.setItem('claude_tutorial_expanded', JSON.stringify(this.expandedCategories));
+                },
+
+                getCategoryName(chapterId) {
+                    for (const cat of courseData.categories) {
+                        if (cat.chapters.some(c => c.id === chapterId)) {
+                            return cat.name;
+                        }
+                    }
+                    return '';
+                },
+
+                goToChapter(chapterId, save = true) {
+                    this.currentChapter = chapterId;
+                    this.sidebarOpen = false;
+                    this.mobileMenuOpen = false;
+
+                    if (save) {
+                        localStorage.setItem('claude_tutorial_current', chapterId);
+                    }
+
+                    // Render content
+                    const content = chapterContent[chapterId] || '';
+                    const container = document.getElementById('chapter-content');
+                    container.innerHTML = marked.parse(content);
+
+                    // Highlight code blocks
+                    container.querySelectorAll('pre code').forEach((block) => {
+                        hljs.highlightElement(block);
+                    });
+
+                    // Scroll to top
+                    window.scrollTo({ top: 0, behavior: 'smooth' });
+
+                    // Update URL hash without jumping
+                    history.replaceState(null, '', '#' + chapterId);
+                },
+
+                goHome() {
+                    this.currentChapter = null;
+                    this.sidebarOpen = true;
+                    localStorage.removeItem('claude_tutorial_current');
+                    history.replaceState(null, '', ' ');
+                },
+
+                startLearning() {
+                    this.goToChapter('00');
+                },
+
+                toggleComplete(chapterId) {
+                    if (this.completedChapters.includes(chapterId)) {
+                        this.completedChapters = this.completedChapters.filter(id => id !== chapterId);
+                    } else {
+                        this.completedChapters.push(chapterId);
+                    }
+                    localStorage.setItem('claude_tutorial_completed', JSON.stringify(this.completedChapters));
+                },
+
+                performSearch(query) {
+                    if (!query.trim()) {
+                        this.searchResults = [];
+                        return;
+                    }
+
+                    const q = query.toLowerCase();
+                    this.searchResults = [];
+
+                    for (const cat of courseData.categories) {
+                        for (const ch of cat.chapters) {
+                            const content = chapterContent[ch.id] || '';
+                            if (ch.title.toLowerCase().includes(q) || content.toLowerCase().includes(q)) {
+                                const idx = content.toLowerCase().indexOf(q);
+                                let preview = '';
+                                if (idx > -1) {
+                                    preview = content.substring(Math.max(0, idx - 30), idx + 70) + '...';
+                                }
+                                this.searchResults.push({
+                                    chapterId: ch.id,
+                                    title: ch.title,
+                                    preview: preview.replace(/\n/g, ' ')
+                                });
+                            }
+                        }
+                    }
+                },
+
+                scrollToTop() {
+                    window.scrollTo({ top: 0, behavior: 'smooth' });
+                }
+            };
+        }
+
+        // Configure marked
+        marked.setOptions({
+            breaks: true,
+            gfm: true,
+            highlight: function(code, lang) {
+                if (lang && hljs.getLanguage(lang)) {
+                    try {
+                        return hljs.highlight(code, { language: lang }).value;
+                    } catch (e) {}
+                }
+                return code;
+            }
+        });
+    </script>
+</body>
+</html>

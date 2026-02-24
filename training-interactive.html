@@ -1,0 +1,2346 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Claude Code 交互式教程</title>
+
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+
+    <!-- Marked.js for Markdown rendering -->
+    <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+
+    <!-- Highlight.js for code highlighting -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/github-dark.min.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js"></script>
+
+    <!-- Alpine.js for interactions -->
+    <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
+
+    <style>
+        /* Custom scrollbar */
+        ::-webkit-scrollbar {
+            width: 6px;
+            height: 6px;
+        }
+        ::-webkit-scrollbar-track {
+            background: transparent;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #cbd5e1;
+            border-radius: 3px;
+        }
+        .dark ::-webkit-scrollbar-thumb {
+            background: #475569;
+        }
+
+        /* Markdown content styling */
+        .markdown-content h1 {
+            font-size: 2rem;
+            font-weight: 700;
+            margin-top: 1.5rem;
+            margin-bottom: 1rem;
+            color: #1e293b;
+            border-bottom: 2px solid #e2e8f0;
+            padding-bottom: 0.5rem;
+        }
+        .dark .markdown-content h1 {
+            color: #f1f5f9;
+            border-color: #334155;
+        }
+        .markdown-content h2 {
+            font-size: 1.5rem;
+            font-weight: 600;
+            margin-top: 1.25rem;
+            margin-bottom: 0.75rem;
+            color: #334155;
+        }
+        .dark .markdown-content h2 {
+            color: #e2e8f0;
+        }
+        .markdown-content h3 {
+            font-size: 1.25rem;
+            font-weight: 600;
+            margin-top: 1rem;
+            margin-bottom: 0.5rem;
+            color: #475569;
+        }
+        .dark .markdown-content h3 {
+            color: #cbd5e1;
+        }
+        .markdown-content p {
+            margin-bottom: 1rem;
+            line-height: 1.75;
+            color: #374151;
+        }
+        .dark .markdown-content p {
+            color: #d1d5db;
+        }
+        .markdown-content ul, .markdown-content ol {
+            margin-left: 1.5rem;
+            margin-bottom: 1rem;
+        }
+        .markdown-content li {
+            margin-bottom: 0.5rem;
+            color: #374151;
+        }
+        .dark .markdown-content li {
+            color: #d1d5db;
+        }
+        .markdown-content code {
+            background: #f1f5f9;
+            padding: 0.125rem 0.375rem;
+            border-radius: 0.25rem;
+            font-family: 'Fira Code', 'Consolas', monospace;
+            font-size: 0.875rem;
+            color: #dc2626;
+        }
+        .dark .markdown-content code {
+            background: #1e293b;
+            color: #f87171;
+        }
+        .markdown-content pre {
+            background: #1e293b;
+            padding: 1rem;
+            border-radius: 0.5rem;
+            overflow-x: auto;
+            margin-bottom: 1rem;
+        }
+        .markdown-content pre code {
+            background: transparent;
+            color: inherit;
+            padding: 0;
+        }
+        .markdown-content blockquote {
+            border-left: 4px solid #3b82f6;
+            padding-left: 1rem;
+            margin-bottom: 1rem;
+            color: #64748b;
+            font-style: italic;
+        }
+        .dark .markdown-content blockquote {
+            color: #94a3b8;
+        }
+        .markdown-content table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-bottom: 1rem;
+        }
+        .markdown-content th, .markdown-content td {
+            border: 1px solid #e2e8f0;
+            padding: 0.5rem;
+            text-align: left;
+        }
+        .dark .markdown-content th, .dark .markdown-content td {
+            border-color: #334155;
+        }
+        .markdown-content th {
+            background: #f8fafc;
+            font-weight: 600;
+        }
+        .dark .markdown-content th {
+            background: #1e293b;
+        }
+        .markdown-content hr {
+            border: none;
+            border-top: 2px solid #e2e8f0;
+            margin: 1.5rem 0;
+        }
+        .dark .markdown-content hr {
+            border-color: #334155;
+        }
+        .markdown-content a {
+            color: #3b82f6;
+            text-decoration: underline;
+        }
+        .markdown-content a:hover {
+            color: #2563eb;
+        }
+
+        /* Sidebar transition */
+        .sidebar {
+            transition: transform 0.3s ease;
+        }
+        .sidebar.closed {
+            transform: translateX(-100%);
+        }
+
+        /* Progress bar animation */
+        .progress-fill {
+            transition: width 0.5s ease;
+        }
+
+        /* Checkbox animation */
+        .checkbox-anim {
+            transition: all 0.2s ease;
+        }
+
+        /* Search highlight */
+        .search-highlight {
+            background: #fef08a;
+            padding: 0 0.125rem;
+            border-radius: 0.125rem;
+        }
+        .dark .search-highlight {
+            background: #854d0e;
+        }
+    </style>
+</head>
+<body x-data="app()" :class="{ 'dark': darkMode }" class="bg-slate-50 text-slate-900 dark:bg-slate-900 dark:text-slate-100 min-h-screen">
+
+    <!-- Header -->
+    <header class="fixed top-0 left-0 right-0 z-50 bg-white dark:bg-slate-800 border-b border-slate-200 dark:border-slate-700 h-14 flex items-center justify-between px-4 shadow-sm">
+        <div class="flex items-center gap-4">
+            <!-- Mobile menu button -->
+            <button @click="toggleSidebar()" class="lg:hidden p-2 rounded-lg hover:bg-slate-100 dark:hover:bg-slate-700">
+                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"/>
+                </svg>
+            </button>
+
+            <!-- Logo -->
+            <div class="flex items-center gap-2">
+                <div class="w-8 h-8 bg-gradient-to-br from-blue-500 to-purple-600 rounded-lg flex items-center justify-center">
+                    <span class="text-white font-bold text-sm">CC</span>
+                </div>
+                <h1 class="font-bold text-lg hidden sm:block">Claude Code 教程</h1>
+            </div>
+        </div>
+
+        <!-- Progress bar -->
+        <div class="flex-1 max-w-md mx-4">
+            <div class="flex items-center gap-2 text-xs text-slate-500 dark:text-slate-400 mb-1">
+                <span>学习进度</span>
+                <span x-text="progressPercent + '%'"></span>
+            </div>
+            <div class="h-2 bg-slate-200 dark:bg-slate-700 rounded-full overflow-hidden">
+                <div class="h-full bg-gradient-to-r from-blue-500 to-purple-500 progress-fill" :style="'width: ' + progressPercent + '%'"></div>
+            </div>
+        </div>
+
+        <!-- Header actions -->
+        <div class="flex items-center gap-2">
+            <!-- Search -->
+            <div class="relative hidden sm:block">
+                <input type="text" x-model="searchQuery" @input="performSearch()" placeholder="搜索..."
+                    class="w-40 pl-8 pr-3 py-1.5 text-sm bg-slate-100 dark:bg-slate-700 border-none rounded-lg focus:ring-2 focus:ring-blue-500 focus:w-60 transition-all">
+                <svg class="w-4 h-4 absolute left-2.5 top-1/2 -translate-y-1/2 text-slate-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/>
+                </svg>
+            </div>
+
+            <!-- Dark mode toggle -->
+            <button @click="toggleDarkMode()" class="p-2 rounded-lg hover:bg-slate-100 dark:hover:bg-slate-700" title="切换主题">
+                <svg x-show="!darkMode" class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z"/>
+                </svg>
+                <svg x-show="darkMode" class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364 6.364l-.707-.707M6.343 6.343l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707M16 12a4 4 0 11-8 0 4 4 0 018 0z"/>
+                </svg>
+            </button>
+        </div>
+    </header>
+
+    <!-- Sidebar -->
+    <aside class="fixed top-14 left-0 bottom-0 w-72 bg-white dark:bg-slate-800 border-r border-slate-200 dark:border-slate-700 overflow-y-auto sidebar z-40"
+           :class="{ 'closed': !sidebarOpen, 'translate-x-0': sidebarOpen, '-translate-x-full lg:translate-x-0': !sidebarOpen }">
+        <div class="p-4">
+            <!-- Filter tabs -->
+            <div class="flex gap-1 mb-4 p-1 bg-slate-100 dark:bg-slate-700 rounded-lg">
+                <button @click="filter = 'all'" :class="filter === 'all' ? 'bg-white dark:bg-slate-600 shadow' : ''"
+                    class="flex-1 py-1.5 px-3 text-sm font-medium rounded-md transition-all">
+                    全部
+                </button>
+                <button @click="filter = 'required'" :class="filter === 'required' ? 'bg-white dark:bg-slate-600 shadow' : ''"
+                    class="flex-1 py-1.5 px-3 text-sm font-medium rounded-md transition-all">
+                    必修
+                </button>
+                <button @click="filter = 'optional'" :class="filter === 'optional' ? 'bg-white dark:bg-slate-600 shadow' : ''"
+                    class="flex-1 py-1.5 px-3 text-sm font-medium rounded-md transition-all">
+                    选修
+                </button>
+            </div>
+
+            <!-- Chapter list -->
+            <div class="space-y-1">
+                <template x-for="category in filteredCategories" :key="category.id">
+                    <div class="mb-4">
+                        <!-- Category header -->
+                        <button @click="toggleCategory(category.id)"
+                            class="w-full flex items-center justify-between py-2 px-3 text-sm font-semibold text-slate-700 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-700 rounded-lg">
+                            <span x-text="category.name"></span>
+                            <svg class="w-4 h-4 transition-transform" :class="{ 'rotate-90': expandedCategories.includes(category.id) }" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/>
+                            </svg>
+                        </button>
+
+                        <!-- Chapter items -->
+                        <div x-show="expandedCategories.includes(category.id)" class="mt-1 space-y-1">
+                            <template x-for="chapter in category.chapters" :key="chapter.id">
+                                <button @click="selectChapter(chapter.id)"
+                                    :class="{ 'bg-blue-50 dark:bg-blue-900/30 text-blue-600 dark:text-blue-400': currentChapter === chapter.id, 'text-slate-600 dark:text-slate-400': currentChapter !== chapter.id }"
+                                    class="w-full flex items-center gap-2 py-2 px-3 text-sm rounded-lg hover:bg-slate-100 dark:hover:bg-slate-700 transition-all">
+                                    <!-- Checkbox -->
+                                    <div @click.stop="toggleComplete(chapter.id)"
+                                        class="w-5 h-5 flex-shrink-0 rounded border-2 checkbox-anim flex items-center justify-center"
+                                        :class="completedChapters.includes(chapter.id) ? 'bg-green-500 border-green-500' : 'border-slate-300 dark:border-slate-600'">
+                                        <svg x-show="completedChapters.includes(chapter.id)" class="w-3 h-3 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M5 13l4 4L19 7"/>
+                                        </svg>
+                                    </div>
+                                    <span class="truncate flex-1 text-left" x-text="chapter.title"></span>
+                                    <span x-show="chapter.type === 'required'" class="px-1.5 py-0.5 text-xs bg-red-100 dark:bg-red-900/50 text-red-600 dark:text-red-400 rounded">必修</span>
+                                    <span x-show="chapter.type === 'optional'" class="px-1.5 py-0.5 text-xs bg-blue-100 dark:bg-blue-900/50 text-blue-600 dark:text-blue-400 rounded">选修</span>
+                                </button>
+                            </template>
+                        </div>
+                    </div>
+                </template>
+            </div>
+        </div>
+    </aside>
+
+    <!-- Overlay for mobile -->
+    <div x-show="sidebarOpen" @click="toggleSidebar()" x-transition.opacity class="fixed inset-0 bg-black/50 z-30 lg:hidden"></div>
+
+    <!-- Main content -->
+    <main class="lg:ml-72 pt-14 min-h-screen">
+        <!-- Search results overlay -->
+        <div x-show="searchQuery && searchResults.length > 0" class="max-w-4xl mx-auto p-4">
+            <div class="bg-white dark:bg-slate-800 rounded-xl shadow-lg border border-slate-200 dark:border-slate-700 overflow-hidden">
+                <div class="p-3 border-b border-slate-200 dark:border-slate-700">
+                    <span class="text-sm font-medium text-slate-600 dark:text-slate-400">
+                        搜索结果 (<span x-text="searchResults.length"></span>)
+                    </span>
+                    <button @click="searchQuery = ''; searchResults = []" class="ml-2 text-sm text-slate-400 hover:text-slate-600">关闭</button>
+                </div>
+                <div class="max-h-64 overflow-y-auto">
+                    <template x-for="result in searchResults" :key="result.chapterId">
+                        <button @click="selectChapter(result.chapterId); searchQuery = ''; searchResults = []"
+                            class="w-full px-4 py-3 text-left hover:bg-slate-50 dark:hover:bg-slate-700 border-b border-slate-100 dark:border-slate-700 last:border-0">
+                            <div class="font-medium text-slate-800 dark:text-slate-200" x-text="result.title"></div>
+                            <div class="text-sm text-slate-500 truncate" x-text="result.preview"></div>
+                        </button>
+                    </template>
+                </div>
+            </div>
+        </div>
+
+        <!-- Chapter content -->
+        <div x-show="currentChapterData" class="max-w-4xl mx-auto p-4 sm:p-6 lg:p-8">
+            <!-- Chapter header -->
+            <div class="mb-8">
+                <div class="flex items-center gap-2 mb-4">
+                    <span x-show="currentChapterData?.type === 'required'" class="px-2 py-1 text-xs font-medium bg-red-100 dark:bg-red-900/50 text-red-600 dark:text-red-400 rounded-full">必修</span>
+                    <span x-show="currentChapterData?.type === 'optional'" class="px-2 py-1 text-xs font-medium bg-blue-100 dark:bg-blue-900/50 text-blue-600 dark:text-blue-400 rounded-full">选修</span>
+                    <span x-show="currentChapterData?.type === 'appendix'" class="px-2 py-1 text-xs font-medium bg-purple-100 dark:bg-purple-900/50 text-purple-600 dark:text-purple-400 rounded-full">附录</span>
+                </div>
+
+                <h1 class="text-2xl sm:text-3xl font-bold mb-4" x-text="currentChapterData?.title"></h1>
+
+                <p x-show="currentChapterData?.description" class="text-lg text-slate-600 dark:text-slate-400 mb-4" x-text="currentChapterData?.description"></p>
+
+                <div x-show="currentChapterData?.time" class="flex items-center gap-4 text-sm text-slate-500 dark:text-slate-400">
+                    <span class="flex items-center gap-1">
+                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"/>
+                        </svg>
+                        <span x-text="currentChapterData?.time"></span>
+                    </span>
+                </div>
+            </div>
+
+            <!-- Markdown content -->
+            <div class="markdown-content prose prose-slate dark:prose-invert max-w-none"
+                 x-html="renderedContent"></div>
+
+            <!-- Chapter navigation -->
+            <div class="mt-12 pt-8 border-t border-slate-200 dark:border-slate-700">
+                <div class="flex justify-between">
+                    <button x-show="previousChapter" @click="selectChapter(previousChapter)"
+                        class="flex items-center gap-2 px-4 py-2 text-sm font-medium text-slate-600 dark:text-slate-400 hover:text-blue-600 dark:hover:text-blue-400 transition-colors">
+                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"/>
+                        </svg>
+                        上一章
+                    </button>
+
+                    <button x-show="nextChapter" @click="selectChapter(nextChapter)"
+                        class="flex items-center gap-2 px-4 py-2 text-sm font-medium text-slate-600 dark:text-slate-400 hover:text-blue-600 dark:hover:text-blue-400 transition-colors">
+                        下一章
+                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/>
+                        </svg>
+                    </button>
+                </div>
+            </div>
+
+            <!-- Complete chapter button -->
+            <div class="mt-8 flex justify-center">
+                <button @click="markCurrentComplete()"
+                    :class="completedChapters.includes(currentChapter) ? 'bg-green-100 dark:bg-green-900/30 text-green-600 dark:text-green-400' : 'bg-blue-100 dark:bg-blue-900/30 text-blue-600 dark:text-blue-400'"
+                    class="flex items-center gap-2 px-6 py-3 rounded-lg font-medium transition-colors">
+                    <svg x-show="!completedChapters.includes(currentChapter)" class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/>
+                    </svg>
+                    <svg x-show="completedChapters.includes(currentChapter)" class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/>
+                    </svg>
+                    <span x-text="completedChapters.includes(currentChapter) ? '已完成本章' : '标记为已完成'"></span>
+                </button>
+            </div>
+        </div>
+    </main>
+
+    <!-- Back to top button -->
+    <button x-show="showBackToTop" @click="scrollToTop()"
+        class="fixed bottom-6 right-6 w-12 h-12 bg-blue-600 hover:bg-blue-700 text-white rounded-full shadow-lg flex items-center justify-center transition-all">
+        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 10l7-7m0 0l7 7m-7-7v18"/>
+        </svg>
+    </button>
+
+    <script>
+        // Course content data
+        const courseData = {
+            categories: [
+                {
+                    id: 'required',
+                    name: '📚 必修课程',
+                    chapters: [
+                        { id: '00', title: '90分钟上手', type: 'required', time: '90-120分钟', description: '在90-120分钟内完成"能用起来"的首次成功，并掌握最常用的6类指令模板与快速排障方法。' },
+                        { id: '01', title: '在项目里工作', type: 'required', time: '30-40分钟', description: '让Claude Code"看见并理解"你的项目；学会在安全边界内指定文件/目录。' },
+                        { id: '02', title: '开发闭环', type: 'required', time: '45-60分钟', description: '掌握用Claude Code辅助开发的最小闭环：读代码→设计改动→实现→测试→验收交付。' },
+                        { id: '03', title: '高质量提问与迭代', type: 'required', time: '30-40分钟', description: '学会给上下文、给约束、要验证；把一次性对话变成可复用的工作流。' }
+                    ]
+                },
+                {
+                    id: 'optional',
+                    name: '🎯 选修课程',
+                    chapters: [
+                        { id: '04', title: 'CLI进阶与效率提升', type: 'optional', time: '60-90分钟', description: '从插件过渡到CLI；用命令行把"单次成功"升级为"批量自动化"。' },
+                        { id: '05', title: '团队协作SOP', type: 'optional', time: '30-60分钟', description: '把Claude Code从"个人效率工具"升级为"团队一致的交付流程"。' },
+                        { id: '06', title: '非编程高频场景', type: 'optional', time: '45-60分钟', description: '文档、数据、汇报、复盘——让Claude Code帮你完成更多"工程工作"。' },
+                        { id: '07', title: '自动化与可复用资产', type: 'optional', time: '60-90分钟', description: '把"会用Claude Code"升级为"能复用、能规模化"：沉淀提示词模板库、可复用命令片段。' }
+                    ]
+                },
+                {
+                    id: 'appendix',
+                    name: '📖 附录资料',
+                    chapters: [
+                        { id: '08', title: '速查与排障', type: 'appendix', time: '随用随查', description: '用最短时间定位常见问题，并快速恢复可用状态。' }
+                    ]
+                }
+            ]
+        };
+
+        // Chapter content (embedded markdown)
+        const chapterContent = {
+            '00': `# 00 必修：90分钟上手
+
+> 学习目标：在 90-120 分钟内完成"能用起来"的首次成功，并掌握最常用的 6 类指令模板与快速排障方法。
+
+> 适用对象：零 Claude Code 经验的工程开发者/小白。
+
+> ⏱️ **时间预估**：
+> - 有编程经验：约 90 分钟
+> - 完全新手：约 2-3 小时（第一次安装配置需要更多时间）
+
+> 默认路径：使用 VS Code 插件；CLI 在进阶章节再讲。
+
+---
+
+## 15分钟快通道（已配好环境的同学）
+
+> 适用：你已经装好 VS Code + Python，并且已经拿到可用的模型 Key（GLM/团队网关等），想先拿到一个"第一次成功"。
+
+### 你将完成什么
+
+- 在 \`training-pack/sample-repo/\` 修复 1 个 bug，并用命令验证通过（得到一个可复用的最小闭环）。
+
+### 步骤（按顺序做）
+
+1. **打开练习项目**：\`claude-code-training/training-pack/sample-repo/\`
+   - VS Code：\`File → Open Folder\` → 选择该目录
+2. **安装 Claude Code 插件**（已安装可跳过）：跳到「第一步：安装 VS Code 插件」
+3. **配置模型与 Key**：跳到「第二步：获取 GLM API Key」和「第二步（续）：配置 GLM 模型」
+4. **快速自检（2 分钟）**：在 Claude Code 面板输入 \`当前项目目录下有哪些文件？\`，能列出文件即 OK
+5. **首次成功任务（8 分钟）**：修复 \`src/calc.py\` 的 \`absolute_value()\` bug
+   - 复制提示词（推荐）：
+     \`\`\`
+     请先读取 src/calc.py，分析 absolute_value 函数的 bug 原因与修复方案，但先不要修改文件。
+     我确认后你再执行修改，并给出验证命令。
+     \`\`\`
+   - 验收命令（任意一种即可）：
+     \`\`\`bash
+     python -c "from src.calc import absolute_value; print(absolute_value(-5))"
+     # 期望输出：5
+     \`\`\`
+6. **如果卡住**：直接跳到本章的「排障决策树」或打开 \`08_附录_速查与排障.md\`
+
+> 完成快通道后，建议继续完成本章剩余内容：把"能用"升级为"用得稳"（包含 5 分钟自检、排障与提示词模板）。
+
+---
+
+## 背景知识
+
+### 什么是 Claude Code？
+
+Claude Code 是 Anthropic 推出的**AI 结对编程工具**。与传统的聊天机器人不同，它能：
+
+- **读取你项目里的代码**：不需要手动复制粘贴
+- **直接修改文件**：按照你的要求改代码、写测试
+- **运行命令**：执行测试、打包、部署等操作
+- **记住上下文**：在整个对话过程中理解项目结构
+
+### 为什么要学？
+
+| 传统方式 | 用 Claude Code |
+|----------|----------------|
+| 自己逐行读代码理解 | 让 AI 总结代码逻辑和数据流 |
+| 手动写重复代码 | 让 AI 生成脚手架和模板 |
+| 遇到报错到处搜解决方案 | 直接把错误信息抛给它 |
+| 写文档/注释很痛苦 | 让 AI 根据代码自动生成 |
+
+---
+
+## 第一步：安装 VS Code 插件（5分钟）
+
+> 在这一步，我们要在 VS Code 中安装 Claude Code 插件。
+
+### 1.1 安装插件
+
+1. 点击 VS Code 左侧的**扩展**图标（或按 \`Ctrl+Shift+X\`）
+2. 搜索 \`Claude Code\`
+3. 找到由 **Anthropic** 发布的插件，点击**安装**
+
+\`\`\`
+图标：紫色四边形图案
+发布者：Anthropic
+\`\`\`
+
+### 1.2 登录授权
+
+1. 安装完成后，侧边栏会出现 Claude Code 图标
+2. 点击图标，选择**Sign in**
+3. 浏览器会打开 Anthropic 登录页面
+4. 登录完成后，VS Code 会显示已连接状态
+
+---
+
+## 第二步：获取 GLM API Key（10分钟）
+
+> API Key 是连接 AI 服务的"钥匙"。本教程使用智谱 AI（GLM）作为示例。
+
+### 2.1 获取 API Key 详细步骤
+
+**方式一：智谱 AI（推荐新手使用）**
+
+\`\`\`
+┌─────────────────────────────────────────────────────────┐
+│  获取智谱 AI API Key 的 5 个步骤                          │
+├─────────────────────────────────────────────────────────┤
+│                                                         │
+│  ① 打开浏览器，访问：https://open.bigmodel.cn/          │
+│                                                         │
+│  ② 点击右上角"注册/登录"（支持手机号注册）              │
+│                                                         │
+│  ③ 登录后，点击右上角头像 → "API Key 管理"              │
+│                                                         │
+│  ④ 点击"创建 API Key"按钮                               │
+│                                                         │
+│  ⑤ 复制生成的 Key（格式：xxxxxxxx.xxxxxx）              │
+│      ⚠️ 立即保存好！关闭页面后无法再次查看完整内容        │
+│                                                         │
+└─────────────────────────────────────────────────────────┘
+\`\`\`
+
+---
+
+## 第二步（续）：配置 GLM 模型（5分钟）
+
+> 有了 API Key 后，现在把它配置到 Claude Code 中。
+
+### 2.2 添加自定义模型
+
+1. 在 VS Code 设置中找到 \`Claude Code: Model Configurations\`
+2. 点击「添加项目」
+3. 填写以下信息：
+
+\`\`\`json
+{
+  "provider": "openai-compatible",
+  "apiKey": "你的GLM_API_KEY",
+  "baseUrl": "https://open.bigmodel.cn/api/paas/v4/",
+  "model": "glm-4.7"
+}
+\`\`\`
+
+> ⚡ **直接用最强模型**：学习时效果最好，节省时间比节省费用更重要。
+
+### 2.3 验证配置
+
+在 Claude Code 面板中发送一条测试消息：
+
+\`\`\`
+你好，请回复"配置成功"
+\`\`\`
+
+如果收到回复，说明配置正常。
+
+---
+
+## 第五步：6个高频提示词模板（20分钟）
+
+> 这些模板覆盖了 80% 的日常使用场景，建议收藏或打印。
+
+### 模板 1：读代码 - 快速理解
+
+\`\`\`
+请帮我理解 [文件名/模块名]：
+1. 这个模块是做什么的？
+2. 主要的函数/类有哪些？
+3. 数据是如何流动的？
+\`\`\`
+
+**使用场景**：接手新项目、阅读他人代码、代码评审
+
+### 模板 2：改代码 - 按约束修改
+
+\`\`\`
+请修改 [文件名] 中的 [具体位置]：
+- 目标：[你想达成的效果]
+- 约束：[不要修改的内容/注意事项]
+- 请只展示改动部分，并说明改动原因
+\`\`\`
+
+**使用场景**：Bug 修复、功能调整、小步重构
+
+### 模板 3：测代码 - 补充测试
+
+\`\`\`
+请为 [文件名/函数名] 编写单元测试：
+- 覆盖正常情况和边界情况
+- 使用 pytest 框架
+- 每个测试要有清晰的描述
+\`\`\`
+
+**使用场景**：补充测试用例、验证修复效果
+
+### 模板 4：搜代码 - 全局定位
+
+\`\`\`
+请帮我在项目中找到 [函数名/变量名/错误信息]：
+1. 在哪些文件中被定义/调用？
+2. 调用链是什么？
+3. 数据从哪里来、到哪里去？
+\`\`\`
+
+**使用场景**：定位 Bug 来源、理解依赖关系
+
+### 模板 5：写文档 - 生成说明
+
+\`\`\`
+请根据 [文件名/项目] 的代码，生成：
+1. 模块功能说明
+2. 主要接口和使用示例
+3. 注意事项
+\`\`\`
+
+**使用场景**：写 README、API 文档、注释
+
+### 模板 6：总结 - 沉淀经验
+
+\`\`\`
+请把我们刚才完成的工作总结成一份 SOP：
+1. 问题描述是什么
+2. 采取的解决方案
+3. 关键步骤和命令
+4. 以后类似问题的处理流程
+\`\`\`
+
+**使用场景**：复盘、知识沉淀、团队分享
+
+---
+
+## 常见问题
+
+### Q1：VS Code 插件安装后找不到图标？
+
+**A**：尝试以下方法：
+1. 重启 VS Code
+2. 检查左侧活动栏是否有 Claude 图标
+3. 如果还没有，按 \`Ctrl+Shift+P\`，输入 "Claude Code: Focus"
+
+### Q2：登录时浏览器打不开？
+
+**A**：
+1. 检查网络是否正常
+2. 检查是否有防火墙/代理拦截
+3. 尝试手动复制 VS Code 显示的授权 URL 到浏览器
+
+### Q3：配置 GLM 后连接失败？
+
+**A**：
+1. 检查 API Key 是否正确复制（没有多余空格）
+2. 检查 baseUrl 是否完整（末尾有 \`/\`）
+3. 在 Claude Code 设置中确认选择了正确的模型配置
+
+---
+
+## 下一步
+
+完成本章后，你已经掌握了：
+- ✅ Claude Code 的基本使用
+- ✅ 6 个高频提示词模板
+- ✅ 常见问题排障能力
+
+**下一章（01）**，我们将学习：
+- 如何让 Claude Code 正确"看见"你的项目
+- 哪些信息不能给它（安全边界）
+- 精准指定文件的操作技巧`,
+            '01': `# 01 必修：在项目里工作（工作区与文件）
+
+> 学习目标：让 Claude Code "看见并理解"你的项目；学会在安全边界内指定文件/目录，并把改动落到真实文件中。
+
+---
+
+## 章节定位
+
+**前置知识**：已完成 00 章，能启动 Claude Code 并完成基本对话。
+
+**本章价值**：00 章让你"能用"，本章让你"用对"——学会如何在真实项目中与 Claude Code 协作。
+
+---
+
+## 背景知识
+
+### 为什么"工作区"很重要？
+
+Claude Code 的强大之处在于它能**理解整个项目上下文**，但前提是你要让它"看见"你的代码。
+
+\`\`\`
+错误方式 ❌                      正确方式 ✅
+────────────────────────────────────────────────
+手动复制代码片段                 用 VS Code 打开项目文件夹
+贴到对话框里问问题               Claude Code 自动读取所有文件
+没有上下文，只能瞎猜             理解项目结构，给出精准建议
+\`\`\`
+
+### 核心概念：工作区（Workspace）
+
+**工作区** = 你用 VS Code 打开的**项目根文件夹**
+
+\`\`\`
+示例项目结构：
+my-project/           ← 这是工作区根目录
+├── src/
+│   ├── main.py
+│   └── utils.py
+├── tests/
+└── config.json
+\`\`\`
+
+---
+
+## 第一步：正确打开工作区（5分钟）
+
+### 1.1 用 VS Code 打开项目文件夹
+
+\`\`\`bash
+# 在终端中执行
+cd your-project-path
+code .
+\`\`\`
+
+或者：
+1. 打开 VS Code
+2. \`Ctrl+Shift+P\` → 输入 "Open Folder"
+3. 选择你的项目文件夹
+
+### 1.2 确认工作区已加载
+
+在 Claude Code 面板中输入：
+
+\`\`\`
+当前项目目录下有哪些文件？
+\`\`\`
+
+如果它能列出你的项目文件，说明工作区配置正确。
+
+---
+
+## 第二步：指定文件的三种方式（10分钟）
+
+### 方式 1：直接指定文件名
+
+\`\`\`
+读取 src/main.py 文件
+\`\`\`
+
+### 方式 2：描述功能让它自己找
+
+\`\`\`
+找到包含 "calculate" 函数的文件
+\`\`\`
+
+### 方式 3：指定目录范围
+
+\`\`\`
+分析 src/ 目录下的所有 Python 文件
+\`\`\`
+
+---
+
+## 第三步：安全边界与脱敏（10分钟）
+
+### 🔴 绝对不能给的信息
+
+| 信息类型 | 示例 | 风险 |
+|----------|------|------|
+| API 密钥 | \`sk-xxxxx\`, \`AKIAxxxxx\` | 账号被盗用 |
+| 密码 | \`password = "xxxx"\` | 系统被入侵 |
+| 内网地址 | \`192.168.x.x\`, 内部域名 | 暴露内网结构 |
+| 客户数据 | 真实姓名、手机号、身份证 | 隐私泄露 |
+| 生产配置 | 生产数据库连接串 | 生产环境风险 |
+
+### ✅ 需要脱敏的处理方式
+
+**原始日志**：
+\`\`\`
+ERROR: Connection failed for user=admin@prod-db.internal
+Password: MySecret123
+\`\`\`
+
+**脱敏后**：
+\`\`\`
+ERROR: Connection failed for user=<用户名>@<数据库地址>
+Password: <密码>
+\`\`\`
+
+---
+
+## 第四步：让改动可控的三条规矩（15分钟）
+
+### 规矩 1：先看方案，再动手
+
+\`\`\`❌ 错误：直接改文件
+"帮我优化 src/calc.py"
+
+✅ 正确：先要方案
+"请分析 src/calc.py，告诉我哪些地方可以优化，
+并说明原因，但先不要修改任何文件"
+\`\`\`
+
+### 规矩 2：小步改动，逐步验证
+
+\`\`\`❌ 错误：一次改太多
+"帮我重构整个项目的代码"
+
+✅ 正确：分步骤来
+"第一步：先改 src/calc.py 中的 absolute_value 函数
+改完后告诉我改了什么，我再决定是否继续"
+\`\`\`
+
+### 规矩 3：改动必须能验证
+
+\`\`\`❌ 错误：没有验收标准
+"帮我修复这个 bug"
+
+✅ 正确：明确验收方式
+"帮我修复这个 bug：
+1. 先说明问题原因
+2. 修复后告诉我改了哪些文件
+3. 给出验证命令，我执行确认没问题"
+\`\`\`
+
+---
+
+## 实战任务
+
+### 任务目标
+
+在 \`training-pack/sample-repo/\` 中完成一次"指定文件→理解→改动→验证"的完整闭环。
+
+### 时间预估
+
+30-40 分钟
+
+### 任务卡（复制即可）
+
+**输入**
+- 项目：\`training-pack/sample-repo/\`
+- 文件：\`src/calc.py\`
+
+**步骤**
+1. 指定文件：让 Claude Code 读取 \`src/calc.py\`
+2. 理解问题：让它解释 \`absolute_value()\` 的逻辑与 bug（不要直接改）
+3. 提出方案：让它给修复方案，但先不要修改文件
+4. 确认修改：你同意方案后，再让它执行修改（只改这个函数）
+5. 验证结果：用命令验证修复成功
+
+**验收命令**
+\`\`\`bash
+python -c "from src.calc import absolute_value; print(absolute_value(-5))"
+# 期望输出：5
+\`\`\`
+
+---
+
+## 下一步
+
+完成本章后，你已经掌握了：
+- ✅ 正确打开和配置工作区
+- ✅ 指定文件让 Claude Code 读取
+- ✅ 理解安全边界和脱敏处理
+- ✅ 让改动可控的三条规矩
+
+**下一章（02）**，我们将学习完整的开发闭环：**读 → 改 → 测 → 交付**`,
+            '02': `# 02 必修：开发闭环（读→改→测→交付）
+
+> 学习目标：掌握用 Claude Code 辅助开发的最小闭环：读代码 → 设计改动 → 实现 → 测试/验证 → 交付说明。
+
+---
+
+## 背景知识
+
+### 为什么"闭环"很重要？
+
+很多新手用 Claude Code 的问题是：**只让 AI 写代码，不管后续**。
+
+\`\`\`
+错误方式 ❌                      正确方式 ✅
+────────────────────────────────────────────────
+"帮我写个函数"                   "读一下这个文件，理解它的逻辑"
+AI 生成代码                      "告诉我这段代码在做什么"
+复制粘贴，不管了                 "我需要修改 xxx 功能，先分析怎么改"
+                                "按方案修改，然后给我测试命令"
+                                "生成一份变更说明"
+\`\`\`
+
+### 开发闭环的四个环节
+
+\`\`\`
+┌─────────────────────────────────────────────────────────┐
+│                    开发闭环                              │
+├──────────┬──────────┬──────────┬────────────────────────┤
+│   读     │   改     │   测     │        交付             │
+├──────────┼──────────┼──────────┼────────────────────────┤
+│理解现有  │设计改动  │验证结果  │文档化+可审查            │
+│代码逻辑  │明确边界  │确保正确  │风险点+回滚方案          │
+│建立心智  │带约束    │可重复    │让同事能接手            │
+│模型      │可实现    │自动化    │让未来能追溯            │
+└──────────┴──────────┴──────────┴────────────────────────┘
+\`\`\`
+
+---
+
+## 第一步：读 — 快速建立心智模型（10分钟）
+
+### 1.1 让 AI 解释代码结构
+
+\`\`\`
+请读取 src/calc.py 文件，告诉我：
+1. 这个文件有哪些函数？
+2. 每个函数的作用是什么？
+3. 函数之间有调用关系吗？
+4. 代码的整体结构是什么？
+\`\`\`
+
+### 1.2 理解数据流
+
+\`\`\`
+这个项目的数据是怎么流动的？
+从输入到输出，经过了哪些文件和函数？
+\`\`\`
+
+---
+
+## 第二步：改 — 先方案后实现（15分钟）
+
+### 2.1 明确改动目标
+
+\`\`\`
+我要修复 absolute_value 函数的 bug：
+目标：让 absolute_value(-5) 返回 5
+非目标：不改动其他函数
+\`\`\`
+
+### 2.2 让 AI 先分析，不要直接改
+
+\`\`\`❌ 错误：直接要求修改
+"帮我修复 absolute_value 函数"
+
+✅ 正确：先要分析和方案
+"分析 src/calc.py 中的 absolute_value 函数：
+1. 当前逻辑是什么？
+2. bug 在哪里？
+3. 应该怎么修复？
+请先分析，但不要修改任何文件"
+\`\`\`
+
+---
+
+## 第三步：测 — 验证结果（15分钟）
+
+### 3.1 让 AI 生成测试
+
+\`\`\`
+请为 absolute_value 函数生成测试用例，
+覆盖以下场景：
+1. 正数输入
+2. 负数输入
+3. 零
+4. 边界值
+\`\`\`
+
+### 3.2 运行测试验证
+
+\`\`\`bash
+# 方法 1：只跑当前函数相关测试
+pytest tests/test_calc.py::TestAbsoluteValue -v
+
+# 方法 2：手动验证
+python -c "from src.calc import absolute_value; print(absolute_value(-5))"
+
+# 方法 3：运行整个程序
+python src/main.py
+\`\`\`
+
+---
+
+## 第四步：交付 — 产出可审查的交付物（10分钟）
+
+### 4.1 让 AI 生成变更说明
+
+\`\`\`
+请生成一份变更说明，包含：
+1. 改动了哪些文件
+2. 每个 file 改了什么（diff 格式）
+3. 为什么这样改
+4. 有没有风险点
+5. 如果出问题怎么回滚
+\`\`\`
+
+### 4.2 生成 PR 描述模板
+
+\`\`\`
+请为这次修改生成一个 Pull Request 描述：
+- 标题
+- 改动摘要
+- 测试方式
+- 相关 Issue
+\`\`\`
+
+---
+
+## 实战任务
+
+### 任务目标
+
+在 \`training-pack/sample-repo/\` 中完成一次完整的"读→改→测→交付"闭环。
+
+### 时间预估
+
+45-60 分钟
+
+### 任务描述
+
+修复 \`src/calc.py\` 中的三个 bug（按顺序做）：
+
+1. **Bug #1: absolute_value**
+   - 问题：\`absolute_value(-5)\` 返回 \`-5\` 而非 \`5\`
+   - 提示：第 39 行
+
+2. **Bug #2: factorial**
+   - 问题：\`factorial(0)\` 返回 \`0\` 而非 \`1\`
+
+3. **Bug #3: is_prime**
+   - 问题：\`is_prime(4)\` 返回 \`True\` 而非 \`False\`
+
+**验收命令**
+\`\`\`bash
+pytest tests/test_calc.py::TestAbsoluteValue -v
+pytest tests/test_calc.py::TestFactorial -v
+pytest tests/test_calc.py::TestIsPrime -v
+pytest tests/ -v
+\`\`\`
+
+---
+
+## 下一步
+
+完成本章后，你已经掌握了：
+- ✅ 完整的开发闭环：读 → 改 → 测 → 交付
+- ✅ 先方案后实现的谨慎改动方式
+- ✅ 验证和交付的标准流程
+
+**下一章（03）**，我们将学习：**高质量提问与迭代**`,
+            '03': `# 03 必修：高质量提问与迭代（让输出可控）
+
+> 学习目标：学会给上下文、给约束、要验证；把一次性对话变成可复用的工作流。
+
+---
+
+## 章节定位
+
+**前置知识**：已完成必修 00-02 章，能在项目中使用 Claude Code 完成基本开发任务。
+
+**本章价值**：01-02 章让你"能做"，本章让你"做好"——学会如何提问才能获得更精准的答案。
+
+---
+
+## 背景知识
+
+### 为什么"高质量提问"很重要？
+
+同样的需求，不同的提问方式，效果天差地别：
+
+\`\`\`
+低质量提问 ❌                    高质量提问 ✅
+─────────────────────────────────────────────────────
+"帮我优化这段代码"               "这是 xxx 函数，用于处理 xxx 场景：
+                                 当前问题：性能慢，输入 1000 条
+                                 数据需要 5 秒
+                                 目标：优化到 1 秒以内
+                                 约束：不能改动函数签名，
+                                 要兼容现有调用
+                                 请先分析瓶颈，给出优化方案"
+\`\`\`
+
+---
+
+## 第一步：上下文四要素（10分钟）
+
+### 1.1 目标 — 我要解决什么
+
+\`\`\`
+❌ 模糊目标：
+"这段代码有问题，帮我看看"
+
+✅ 明确目标：
+"src/calc.py 中的 is_prime 函数判断合数时返回了错误的结果，
+例如 is_prime(4) 返回 True 而非 False。
+请帮我定位并修复这个 bug。"
+\`\`\`
+
+### 1.2 约束 — 不能做什么/必须满足什么
+
+\`\`\`
+常见的约束类型：
+
+技术约束：
+- 使用 Python 3.8+ 语法
+- 不能引入新的第三方库
+- 要兼容现有的函数签名
+
+业务约束：
+- 不能改动数据结构
+- 要保持向后兼容
+- 不能影响其他功能
+\`\`\`
+
+### 1.3 输入 — 现有文件/日志/数据/复现步骤
+
+\`\`\`
+❌ 糟糕输入：
+"有个报错，帮我看看"
+
+✅ 完整输入：
+"运行测试时出现以下错误：
+--------------------
+Traceback (most recent call last):
+  File "tests/test_calc.py", line 25, in <test_is_prime>
+    assert is_prime(4) == False
+AssertionError: assert True == False
+--------------------
+
+复现步骤：
+1. cd training-pack/sample-repo
+2. pytest tests/test_calc.py::test_is_prime -v
+3. 观察测试失败"
+\`\`\`
+
+### 1.4 输出 — 我希望你交付什么
+
+\`\`\`
+❌ 模糊输出：
+"帮我分析一下"
+
+✅ 明确输出：
+"请：
+1. 分析错误原因
+2. 给出修复方案（但先不要修改）
+3. 说明修复后如何验证
+4. 生成一份变更说明模板"
+\`\`\`
+
+---
+
+## 第二步：迭代三步法（20分钟）
+
+### 2.1 第一步：先要方案，不要实现
+
+\`\`\`❌ 直接要实现：
+"帮我修复 is_prime 函数"
+
+✅ 先要方案：
+"分析 is_prime 函数的问题，告诉我：
+1. 问题在哪一行
+2. 为什么会导致错误结果
+3. 应该如何修复
+4. 修复后如何验证
+但先不要修改任何文件"
+\`\`\`
+
+### 2.2 第二步：小步改动，边改边验证
+
+\`\`\`
+每一步都要确认：
+
+第 1 轮：
+"按方案修改第 71 行，修改后告诉我改了什么"
+
+第 2 轮：
+"生成测试用例，验证修复是否正确"
+
+第 3 轮：
+"运行测试，确认没有引入新问题"
+\`\`\`
+
+### 2.3 第三步：总结沉淀，形成模板
+
+\`\`\`
+让 AI 帮你沉淀经验：
+
+"这次修复很成功，请帮我：
+1. 总结 bug 修复的步骤
+2. 生成一个通用模板，下次遇到类似问题可以直接套用
+3. 列出这次用到的有效提示词"
+\`\`\`
+
+---
+
+## 提示词模板库
+
+### 模板 1：Bug 修复
+
+\`\`\`
+【目标】
+修复 {文件名} 中的 {函数名} 函数
+问题：{具体问题描述}
+
+【约束】
+- 只修改此函数
+- 不改动函数签名
+- 不影响其他功能
+
+【输入】
+错误位置：第 {行号} 行
+错误现象：{复现步骤/错误信息}
+
+【输出】
+1. 分析 bug 原因
+2. 给出修复方案
+3. 生成测试用例
+4. 生成变更说明
+\`\`\`
+
+### 模板 2：新功能开发
+
+\`\`\`
+【目标】
+在 {项目名} 中添加 {功能描述}
+
+【约束】
+- 使用 {技术栈}
+- 遵循项目现有代码风格
+- 性能要求：{具体指标}
+
+【输入】
+参考文件：{相关文件}
+类似实现：{参考位置}
+
+【输出】
+1. 技术方案设计
+2. 实现步骤拆解
+3. 代码实现
+4. 测试用例
+5. 使用文档
+\`\`\`
+
+---
+
+## 下一步
+
+完成本章后，你已经掌握了：
+- ✅ 高质量提问的四要素框架
+- ✅ 迭代优化的三步法
+- ✅ 5 个通用提示词模板
+- ✅ 让输出可控的方法
+
+**必修部分已完成**！你已经具备了使用 Claude Code 的核心能力。
+
+**下一阶段（选修）**，你可以根据需要选择：
+- **04 选修：CLI 进阶** — 命令行高级用法
+- **05 选修：团队协作** — 共享配置与规范`,
+            '04': `# 04 选修：CLI 进阶与效率提升
+
+> 学习目标：从插件过渡到 CLI；用命令行把"单次成功"升级为"批量自动化"。
+
+---
+
+## 章节定位
+
+**前置知识**：已完成必修 00-03 章，熟悉 VS Code 插件的基本使用。
+
+**本章价值**：前三章让你"会用插件"，本章让你"会用 CLI"——适合需要批量操作、自动化脚本、远程开发的高级场景。
+
+---
+
+## 背景知识
+
+### 什么时候需要用 CLI？
+
+VS Code 插件适合日常交互，但 CLI 在以下场景更有优势：
+
+\`\`\`
+┌─────────────────────┬──────────────────┬──────────────────┐
+│      场景           │   VS Code 插件    │      CLI         │
+├─────────────────────┼──────────────────┼──────────────────┤
+│ 日常开发/调试        │       ✅ 推荐     │      ⚠️ 可用      │
+│ 批量处理多文件       │       ⚠️ 手动      │      ✅ 推荐      │
+│ 多仓库操作           │       ⚠️ 逐个      │      ✅ 脚本化    │
+│ CI/CD 集成          │       ❌ 不支持    │      ✅ 天然支持   │
+│ SSH 远程开发        │       ⚠️ 依赖插件   │      ✅ 原生支持   │
+│ 自动化脚本          │       ❌ 不支持    │      ✅ 可组合     │
+└─────────────────────┴──────────────────┴──────────────────┘
+\`\`\`
+
+---
+
+## 第一步：CLI 基础与插件对比（10分钟）
+
+### 1.1 启动方式对比
+
+\`\`\`
+VS Code 插件：
+1. 打开 VS Code
+2. 点击侧边栏 Claude Code 图标
+3. 在输入框输入问题
+
+CLI：
+# 终端直接启动
+claude
+
+# 指定项目目录
+cd /path/to/project
+claude
+\`\`\`
+
+### 1.2 核心命令对比
+
+| 操作 | VS Code 插件 | CLI 命令 |
+|------|--------------|----------|
+| 开始对话 | 点击输入框 | 直接输入 |
+| 查看历史 | 滚动查看 | \`↑/↓\` 箭头 |
+| 退出 | 关闭面板 | \`Ctrl+D\` 或 \`exit\` |
+| 清屏 | - | \`Ctrl+L\` 或 \`clear\` |
+| 读取文件 | "读取 xxx" | \`@filename\` |
+| 多文件操作 | 多次指定 | \`@dir/*.py\` |
+
+---
+
+## 第二步：团队统一配置（15分钟）
+
+### 2.1 配置文件位置
+
+\`\`\`
+配置优先级（从高到低）：
+1. 环境变量
+2. 项目级配置 .claude/config.json
+3. 用户级配置 ~/.claude/config.json
+4. 全局默认配置
+\`\`\`
+
+### 2.2 GLM 模型配置
+
+**Windows（PowerShell）**
+
+\`\`\`powershell
+# 设置环境变量（当前终端会话）
+$env:GLM_API_KEY="your-api-key-here"
+
+# 验证配置
+claude --version
+\`\`\`
+
+**macOS/Linux（bash）**
+
+\`\`\`bash
+# 设置环境变量（当前终端会话）
+export GLM_API_KEY="your-api-key-here"
+
+# 验证配置
+claude --version
+\`\`\`
+
+---
+
+## 第三步：常用组合套路（30分钟）
+
+### 3.1 套路一：代码搜索与理解
+
+\`\`\`bash
+# 场景：理解一个新项目
+
+# 第 1 步：查看项目结构
+claude "用树状图展示当前项目的目录结构"
+
+# 第 2 步：找到核心文件
+claude "列出所有 Python 文件，标注哪些是入口文件"
+
+# 第 3 步：理解核心逻辑
+claude "@src/main.py @src/calc.py 解释这两个文件的关系和数据流"
+\`\`\`
+
+### 3.2 套路二：批量重构
+
+\`\`\`bash
+# 场景：给所有函数添加类型注解
+
+# 第 1 步：分析影响范围
+claude "扫描 src/ 目录，列出所有没有类型注解的函数"
+
+# 第 2 步：生成方案
+claude "@src/calc.py 为这个文件的函数添加类型注解，
+先给出修改方案，不要直接修改"
+
+# 第 3 步：批量修改
+claude "@src/calc.py 按方案添加类型注解，逐个函数进行"
+
+# 第 4 步：验证
+claude "运行测试，确认类型注解没有引入问题"
+pytest tests/ -v
+\`\`\`
+
+---
+
+## 下一步
+
+完成本章后，你已经掌握了：
+- ✅ CLI 的核心命令和配置
+- ✅ 四种常用工作流套路
+- ✅ 脚本化和批量处理方法
+
+**下一章（05）**，我们将学习：**团队协作 SOP**`,
+            '05': `# 05 选修：团队协作 SOP（配置、评审与安全）
+
+> 学习目标：把 Claude Code 从"个人效率工具"升级为"团队一致的交付流程"。
+
+---
+
+## 章节定位
+
+**前置知识**：已完成必修 00-03 章，了解 Claude Code 的基本使用。
+
+**本章价值**：前几章让你"个人能用好"，本章让你"团队能统一"——适合需要规范化、标准化的协作场景。
+
+---
+
+## 背景知识
+
+### 为什么团队需要 SOP？
+
+\`\`\`
+个人用 AI                          团队用 AI
+────────────────────────────────────────────────────
+"能跑就行"                        "代码风格要一致"
+"我知道在改什么"                  "变更说明要可审查"
+"密钥放本地就行"                  "敏感信息要管理"
+"我自己验证"                      "有 Review 清单"
+\`\`\`
+
+### 团队 SOP 的三大目标
+
+\`\`\`
+┌─────────────────────────────────────────────────────────┐
+│                    团队 SOP 的三大目标                    │
+├──────────────┬──────────────┬──────────────────────────┤
+│   一致性     │    可控性    │        安全性             │
+├──────────────┼──────────────┼──────────────────────────┤
+│ 统一配置     │ 变更可审查   │ 敏感信息不泄露            │
+│ 统一流程     │ 质量可验收   │ 权限可管理                │
+│ 统一标准     │ 风险可追溯   │ 问题可回滚                │
+└──────────────┴──────────────┴──────────────────────────┘
+\`\`\`
+
+---
+
+## 第一步：团队统一配置（20分钟）
+
+### 1.1 API Key 管理策略
+
+\`\`\`
+┌────────────────┬───────────────┬─────────────────────────┐
+│     级别       │     适用      │        管理方式          │
+├────────────────┼───────────────┼─────────────────────────┤
+│ 个人 Key       │ 个人开发/学习 │ 自行申请，本地配置      │
+│ 共享 Key       │ 小团队试用    │ 负责人发放，定期更换    │
+│ 企业网关       │ 生产环境      │ 统一网关，审计日志      │
+└────────────────┴───────────────┴─────────────────────────┘
+\`\`\`
+
+### 1.2 配置文件模板
+
+\`\`\`json
+// .claude/config.json - 团队统一配置模板
+{
+  "apiProvider": "glm",
+  "glm": {
+    "apiKey": "${GLM_API_KEY}",
+    "baseURL": "https://open.bigmodel.cn/api/paas/v4/",
+    "model": "glm-4.7"
+  },
+  "contextLimit": 200000,
+  "temperature": 0.3,
+  "instructions": "团队统一提示词：遵守代码规范，生成可测试的代码",
+  "include": [
+    "src/**/*",
+    "tests/**/*"
+  ],
+  "exclude": [
+    "**/__pycache__/**",
+    "**/*.pyc",
+    "**/.env*",
+    "**/secrets/**"
+  ]
+}
+\`\`\`
+
+---
+
+## 第二步：AI 辅助 Code Review 清单（20分钟）
+
+### 2.1 自动化 Review 提示词
+
+\`\`\`
+请对以下代码变更进行审查，按照以下清单逐项检查：
+
+## 功能性检查
+- [ ] 代码是否实现了需求目标？
+- [ ] 是否有遗漏的边界情况？
+- [ ] 错误处理是否完善？
+
+## 代码质量
+- [ ] 代码风格是否统一？
+- [ ] 变量/函数命名是否清晰？
+- [ ] 是否有重复代码可以抽取？
+- [ ] 注释是否充分（复杂逻辑必须有）？
+
+## 测试覆盖
+- [ ] 是否有对应的测试用例？
+- [ ] 测试是否覆盖正常和异常情况？
+- [ ] 是否有集成测试？
+
+## 安全性
+- [ ] 是否有硬编码的敏感信息？
+- [ ] 输入是否做了验证？
+- [ ] 是否有注入风险？
+
+请给出：
+1. 发现的问题（按严重程度排序）
+2. 每个问题的具体位置和改进建议
+3. 总体评价（Approve / Request Changes）
+\`\`\`
+
+---
+
+## 第三步：安全与合规（20分钟）
+
+### 3.1 敏感信息红线清单
+
+\`\`\`
+🔴 绝对不能发给 AI 的信息：
+
+| 类别 | 示例 | 检测方式 |
+|------|------|----------|
+| API 密钥 | sk-xxx, AKIAxxx | 正则检测 |
+| 密码 | password = "xxx" | 关键字检测 |
+| 内网地址 | 192.168.x.x | IP 段检测 |
+| 客户数据 | 真实姓名/手机号 | 样本检测 |
+| 生产凭证 | prod-*.pem | 文件名检测 |
+\`\`\`
+
+---
+
+## 下一步
+
+完成本章后，你已经掌握了：
+- ✅ 团队统一配置的方法
+- ✅ AI 辅助 Code Review 清单
+- ✅ 安全红线与人工复核要求
+
+**下一章（06）**，我们将学习：**非编程高频场景**`,
+            '06': `# 06 选修：非编程高频场景（文档/数据/汇报/复盘）
+
+> 学习目标：让 Claude Code 帮你完成更多"工程工作"，不只写代码：整理信息、写文档、处理 Excel、做周报复盘、归档沉淀。
+
+---
+
+## 章节定位
+
+**前置知识**：已完成必修 00-03 章，熟悉 Claude Code 的基本对话模式。
+
+**本章价值**：前几章专注编程场景，本章扩展到**非编程场景**——开发者日常工作中 60% 的时间都在处理文档、数据、沟通等工作。
+
+---
+
+## 背景知识
+
+### 为什么非编程场景也很重要？
+
+\`\`\`
+开发者的日常工作分布：
+┌────────────────────────────────────────────────┐
+│                                                │
+│   ████████████████ 编写代码 (40%)              │
+│   ██████ 文档与沟通 (25%)                      │
+│   ████ 数据处理 (15%)                          │
+│   ███ 会议与汇报 (12%)                         │
+│   ██ 其他 (8%)                                 │
+│                                                │
+└────────────────────────────────────────────────┘
+\`\`\`
+
+---
+
+## 第一步：文档类场景（20分钟）
+
+### 1.1 会议纪要 → 待办清单
+
+\`\`\`
+输入：会议记录/录音文字稿
+
+提示词模板：
+"请整理以下会议记录，输出：
+1. 会议摘要（3-5 句话）
+2. 参会人员与角色
+3. 讨论的主要议题
+4. **待办清单**（格式：- [ ] 任务 | 负责人 | 截止日期）
+5. 需要跟进的问题
+
+会议记录：
+<粘贴会议记录>"
+\`\`\`
+
+### 1.2 需求说明 → 验收标准
+
+\`\`\`
+输入：产品需求文档/用户描述
+
+提示词模板：
+"根据以下需求，生成技术规格说明：
+1. 功能概述
+2. 验收标准（Given-When-Then 格式）
+3. 技术风险
+4. 需要明确的问题
+
+需求描述：
+<粘贴需求>"
+\`\`\`
+
+### 1.3 周报模板
+
+\`\`\`
+提示词模板：
+"根据以下工作内容，生成周报：
+
+【本周进展】
+- 完成的功能/任务
+- 关键数据/指标
+
+【下周计划】
+- 计划完成的工作
+- 预期交付物
+
+【风险与问题】
+- 当前遇到的问题
+- 需要的支持
+
+【思考与建议】
+- 过程中的发现
+- 改进建议
+
+工作内容：
+<粘贴本周工作>"
+\`\`\`
+
+---
+
+## 第二步：数据类场景（25分钟）
+
+### 2.1 Excel 数据清洗
+
+\`\`\`
+场景：处理杂乱的表格数据
+
+提示词模板：
+"请帮我清洗以下 Excel 数据：
+1. 去除重复行
+2. 统一日期格式为 YYYY-MM-DD
+3. 空值处理规则：
+   - 数值列：用平均值填充
+   - 文本列：用 '未知' 填充
+4. 去除前后空格
+5. 给出清洗前后的数据量对比
+
+<粘贴数据或描述数据结构>"
+\`\`\`
+
+### 2.2 数据统计分析
+
+\`\`\`
+场景：分析业务数据
+
+提示词模板：
+"请分析以下数据：
+1. 总体统计（总数、平均值、最大/最小值）
+2. 趋势分析（如果有时间维度）
+3. 异常值检测
+4. 分组汇总
+5. 给出结论和建议
+
+<粘贴数据或描述数据结构>"
+\`\`\`
+
+---
+
+## 提示词模板库
+
+### 模板 1：会议纪要
+
+\`\`\`
+请整理以下会议记录，输出：
+1. 会议摘要（3-5 句话）
+2. 参会人员与角色
+3. 讨论的主要议题
+4. 待办清单（格式：- [ ] 任务 | 负责人 | 截止日期）
+5. 需要跟进的问题
+
+会议记录：
+<粘贴内容>
+\`\`\`
+
+### 模板 2：数据清洗
+
+\`\`\`
+请帮我清洗以下数据：
+1. 去除重复行
+2. 统一格式（日期/数字/文本）
+3. 处理空值
+4. 给出清洗前后对比
+
+数据：
+<粘贴内容>
+\`\`\`
+
+---
+
+## 下一步
+
+完成本章后，你已经掌握了：
+- ✅ 会议纪要 → 待办清单的处理
+- ✅ 数据清洗与分析的方法
+- ✅ 周报、复盘的生成
+
+**下一章（07）**，我们将学习：**自动化与可复用资产**`,
+            '07': `# 07 选修：自动化与可复用资产（模板库/脚本化/标准化）
+
+> 学习目标：把"会用 Claude Code"升级为"能复用、能规模化"：沉淀提示词模板库、可复用命令片段、可执行的自动化流程。
+
+---
+
+## 章节定位
+
+**前置知识**：已完成必修 00-03 章，有使用 Claude Code 的实际经验。
+
+**本章价值**：前几章让你"每次都重新组织语言"，本章让你"一键调用模板"——把个人经验转化为团队能力。
+
+---
+
+## 背景知识
+
+### 为什么需要资产化？
+
+\`\`\`
+一次性对话                          资产化复用
+────────────────────────────────────────────────────
+每次都重新组织语言                  → 一键调用模板
+提示词散落各处                      → 集中管理库
+经验只在大脑里                      → 可传递的文档
+流程靠口头说明                      → 可执行的脚本
+\`\`\`
+
+### 资产化的三个层次
+
+\`\`\`
+┌─────────────────────────────────────────────────────────┐
+│                   资产化的三个层次                        │
+├──────────────┬──────────────┬──────────────────────────┤
+│   L1 个人    │   L2 团队    │       L3 系统             │
+├──────────────┼──────────────┼──────────────────────────┤
+│ 个人模板库   │ 共享模板库   │ 自动化脚本                │
+│ 常用片段     │ 最佳实践     │ CI/CD 集成                │
+│ 历史记录     │ 规范文档     │ 监控与告警                │
+└──────────────┴──────────────┴──────────────────────────┘
+\`\`\`
+
+---
+
+## 第一步：建立提示词模板库（20分钟）
+
+### 1.1 模板库目录结构
+
+\`\`\`
+claude-templates/
+├── 代码开发/
+│   ├── bug-修复.md
+│   ├── 新功能开发.md
+│   ├── 代码重构.md
+│   └── 性能优化.md
+├── 代码审查/
+│   ├── self-review.md
+│   └── pr-review.md
+├── 文档生成/
+│   ├── api-doc.md
+│   ├── 周报.md
+│   └── 复盘.md
+└── 数据处理/
+    ├── excel-清洗.md
+    └── 数据分析.md
+\`\`\`
+
+### 1.2 模板文件格式
+
+每个模板文件包含：
+
+\`\`\`markdown
+# 模板名称
+
+> 适用场景：一句话说明何时使用
+> 预计耗时：X 分钟
+
+## 使用说明
+简要说明如何使用此模板
+
+## 提示词模板
+
+\`\`\`
+[可复用的提示词内容]
+\`\`\`
+
+## 输出格式
+
+说明期望的输出格式
+
+## 注意事项
+
+使用此模板时需要注意的点
+\`\`\`
+
+---
+
+## 第二步：建立命令片段库（20分钟）
+
+### 2.1 常用片段列表
+
+\`\`\`bash
+# ~/.claude-aliases.sh
+
+# 代码理解
+alias cc-explain='claude "用 10 行解释当前模块的职责、入口、依赖与风险点"'
+alias cc-structure='claude "用树状图展示项目结构"'
+
+# 代码审查
+alias cc-review='claude "请对代码进行审查：功能、质量、测试、安全"'
+alias cc-self-review='claude "请审查刚才的修改：问题、改进、风险"'
+
+# 测试相关
+alias cc-test='claude "为当前函数生成测试用例"'
+alias cc-test-run='claude "运行测试并分析失败原因"'
+
+# 文档生成
+alias cc-doc='claude "生成当前模块的 API 文档"'
+alias cc-readme='claude "生成/更新 README.md"'
+
+# Git 相关
+alias cc-pr='claude "根据当前改动生成 PR 描述"'
+alias cc-commit='claude "根据改动生成 commit 信息"'
+\`\`\`
+
+---
+
+## 下一步
+
+完成本章后，你已经掌握了：
+- ✅ 提示词模板库的建立方法
+- ✅ 命令片段脚本的编写
+- ✅ 流程标准化的框架
+
+**下一章（08）**，我们将学习：**速查与排障**`,
+            '08': `# 08 附录：速查与排障（随用随查）
+
+> 学习目标：用最短时间定位常见问题，并快速恢复可用状态。
+
+---
+
+## 章节定位
+
+**前置知识**：无特定要求，可随时查阅。
+
+**本章价值**：前面章节让你"会用"，本章让你"遇到问题能自救"——一个随时可查的问题解决手册。
+
+---
+
+## 5分钟自检清单
+
+遇到问题时，先快速自检：
+
+\`\`\`
+基础检查（2 分钟）
+├── [ ] Claude Code 能正常启动（插件/CLI）
+├── [ ] 能连接到模型服务（GLM）
+├── [ ] 能访问项目文件
+└── [ ] 能完成一次简单对话
+
+功能检查（3 分钟）
+├── [ ] 能读取文件内容
+├── [ ] 能执行简单任务
+└── [ ] 输出格式正常
+\`\`\`
+
+---
+
+## 排障决策树
+
+\`\`\`
+                              Claude Code 异常
+                                      │
+                    ┌─────────────────┴─────────────────┐
+                    │                                   │
+                  无法启动                           启动但异常
+                    │                                   │
+        ┌───────────┴───────────┐           ┌───────────┴───────────┐
+        │                       │           │                       │
+     插件问题               CLI 问题       模型连通问题           功能异常
+        │                       │           │                       │
+        ▼                       ▼           ▼                       ▼
+    检查安装               检查环境       检查配置               检查上下文
+    重启插件               检查路径       检查网络               重置对话
+    重新安装               检查权限       检查 Key               清除缓存
+\`\`\`
+
+---
+
+## 常见问题排查
+
+### 问题 1：无法启动 Claude Code
+
+**症状**：
+- VS Code 插件图标不显示
+- CLI 输入 \`claude\` 无响应
+- 提示"命令未找到"
+
+**解决步骤**：
+
+\`\`\`bash
+# 1. 检查安装（CLI）
+claude --version
+
+# 2. 检查 VS Code 版本
+# 要求：VS Code 1.80+
+code --version
+
+# 3. 重启 VS Code
+# 完全退出后重新打开
+
+# 4. 重新安装插件
+# 在扩展面板搜索 Claude Code，重新安装
+\`\`\`
+
+---
+
+### 问题 2：模型连接失败
+
+**症状**：
+- 提示"连接超时"
+- 提示"API Key 无效"
+- 提示"网络错误"
+
+**解决步骤**：
+
+**Windows（PowerShell）**
+
+\`\`\`powershell
+# 1. 检查/设置 API Key（当前终端会话）
+$env:GLM_API_KEY
+$env:GLM_API_KEY="your-new-key"
+
+# 2. 测试网络连通
+ping open.bigmodel.cn
+
+# 3. 验证配置
+claude --version
+\`\`\`
+
+**macOS/Linux（bash）**
+
+\`\`\`bash
+# 1. 检查/设置 API Key（当前终端会话）
+echo "$GLM_API_KEY"
+export GLM_API_KEY="your-new-key"
+
+# 2. 测试网络连通
+ping open.bigmodel.cn
+
+# 3. 验证配置
+claude --version
+\`\`\`
+
+---
+
+### 问题 3：文件访问被拒绝
+
+**症状**：
+- 提示"找不到这个文件"
+- 提示"没有权限"
+- 无法读取项目文件
+
+**解决步骤**：
+
+\`\`\`bash
+# 1. 检查当前目录
+pwd
+
+# 2. 确认文件存在
+ls -la src/calc.py
+
+# 3. 检查 .claudeignore
+cat .claudeignore
+
+# 4. 重新打开工作区
+# VS Code：File → Open Folder
+\`\`\`
+
+---
+
+## 提示词速查卡
+
+### 读代码
+
+\`\`\`
+"读取 {文件名}，解释：
+1. 整体结构
+2. 核心功能
+3. 依赖关系
+4. 潜在问题"
+\`\`\`
+
+### 改代码
+
+\`\`\`
+"修改 {文件名} 中的 {函数名}：
+目标：{目标}
+约束：{约束}
+步骤：
+1. 先给出修改方案
+2. 确认后执行
+3. 给出验证命令"
+\`\`\`
+
+### 测试
+
+\`\`\`
+"为 {函数名} 生成测试用例：
+- 覆盖正常和异常情况
+- 使用 pytest 格式
+- 包含断言说明"
+\`\`\`
+
+---
+
+## 常用命令速查
+
+### CLI 命令
+
+| 命令 | 说明 |
+|------|------|
+| \`claude\` | 启动 CLI |
+| \`claude --version\` | 查看版本 |
+| \`claude --help\` | 查看帮助 |
+| \`Ctrl+D\` | 退出 CLI |
+| \`Ctrl+L\` | 清屏 |
+
+---
+
+## 小结
+
+### 要点回顾
+
+本附录提供了：
+
+1. **5 分钟自检清单**：快速定位问题
+2. **排障决策树**：系统化排查流程
+3. **常见问题解决**：5 大类问题的解决方案
+4. **提示词速查卡**：4 个常用模板
+5. **配置参考**：完整配置示例
+
+---
+
+**恭喜！你已经完成了 Claude Code 团队培训的所有章节。**
+
+\`\`\`
+学习路径回顾：
+├── 00 必修：90 分钟上手
+├── 01 必修：在项目里工作
+├── 02 必修：开发闭环
+├── 03 必修：高质量提问
+├── 04 选修：CLI 进阶
+├── 05 选修：团队协作 SOP
+├── 06 选修：非编程场景
+├── 07 选修：自动化与资产
+└── 08 附录：速查与排障
+
+你已经具备：
+✅ 使用 Claude Code 进行日常开发
+✅ 构建团队协作流程
+✅ 沉淀可复用资产
+✅ 排查和解决常见问题
+\`\`\``
+        };
+
+        // App state
+        function app() {
+            return {
+                // UI state
+                sidebarOpen: false,
+                darkMode: false,
+                filter: 'all',
+                searchQuery: '',
+                searchResults: [],
+                showBackToTop: false,
+
+                // Content state
+                currentChapter: '00',
+                expandedCategories: ['required', 'optional', 'appendix'],
+
+                // Progress state
+                completedChapters: [],
+
+                // Computed
+                get filteredCategories() {
+                    if (this.filter === 'all') return courseData.categories;
+                    if (this.filter === 'required') {
+                        return courseData.categories.filter(c => c.id === 'required');
+                    }
+                    if (this.filter === 'optional') {
+                        return courseData.categories.filter(c => c.id === 'optional' || c.id === 'appendix');
+                    }
+                    return courseData.categories;
+                },
+
+                get progressPercent() {
+                    const total = courseData.categories.reduce((sum, cat) => sum + cat.chapters.length, 0);
+                    return total > 0 ? Math.round((this.completedChapters.length / total) * 100) : 0;
+                },
+
+                get currentChapterData() {
+                    for (const cat of courseData.categories) {
+                        const chapter = cat.chapters.find(c => c.id === this.currentChapter);
+                        if (chapter) {
+                            return { ...chapter, category: cat.name };
+                        }
+                    }
+                    return null;
+                },
+
+                get renderedContent() {
+                    const content = chapterContent[this.currentChapter] || '# 内容加载中...';
+                    const html = marked.parse(content);
+                    // Highlight code blocks after rendering
+                    this.$nextTick(() => {
+                        document.querySelectorAll('pre code').forEach((block) => {
+                            hljs.highlightElement(block);
+                        });
+                    });
+                    return html;
+                },
+
+                get previousChapter() {
+                    const allChapters = this.getAllChapters();
+                    const idx = allChapters.findIndex(c => c.id === this.currentChapter);
+                    return idx > 0 ? allChapters[idx - 1].id : null;
+                },
+
+                get nextChapter() {
+                    const allChapters = this.getAllChapters();
+                    const idx = allChapters.findIndex(c => c.id === this.currentChapter);
+                    return idx < allChapters.length - 1 ? allChapters[idx + 1].id : null;
+                },
+
+                // Methods
+                init() {
+                    // Load from localStorage
+                    this.loadState();
+
+                    // Check system dark mode preference
+                    if (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches) {
+                        this.darkMode = true;
+                    }
+
+                    // Scroll handler
+                    window.addEventListener('scroll', () => {
+                        this.showBackToTop = window.scrollY > 300;
+                    });
+
+                    // Keyboard shortcuts
+                    document.addEventListener('keydown', (e) => {
+                        // Ctrl/Cmd + K to focus search
+                        if ((e.ctrlKey || e.metaKey) && e.key === 'k') {
+                            e.preventDefault();
+                            document.querySelector('input[placeholder="搜索..."]')?.focus();
+                        }
+                        // Arrow keys for navigation
+                        if (e.key === 'ArrowLeft' && this.previousChapter) {
+                            this.selectChapter(this.previousChapter);
+                        }
+                        if (e.key === 'ArrowRight' && this.nextChapter) {
+                            this.selectChapter(this.nextChapter);
+                        }
+                    });
+
+                    // Initial render highlight
+                    this.$nextTick(() => {
+                        document.querySelectorAll('pre code').forEach((block) => {
+                            hljs.highlightElement(block);
+                        });
+                    });
+                },
+
+                getAllChapters() {
+                    return courseData.categories.flatMap(cat => cat.chapters);
+                },
+
+                loadState() {
+                    try {
+                        const saved = localStorage.getItem('claude-tutorial-state');
+                        if (saved) {
+                            const state = JSON.parse(saved);
+                            this.completedChapters = state.completed || [];
+                            this.darkMode = state.darkMode ?? false;
+                            this.currentChapter = state.currentChapter || '00';
+                        }
+                    } catch (e) {
+                        console.error('Error loading state:', e);
+                    }
+                },
+
+                saveState() {
+                    try {
+                        localStorage.setItem('claude-tutorial-state', JSON.stringify({
+                            completed: this.completedChapters,
+                            darkMode: this.darkMode,
+                            currentChapter: this.currentChapter
+                        }));
+                    } catch (e) {
+                        console.error('Error saving state:', e);
+                    }
+                },
+
+                toggleSidebar() {
+                    this.sidebarOpen = !this.sidebarOpen;
+                },
+
+                toggleCategory(id) {
+                    const idx = this.expandedCategories.indexOf(id);
+                    if (idx > -1) {
+                        this.expandedCategories.splice(idx, 1);
+                    } else {
+                        this.expandedCategories.push(id);
+                    }
+                },
+
+                selectChapter(id) {
+                    this.currentChapter = id;
+                    this.saveState();
+                    this.sidebarOpen = false;
+                    // Scroll to top
+                    window.scrollTo({ top: 0, behavior: 'smooth' });
+                },
+
+                toggleComplete(id) {
+                    const idx = this.completedChapters.indexOf(id);
+                    if (idx > -1) {
+                        this.completedChapters.splice(idx, 1);
+                    } else {
+                        this.completedChapters.push(id);
+                    }
+                    this.saveState();
+                },
+
+                markCurrentComplete() {
+                    this.toggleComplete(this.currentChapter);
+                },
+
+                toggleDarkMode() {
+                    this.darkMode = !this.darkMode;
+                    this.saveState();
+                },
+
+                performSearch() {
+                    if (!this.searchQuery.trim()) {
+                        this.searchResults = [];
+                        return;
+                    }
+
+                    const query = this.searchQuery.toLowerCase();
+                    this.searchResults = [];
+
+                    for (const cat of courseData.categories) {
+                        for (const chapter of cat.chapters) {
+                            const content = chapterContent[chapter.id] || '';
+                            if (chapter.title.toLowerCase().includes(query) ||
+                                content.toLowerCase().includes(query)) {
+                                // Find preview text
+                                const contentLower = content.toLowerCase();
+                                const idx = contentLower.indexOf(query);
+                                let preview = '';
+                                if (idx > -1) {
+                                    preview = content.substring(Math.max(0, idx - 50), idx + 100) + '...';
+                                }
+                                this.searchResults.push({
+                                    chapterId: chapter.id,
+                                    title: chapter.title,
+                                    preview: preview
+                                });
+                            }
+                        }
+                    }
+                },
+
+                scrollToTop() {
+                    window.scrollTo({ top: 0, behavior: 'smooth' });
+                }
+            };
+        }
+
+        // Configure marked
+        marked.setOptions({
+            breaks: true,
+            gfm: true
+        });
+    </script>
+</body>
+</html>

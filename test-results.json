@@ -1,0 +1,39 @@
+{
+  "total": 8,
+  "passed": 1,
+  "failed": 7,
+  "tests": [
+    {
+      "name": "Page Loading",
+      "passed": false
+    },
+    {
+      "name": "Find Agents Section",
+      "passed": true
+    },
+    {
+      "name": "Agent Cards Clickability",
+      "passed": false
+    },
+    {
+      "name": "Planner Navigation",
+      "passed": false
+    },
+    {
+      "name": "Architect Navigation",
+      "passed": false
+    },
+    {
+      "name": "Designer Navigation",
+      "passed": false
+    },
+    {
+      "name": "TDD-Guide Navigation",
+      "passed": false
+    },
+    {
+      "name": "No Console Errors",
+      "passed": false
+    }
+  ]
+}
